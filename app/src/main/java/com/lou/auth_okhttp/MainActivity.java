@@ -35,9 +35,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        final EditText etUname = (EditText) findViewById(R.id.et_uname);
+        final EditText etPassw = (EditText) findViewById(R.id.et_passw);
+        final Button bLogin = (Button) findViewById(R.id.btn_login);
+
         client = new OkHttpClient();
 
-        attemptLogin(url);
+        //attemptLogin(url);
+
+        bLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                attemptLogin(url);
+            }
+        });
 
     }
 
