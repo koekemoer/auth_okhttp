@@ -1,0 +1,201 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+    defaultConfig {
+        applicationId "com.lou.auth_okhttp"
+        minSdkVersion 15
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:25.1.1'
+    compile "com.squareup.okhttp3:okhttp:3.5.0"
+    testCompile 'junit:junit:4.12'
+}
+
+/*buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+        maven { url 'https://maven.fabric.io/public' }
+        maven {
+            url "https://nexus.it.si/repository/maven-public"
+            credentials {
+                username "deployment"
+                password "deployment123"
+            }
+        }
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.2.2'
+        //classpath 'io.fabric.tools:gradle:1.21.6'
+        classpath 'jp.leafytree.gradle:gradle-android-scala-plugin:2.2-SNAPSHOT'
+        classpath 'de.undercouch:gradle-download-task:2.1.0'
+        classpath 'com.netflix.nebula:gradle-extra-configurations-plugin:3.0.3'
+    }
+}
+repositories {
+    maven { url uri("file://" + System.getenv("ANDROID_HOME") + "/extras/google/m2repository") }
+    maven { url uri("file://" + System.getenv("ANDROID_HOME") + "/extras/android/m2repository") }
+    maven { url uri("file://" + System.getenv("ANDROID_HOME") + "/extras/m2repository") }
+    maven { url "http://dl.bintray.com/scalaz/releases" }
+    maven { url "https://jitpack.io" }
+    maven {
+        url "https://nexus.it.si/repository/maven-public"
+        credentials {
+            username "deployment"
+            password "deployment123"
+        }
+    }
+    jcenter()
+}
+apply plugin: 'com.android.application'
+apply plugin: 'jp.leafytree.android-scala'
+apply plugin: 'de.undercouch.download'
+apply plugin: 'nebula.provided-base'
+//apply plugin: 'io.fabric'
+android {
+    buildToolsVersion "25.0.2"
+    defaultConfig {
+        testInstrumentationRunner "com.android.test.runner.MultiDexTestRunner"
+        versionCode 196
+        versionName "4.0.3"
+        multiDexEnabled true
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+    dexOptions {
+        javaMaxHeapSize "2g"
+    }
+    signingConfigs {
+        release {
+            storeFile file('androidkeystore')
+            storePassword 'ydnabcdef'
+            keyAlias 'itsi-miebooks'
+            keyPassword 'ydnabcdef'
+        }
+    }
+    productFlavors {
+        dev {
+            compileSdkVersion 25
+            minSdkVersion 17
+            targetSdkVersion 23
+        }
+        prod {
+            compileSdkVersion 23
+            minSdkVersion 17
+            targetSdkVersion 21
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFile file('proguard-rules.txt')
+            signingConfig signingConfigs.release
+        }
+    }
+    sourceSets {
+        main {
+            scala {
+                srcDir 'src/main/scala'
+            }
+        }
+        test {
+            scala {
+                srcDir "test/scala"
+            }
+        }
+        androidTest {
+            setRoot("test/scala")
+            scala {
+                srcDir "test/scala"
+            }
+        }
+    }
+}
+dependencies {
+    compile "org.scala-lang:scala-library:2.11.8"
+    compile "com.android.support:multidex:1.0.1"
+    compile 'com.android.support:support-v4:25.0.1'
+    compile 'com.android.support:appcompat-v7:25.0.1'
+    compile 'com.android.support:design:25.0.1'
+    androidTestCompile "com.android.support:multidex-instrumentation:1.0.1", { exclude module: "multidex" }
+    // Need to remove all usage of Promise before upgrading scalaz version to 7.2.x.
+    //compile "com.chuusai:shapeless_2.11:2.3.2"
+    compile "org.scalaz:scalaz-core_2.11:7.1.8"
+    compile "org.scalaz:scalaz-concurrent_2.11:7.1.8"
+    compile "org.scalaz.stream:scalaz-stream_2.11:0.7.2a"
+    compile 'io.monix:monix_2.11:2.0.4'
+    compile "com.squareup.okio:okio:1.6.0"
+    compile "com.squareup.okhttp3:okhttp:3.5.0"
+    compile 'com.fortysevendeg:mvessel-android_2.11:0.1'
+    compile "com.typesafe.slick:slick_2.11:3.1.1"
+    compile "org.slf4j:slf4j-nop:1.6.4"
+    //compile "net.databinder:unfiltered-filter_2.11:0.8.4"
+    //compile "net.databinder:unfiltered-jetty_2.11:0.8.4"
+    compile "pl.droidsonroids.gif:android-gif-drawable:1.1.7@aar"
+    compile "org.tpolecat:atto-core_2.11:0.4.2"
+    compile "io.argonaut:argonaut_2.11:6.1"
+    compile "io.dylemma:scala-frp_2.11:1.1"
+    compile "org.scala-stm:scala-stm_2.11:0.7"
+    compile "org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.0.2"
+    compile "com.radaee.pdf:viewlib:3.10c@aar"
+    provided "com.radaee:view:3.10c"
+    compile "itsi:device-event-protos:58"
+    compile 'com.android.support.constraint:constraint-layout:1.0.0-beta2'
+    compile 'com.android.support:cardview-v7:25.0.1'
+    //compile 'com.github.ozodrukh:CircularReveal:2.0.1@aar'
+    //compile 'com.bowyer.app:fabtransitionlayout:0.4.0@aar'
+    compile 'com.getbase:floatingactionbutton:1.10.1'
+}
+tasks.withType(ScalaCompile) {
+    scalaCompileOptions.deprecation = false
+    scalaCompileOptions.additionalParameters = [
+            '-feature',
+            //'-deprecation',
+            '-unchecked',
+            '-language:postfixOps',
+            '-language:implicitConversions',
+            '-Xfuture',
+            '-Yno-adapted-args'
+            //'-Ywarn-dead-code'
+    ]
+}
+import de.undercouch.gradle.tasks.download.Download
+task updateCDNFiles(type: Download) {
+    src 'http://schools.cdn.it.si/schools.json'
+    dest 'src/main/res/raw/schools.json'
+}
+task updateStudentDashboard(type: Download) {
+    username 'deployment'
+    password 'deployment123'
+    src 'https://nexus.it.si/repository/raw-hosted/student-dashboard.zip'
+    dest 'src/main/res/raw/statisticszip.zip'
+}
+task updateAssessmentZip(type: Download) {
+    src 'http://app.dev.it.si/alchemy/assessmentzip'
+    dest 'src/main/res/raw/assessmentzip.zip'
+}
+gradle.projectsEvaluated {
+    prepareProdReleaseDependencies.dependsOn updateCDNFiles
+    prepareProdReleaseDependencies.dependsOn updateStudentDashboard
+    prepareProdReleaseDependencies.dependsOn updateAssessmentZip
+}*/
