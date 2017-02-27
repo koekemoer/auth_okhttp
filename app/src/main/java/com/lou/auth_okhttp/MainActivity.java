@@ -1,7 +1,12 @@
 package com.lou.auth_okhttp;
 
 import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
+import java.util.Arrays;
 
 import android.net.Credentials;
 import android.os.AsyncTask;
@@ -17,6 +22,7 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
 import okhttp3.HttpUrl;
@@ -32,10 +38,13 @@ import static okhttp3.Credentials.basic;
 public class MainActivity extends AppCompatActivity {
 
     private OkHttpClient client;
+
     private String response;
 
     String url = "https://app.dev.it.si/alchemy/api/1.0/login";
 
+    public MainActivity() throws NoSuchAlgorithmException {
+    }
 
 
     @Override
@@ -49,12 +58,20 @@ public class MainActivity extends AppCompatActivity {
 
         client = new OkHttpClient();
 
+        //client = getUnsafeOkHttpClient();
+
         //attemptLogin(url);
+
+
 
         bLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                attemptLogin(url);
+
+                String uname = etUname.toString();
+                String pass = etPassw.toString();
+
+                attemptLogin(url, uname, pass);
             }
         });
 
@@ -76,14 +93,14 @@ public class MainActivity extends AppCompatActivity {
         }.execute();
     }
 
-    private void attemptLogin(String url) {
+    private void attemptLogin(String url, final String username, final String password) {
         new AsyncTask<String, Void, Void>() {
             protected Void doInBackground(String... params) {
                 try {
                     response = ApiCall.POST(
                             client,
                             params[0],
-                            RequestBuilder.LoginBody("harvey", "p"/*, "token"*/));
+                            RequestBuilder.LoginBody(username, password/*, "token"*/));
 
                     Log.d("Response", response);
                 } catch (IOException e) {
@@ -94,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
         }.execute(url);
     }
 
-    /*private static OkHttpClient getUnsafeOkHttpClient() {
+    private static OkHttpClient getUnsafeOkHttpClient() {
         try {
             // Create a trust manager that does not validate certificate chains
             final TrustManager[] trustAllCerts = new TrustManager[] {
@@ -120,20 +137,36 @@ public class MainActivity extends AppCompatActivity {
             // Create an ssl socket factory with our all-trusting manager
             final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
 
-            OkHttpClient okHttpClient = new OkHttpClient();
-            okHttpClient.setSslSocketFactory(sslSocketFactory);
-            okHttpClient.setHostnameVerifier(new HostnameVerifier() {
+            //OkHttpClient okHttpClient = new OkHttpClient();
+
+            TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(
+                    TrustManagerFactory.getDefaultAlgorithm());
+            trustManagerFactory.init((KeyStore) null);
+            TrustManager[] trustManagers = trustManagerFactory.getTrustManagers();
+            if (trustManagers.length != 1 || !(trustManagers[0] instanceof X509TrustManager)) {
+                throw new IllegalStateException("Unexpected default trust managers:"
+                        + Arrays.toString(trustManagers));
+            }
+
+            X509TrustManager trustManager = (X509TrustManager) trustManagers[0];
+
+            OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                    .sslSocketFactory(sslSocketFactory, trustManager)
+                    .build();
+
+            //okHttpClient.setSslSocketFactory(sslSocketFactory);
+            /*okHttpClient.setHostnameVerifier(new HostnameVerifier() {
                 @Override
                 public boolean verify(String hostname, SSLSession session) {
                     return true;
                 }
-            });
+            });*/
 
             return okHttpClient;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }*/
+    }
 
 
 }
