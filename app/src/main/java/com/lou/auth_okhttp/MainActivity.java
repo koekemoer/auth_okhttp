@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import android.content.Intent;
 import android.net.Credentials;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -133,7 +134,6 @@ public class MainActivity extends AppCompatActivity {
                 attemptLogin(url, uname, pass);
             }
         });
-
     }
 
     private void loadContent() {
@@ -153,6 +153,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void attemptLogin(String url, final String username, final String password) {
+
+        final String test = "(.*)\"success\":true(.*)";
+
         new AsyncTask<String, Void, Void>() {
             protected Void doInBackground(String... params) {
                 assert (params[0] != null);
@@ -163,6 +166,11 @@ public class MainActivity extends AppCompatActivity {
                             RequestBuilder.LoginBody(username, password/*, "token"*/));
 
                     Log.d("Response", response);
+                    if (response.matches(test) == true) {
+                        Intent intent = new Intent(MainActivity.this, UserAreaAct.class);
+
+                        MainActivity.this.startActivity(intent);
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
