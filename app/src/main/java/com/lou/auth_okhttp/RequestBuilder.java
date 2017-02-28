@@ -13,11 +13,14 @@ public class RequestBuilder {
     public static RequestBody LoginBody(String username, String password/*, String token*/) {
         assert(username != null);
         assert(password != null);
+
+
         return new FormBody.Builder()
-                .add("action", "login")
-                .add("format", "json")
+                //.add("action", "login")
+                //.add("format", "json")
                 .add("username", username)
                 .add("password", password)
+                .add("noHash", "0")
                 //.add("logintoken", token)
                 .build();
     }

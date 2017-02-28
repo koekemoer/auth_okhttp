@@ -127,8 +127,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                final String uname = etUname.toString();
-                final String pass = etPassw.toString();
+                String uname = etUname.getText().toString();
+                String pass = etPassw.getText().toString();
 
                 attemptLogin(url, uname, pass);
             }
@@ -207,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
                 .add(url, "sha1/iXvcdOUn+STyrY9ra+EyHq8un1Q=")
                 .build();
 
-        CookieJar cookies = new CookieJar() {
+        /*CookieJar cookies = new CookieJar() {
             @Override
             public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {
             }
@@ -216,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
             public List<Cookie> loadForRequest(HttpUrl url) {
                 return null;
             }
-        };
+        };*/
 
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .sslSocketFactory(sslContext.getSocketFactory())
@@ -227,7 +227,19 @@ public class MainActivity extends AppCompatActivity {
                     }
                 })
                 .certificatePinner(pinner)
-                .cookieJar(cookies)
+                .cookieJar(new CookieJar() {
+                    private List<Cookie> cookies = new ArrayList();
+
+                    @Override
+                    public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {
+                        this.cookies = cookies;
+                    }
+
+                    @Override
+                    public List<Cookie> loadForRequest(HttpUrl url) {
+                        return cookies;
+                    }
+                })
                 .build();
 
         return okHttpClient;
