@@ -11,6 +11,8 @@ import okhttp3.RequestBody;
 public class RequestBuilder {
 
     public static RequestBody LoginBody(String username, String password/*, String token*/) {
+        assert(username != null);
+        assert(password != null);
         return new FormBody.Builder()
                 .add("action", "login")
                 .add("format", "json")

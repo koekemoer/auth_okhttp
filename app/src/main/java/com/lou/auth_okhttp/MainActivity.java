@@ -60,31 +60,31 @@ public class MainActivity extends AppCompatActivity {
 
     private static String url = "https://app.dev.it.si/alchemy/api/1.0/login";
 
-    private static final String ITSIPEM = "-----BEGIN CERTIFICATE-----" +
-            "MIIEXzCCA0egAwIBAgIJAMKQOgdGwN9LMA0GCSqGSIb3DQEBCwUAMIHFMQswCQYD" +
-            "VQQGEwJaQTEQMA4GA1UECAwHR2F1dGVuZzERMA8GA1UEBwwIUHJldG9yaWExHTAb" +
-            "BgNVBAoMFElUIFNjaG9vbCBJbm5vdmF0aW9uMRkwFwYDVQQLDBBJVFNJIERldmVs" +
-            "b3BtZW50MS8wLQYDVQQDDCZJVFNJIERldmVsb3BtZW50IENlcnRpZmljYXRlIEF1" +
-            "dGhvcml0eTEmMCQGCSqGSIb3DQEJARYXc3VwcG9ydEBpdHNjaG9vbHMuY28uemEw" +
-            "HhcNMTQwOTEwMDczOTEwWhcNMjQwOTA3MDczOTEwWjCBxTELMAkGA1UEBhMCWkEx" +
-            "EDAOBgNVBAgMB0dhdXRlbmcxETAPBgNVBAcMCFByZXRvcmlhMR0wGwYDVQQKDBRJ" +
-            "VCBTY2hvb2wgSW5ub3ZhdGlvbjEZMBcGA1UECwwQSVRTSSBEZXZlbG9wbWVudDEv" +
-            "MC0GA1UEAwwmSVRTSSBEZXZlbG9wbWVudCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkx" +
-            "JjAkBgkqhkiG9w0BCQEWF3N1cHBvcnRAaXRzY2hvb2xzLmNvLnphMIIBIjANBgkq" +
-            "hkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0BfpGWpIUMmGfFgYdn95UH+XbZkcTEYy" +
-            "45W6KqiJpW2eygnr9O2mbi1NLYGllvIAkR0/jUrI4m7MNnzGLz5NfLKRtog356V8" +
-            "LIeb5zIUu+L1Zuw0YuKEcbRzAV4txB5NA5zKLiYg88rLi7uXVlmVIDp28RO6HQLJ" +
-            "8r5D9SbOFiTXG0BZ1oQkdQ2gZtJKr0S04UAYv2HWIy8i+M5Xz8xRB88tBqLD3SPr" +
-            "MoBedrHTKuqPtCWiq1ArmfPdIFFf4rBQalsba5u2G2HPfBkVYyXTACe0K2FLtpiX" +
-            "vo7nuaiMh9cXU45wKLI/nxtLjjR8ehysVw2ICsfkg5Mk8s/GL1xF+QIDAQABo1Aw" +
-            "TjAdBgNVHQ4EFgQUA7vcSm79IvSQVopFevZX1KFIzAUwHwYDVR0jBBgwFoAUA7vc" +
-            "Sm79IvSQVopFevZX1KFIzAUwDAYDVR0TBAUwAwEB/zANBgkqhkiG9w0BAQsFAAOC" +
-            "AQEAMm9jcBymtSUI/05A+GRtQMQlfmGdqU8lpgQJ1/Km64U3oeNWGsAJfC4EQWs0" +
-            "9PCbL2Tzso2DtfmYoYYIRZYJuzZ3GcLPBNCg5ut6ihaNBIFSnyTMJ2n1KpHMqGIZ" +
-            "g/vZ8JKzIafT0qObwdImZi9lqwo5XLl8OXzHCJHesSuGTHSHcX0jjThKhL3ERVgc" +
-            "jGwIQm7Uz4UicrMhOfJLpVP0E/UG3rqVH4YTcjbfFbC4lKkjY75BAV8GQ/xN9mvk" +
-            "GzJ9DaugccvYof0WnL+83SJm8mQXhFIIzjWodDocAgc/Xo511TSRZRugITfythM6" +
-            "1coLc8so8GjOjLb71Xovlnps/w==" +
+    private static final String ITSIPEM = "-----BEGIN CERTIFICATE-----\n" +
+            "MIIEXzCCA0egAwIBAgIJAMKQOgdGwN9LMA0GCSqGSIb3DQEBCwUAMIHFMQswCQYD\n" +
+            "VQQGEwJaQTEQMA4GA1UECAwHR2F1dGVuZzERMA8GA1UEBwwIUHJldG9yaWExHTAb\n" +
+            "BgNVBAoMFElUIFNjaG9vbCBJbm5vdmF0aW9uMRkwFwYDVQQLDBBJVFNJIERldmVs\n" +
+            "b3BtZW50MS8wLQYDVQQDDCZJVFNJIERldmVsb3BtZW50IENlcnRpZmljYXRlIEF1\n" +
+            "dGhvcml0eTEmMCQGCSqGSIb3DQEJARYXc3VwcG9ydEBpdHNjaG9vbHMuY28uemEw\n" +
+            "HhcNMTQwOTEwMDczOTEwWhcNMjQwOTA3MDczOTEwWjCBxTELMAkGA1UEBhMCWkEx\n" +
+            "EDAOBgNVBAgMB0dhdXRlbmcxETAPBgNVBAcMCFByZXRvcmlhMR0wGwYDVQQKDBRJ\n" +
+            "VCBTY2hvb2wgSW5ub3ZhdGlvbjEZMBcGA1UECwwQSVRTSSBEZXZlbG9wbWVudDEv\n" +
+            "MC0GA1UEAwwmSVRTSSBEZXZlbG9wbWVudCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkx\n" +
+            "JjAkBgkqhkiG9w0BCQEWF3N1cHBvcnRAaXRzY2hvb2xzLmNvLnphMIIBIjANBgkq\n" +
+            "hkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0BfpGWpIUMmGfFgYdn95UH+XbZkcTEYy\n" +
+            "45W6KqiJpW2eygnr9O2mbi1NLYGllvIAkR0/jUrI4m7MNnzGLz5NfLKRtog356V8\n" +
+            "LIeb5zIUu+L1Zuw0YuKEcbRzAV4txB5NA5zKLiYg88rLi7uXVlmVIDp28RO6HQLJ\n" +
+            "8r5D9SbOFiTXG0BZ1oQkdQ2gZtJKr0S04UAYv2HWIy8i+M5Xz8xRB88tBqLD3SPr\n" +
+            "MoBedrHTKuqPtCWiq1ArmfPdIFFf4rBQalsba5u2G2HPfBkVYyXTACe0K2FLtpiX\n" +
+            "vo7nuaiMh9cXU45wKLI/nxtLjjR8ehysVw2ICsfkg5Mk8s/GL1xF+QIDAQABo1Aw\n" +
+            "TjAdBgNVHQ4EFgQUA7vcSm79IvSQVopFevZX1KFIzAUwHwYDVR0jBBgwFoAUA7vc\n" +
+            "Sm79IvSQVopFevZX1KFIzAUwDAYDVR0TBAUwAwEB/zANBgkqhkiG9w0BAQsFAAOC\n" +
+            "AQEAMm9jcBymtSUI/05A+GRtQMQlfmGdqU8lpgQJ1/Km64U3oeNWGsAJfC4EQWs0\n" +
+            "9PCbL2Tzso2DtfmYoYYIRZYJuzZ3GcLPBNCg5ut6ihaNBIFSnyTMJ2n1KpHMqGIZ\n" +
+            "g/vZ8JKzIafT0qObwdImZi9lqwo5XLl8OXzHCJHesSuGTHSHcX0jjThKhL3ERVgc\n" +
+            "jGwIQm7Uz4UicrMhOfJLpVP0E/UG3rqVH4YTcjbfFbC4lKkjY75BAV8GQ/xN9mvk\n" +
+            "GzJ9DaugccvYof0WnL+83SJm8mQXhFIIzjWodDocAgc/Xo511TSRZRugITfythM6\n" +
+            "1coLc8so8GjOjLb71Xovlnps/w==\n" +
             "-----END CERTIFICATE-----";
 
 
@@ -103,7 +103,21 @@ public class MainActivity extends AppCompatActivity {
 
         //client = new OkHttpClient();
 
-        client = getUnsafeOkHttpClient();
+        try {
+            client = pinnedClient();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (CertificateException e) {
+            e.printStackTrace();
+        } catch (UnrecoverableKeyException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (KeyManagementException e) {
+            e.printStackTrace();
+        } catch (KeyStoreException e) {
+            e.printStackTrace();
+        }
 
         //attemptLogin(url);
 
@@ -113,8 +127,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                String uname = etUname.toString();
-                String pass = etPassw.toString();
+                final String uname = etUname.toString();
+                final String pass = etPassw.toString();
 
                 attemptLogin(url, uname, pass);
             }
@@ -141,6 +155,7 @@ public class MainActivity extends AppCompatActivity {
     private void attemptLogin(String url, final String username, final String password) {
         new AsyncTask<String, Void, Void>() {
             protected Void doInBackground(String... params) {
+                assert (params[0] != null);
                 try {
                     response = ApiCall.POST(
                             client,
@@ -179,8 +194,6 @@ public class MainActivity extends AppCompatActivity {
                     new SecureRandom());
             return sslContext;
         }
-    }
-
 
     private static OkHttpClient pinnedClient() throws IOException, CertificateException, UnrecoverableKeyException, NoSuchAlgorithmException, KeyManagementException, KeyStoreException {
 
@@ -206,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
         };
 
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .sslSocketFactory(sslSocketFactory.getSocketFactory, pinner)
+                .sslSocketFactory(sslContext.getSocketFactory())
                 .hostnameVerifier(new HostnameVerifier() {
                     @Override
                     public boolean verify(String hostname, SSLSession session) {
@@ -214,7 +227,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                 })
                 .certificatePinner(pinner)
-                .cookieJar(cookies);
+                .cookieJar(cookies)
+                .build();
 
         return okHttpClient;
     }

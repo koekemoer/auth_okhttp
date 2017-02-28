@@ -40,6 +40,9 @@ public class ApiCall {
     }
 
     public static String POST(OkHttpClient client, String url, RequestBody body) throws IOException {
+        assert(client != null);
+        assert(url != null);
+        assert(body != null);
         Request request = new Request.Builder()
                 .url(url)
                 .post(body)
