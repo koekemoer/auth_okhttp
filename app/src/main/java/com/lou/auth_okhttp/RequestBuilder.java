@@ -31,8 +31,11 @@ public class RequestBuilder {
                 .host("app.dev.it.si")
                 .addPathSegment("alchemy")
                 .addPathSegment("api")
-                .addPathSegment("1.0")
-                .addPathSegment("login")
+                //.addPathSegment("1.0")
+                //.addPathSegment("login")
+                .addPathSegment("user")
+                .addPathSegment("harvey")
+                .addPathSegment("books")
                 .build();
     }
 }

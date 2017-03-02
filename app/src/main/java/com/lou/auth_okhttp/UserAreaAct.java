@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 public class UserAreaAct extends AppCompatActivity {
 
-    private static String user_url = "wiele";
+    private static String user_url = "https://app.dev.it.si/alchemy/api/users/harvey/books";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

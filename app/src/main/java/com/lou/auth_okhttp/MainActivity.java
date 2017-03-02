@@ -1,5 +1,6 @@
 package com.lou.auth_okhttp;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -134,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
             protected Void doInBackground(Void... params) {
                 try {
                     response = ApiCall.GET(client, RequestBuilder.buildUrl());
-                    Log.d("Response", response);
+                    Log.d("Response:LoadContent", response);
                 }
                 catch (IOException e) {
                     e.printStackTrace();
@@ -157,7 +158,6 @@ public class MainActivity extends AppCompatActivity {
 
                     Log.d("Response", response);
 //--------------------------------------------------------------------------------------------------
-
                     Gson gson = new Gson();
                     LoginInfo obj1 = gson.fromJson(response, LoginInfo.class);
 
@@ -165,12 +165,12 @@ public class MainActivity extends AppCompatActivity {
                     Log.d("LoginInfo:Surname", obj1.surname);
                     Log.d("LoginInfo:Success", obj1.success.toString());
 
+                    loadContent();
 
-                    /*if (response.matches(test) == true) {
+                    if (obj1.success == true) {
                         Intent intent = new Intent(MainActivity.this, UserAreaAct.class);
-
                         MainActivity.this.startActivity(intent);
-                    }*/
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
