@@ -1,10 +1,25 @@
 package com.lou.auth_okhttp;
 
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -15,43 +30,20 @@ import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-
-import android.content.Intent;
-import android.net.Credentials;
-import android.os.AsyncTask;
-import android.os.Build;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
-import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
-import javax.net.ssl.X509TrustManager;
 
 import okhttp3.CertificatePinner;
 import okhttp3.Cookie;
 import okhttp3.CookieJar;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
-import okhttp3.Response;
-import okhttp3.Route;
-import okhttp3.Authenticator;
-import okhttp3.Request;
-
-import static okhttp3.Credentials.basic;
-import static org.apache.http.conn.ssl.SSLSocketFactory.SSL;
-//import okhttp3.Credentials;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -154,9 +146,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void attemptLogin(String url, final String username, final String password) {
 
-        final String test = "(.*)\"success\":true(.*)";
-
-        new AsyncTask<String, Void, Void>() {
+         new AsyncTask<String, Void, Void>() {
             protected Void doInBackground(String... params) {
                 assert (params[0] != null);
                 try {
@@ -166,11 +156,21 @@ public class MainActivity extends AppCompatActivity {
                             RequestBuilder.LoginBody(username, password/*, "token"*/));
 
                     Log.d("Response", response);
-                    if (response.matches(test) == true) {
+//--------------------------------------------------------------------------------------------------
+
+                    Gson gson = new Gson();
+                    LoginInfo obj1 = gson.fromJson(response, LoginInfo.class);
+
+                    Log.d("LoginInfo:FirstName", obj1.firstname);
+                    Log.d("LoginInfo:Surname", obj1.surname);
+                    Log.d("LoginInfo:Success", obj1.success.toString());
+
+
+                    /*if (response.matches(test) == true) {
                         Intent intent = new Intent(MainActivity.this, UserAreaAct.class);
 
                         MainActivity.this.startActivity(intent);
-                    }
+                    }*/
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -207,8 +207,6 @@ public class MainActivity extends AppCompatActivity {
 
         SSLContext sslContext = sslContextForTrustedCertificates(
                 new ByteArrayInputStream(ITSIPEM.getBytes("UTF-8")));
-
-
 
         CertificatePinner pinner = new okhttp3.CertificatePinner.Builder()
                 .add(url, "sha1/3gMBWEcd/5uQKWBUio2xcJnLCrk=")
