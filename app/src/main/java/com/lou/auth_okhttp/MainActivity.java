@@ -52,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
 
     private String response;
 
+    public static String finalUser;
+
     private static String url = "https://app.dev.it.si/alchemy/api/1.0/login";
 
     private static final String ITSIPEM = "-----BEGIN CERTIFICATE-----\n" +
@@ -115,8 +117,6 @@ public class MainActivity extends AppCompatActivity {
 
         //attemptLogin(url);
 
-
-
         bLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -129,12 +129,16 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void loadContent() {
+    public OkHttpClient getClient() {
+        return this.client;
+    }
+
+    public void loadContent(final String username) {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
                 try {
-                    response = ApiCall.GET(client, RequestBuilder.buildUrl());
+                    response = ApiCall.GET(client, RequestBuilder.buildUrl(username));
                     Log.d("Response:LoadContent", response);
                 }
                 catch (IOException e) {
@@ -147,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void attemptLogin(String url, final String username, final String password) {
 
-         new AsyncTask<String, Void, Void>() {
+        new AsyncTask<String, Void, Void>() {
             protected Void doInBackground(String... params) {
                 assert (params[0] != null);
                 try {
@@ -157,15 +161,17 @@ public class MainActivity extends AppCompatActivity {
                             RequestBuilder.LoginBody(username, password/*, "token"*/));
 
                     Log.d("Response", response);
-//--------------------------------------------------------------------------------------------------
+
                     Gson gson = new Gson();
                     LoginInfo obj1 = gson.fromJson(response, LoginInfo.class);
 
-                    Log.d("LoginInfo:FirstName", obj1.firstname);
-                    Log.d("LoginInfo:Surname", obj1.surname);
-                    Log.d("LoginInfo:Success", obj1.success.toString());
+                    //Log.d("LoginInfo:FirstName", obj1.firstname);
+                    //Log.d("LoginInfo:Surname", obj1.surname);
+                    //Log.d("LoginInfo:Success", obj1.success.toString());
+                    //Log.d("User:Username", obj1.user.username);
 
-                    loadContent();
+                    finalUser = obj1.user.username.toString();
+                    loadContent(finalUser);
 
                     if (obj1.success == true) {
                         Intent intent = new Intent(MainActivity.this, UserAreaAct.class);

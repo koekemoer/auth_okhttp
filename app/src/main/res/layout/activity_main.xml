@@ -11,26 +11,26 @@
     tools:context="com.lou.auth_okhttp.MainActivity">
 
     <EditText
+        android:id="@+id/et_uname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
-        android:id="@+id/et_uname"
-        android:hint="Username" />
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="harvey" />
 
     <EditText
+        android:id="@+id/et_passw"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:ems="10"
-        android:layout_below="@+id/et_uname"
         android:layout_alignLeft="@+id/et_uname"
         android:layout_alignStart="@+id/et_uname"
-        android:id="@+id/et_passw"
-        android:hint="Password" />
+        android:layout_below="@+id/et_uname"
+        android:ems="10"
+        android:inputType="textPassword"
+        android:text="p" />
 
     <Button
         android:text="Login"

@@ -9,9 +9,9 @@ import com.google.gson.annotations.SerializedName;
 
 public class LoginInfo {
 
-    //@SerializedName("user")
-    //@Expose
-    //public User user;
+    @SerializedName("user")
+    @Expose
+    public User user;
     @SerializedName("hash")
     @Expose
     public String hash;

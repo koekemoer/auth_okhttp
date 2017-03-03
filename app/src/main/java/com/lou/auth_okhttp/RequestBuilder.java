@@ -25,7 +25,7 @@ public class RequestBuilder {
                 .build();
     }
 
-    public static HttpUrl buildUrl() {
+    public static HttpUrl buildUrl(final String username) {
         return new HttpUrl.Builder()
                 .scheme("https")
                 .host("app.dev.it.si")
@@ -33,8 +33,8 @@ public class RequestBuilder {
                 .addPathSegment("api")
                 //.addPathSegment("1.0")
                 //.addPathSegment("login")
-                .addPathSegment("user")
-                .addPathSegment("harvey")
+                .addPathSegment("users")
+                .addPathSegment(username)
                 .addPathSegment("books")
                 .build();
     }

@@ -10,4 +10,11 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.lou.auth_okhttp.UserAreaAct">
 
+    <TextView
+        android:id="@+id/textView_welcome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:textAppearance="@android:style/TextAppearance.Material.Large" />
 </RelativeLayout>
