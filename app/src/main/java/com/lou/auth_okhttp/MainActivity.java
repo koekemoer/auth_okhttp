@@ -48,9 +48,12 @@ import okhttp3.OkHttpClient;
 
 public class MainActivity extends AppCompatActivity {
 
-    private OkHttpClient client;
+    private static OkHttpClient client;
+    //public OkHttpClient client;
 
-    private String response;
+    private static String response;
+
+    private static LoginInfo obj1;
 
     public static String finalUser;
 
@@ -133,6 +136,14 @@ public class MainActivity extends AppCompatActivity {
         return this.client;
     }
 
+    public String getResponse() {
+        return this.response;
+    }
+
+    public LoginInfo getObj1() {
+        return this.obj1;
+    }
+
     public void loadContent(final String username) {
         new AsyncTask<Void, Void, Void>() {
             @Override
@@ -163,17 +174,13 @@ public class MainActivity extends AppCompatActivity {
                     Log.d("Response", response);
 
                     Gson gson = new Gson();
-                    LoginInfo obj1 = gson.fromJson(response, LoginInfo.class);
+                    obj1 = gson.fromJson(response, LoginInfo.class);
 
-                    //Log.d("LoginInfo:FirstName", obj1.firstname);
-                    //Log.d("LoginInfo:Surname", obj1.surname);
-                    //Log.d("LoginInfo:Success", obj1.success.toString());
-                    //Log.d("User:Username", obj1.user.username);
 
-                    finalUser = obj1.user.username.toString();
-                    loadContent(finalUser);
+                    //loadContent(finalUser);
 
                     if (obj1.success == true) {
+                        finalUser = obj1.user.username.toString();
                         Intent intent = new Intent(MainActivity.this, UserAreaAct.class);
                         MainActivity.this.startActivity(intent);
                     }
