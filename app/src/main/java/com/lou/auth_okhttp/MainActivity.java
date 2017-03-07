@@ -58,8 +58,6 @@ public class MainActivity extends AppCompatActivity {
 
     public static String finalUser;
 
-    public static String test;
-
     private static String url = "https://app.dev.it.si/alchemy/api/1.0/login";
 
     private static final String ITSIPEM = "-----BEGIN CERTIFICATE-----\n" +
@@ -151,16 +149,13 @@ public class MainActivity extends AppCompatActivity {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-                //test = "Before try";
                 try {
                     response = ApiCall.GET(client, RequestBuilder.buildUrl(username));
                     Log.d("Response:LoadContent", response);
                     //Toast.makeText(MainActivity.this, "MainActivity LoadContent", Toast.LENGTH_LONG).show();
-                  //  test = "Kosie";
                 }
                 catch (IOException e) {
                     e.printStackTrace();
-                    //test = "Buksie";
                 }
                 return null;
             }

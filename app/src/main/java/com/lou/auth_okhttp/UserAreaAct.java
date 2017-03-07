@@ -42,54 +42,35 @@ public class UserAreaAct extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        //Gson gson = new Gson();
-        //LoginInfo obj = gson.fromJson(mainActivity.getResponse(), LoginInfo.class);
         LoginInfo obj = mainActivity.getObj1();
-
-        //client = mainActivity.client;
-
-        //txt_welcome.setText("Welcome " + mainActivity.finalUser);
         txt_welcome.setText("Welcome Mr. " + obj.surname);
+        //Log.d("UserArea:Username", mainActivity.finalUser);
 
-        Log.d("UserArea:Username", mainActivity.finalUser);
+        loadContent(mainActivity.getClient(), obj.user.username.toString());
 
-        //mainActivity.loadContent(obj.user.username);
+        //txt_test.setText(response);
+        //Toast.makeText(UserAreaAct.this, "After LoadContent", Toast.LENGTH_LONG).show();
 
-        loadContent(mainActivity.getClient()/*, obj.user.username.toString()*/);
-
-        txt_test.setText(mainActivity.finalUser);
-        Toast.makeText(UserAreaAct.this, "After LoadContent", Toast.LENGTH_LONG).show();
-        /*if (response == null) {
-            txt_test.setText("Wiele met 'n P");
-        }*/
-
-        /*try {
-            response = ApiCall.GET(mainActivity.getClient(), RequestBuilder.buildUrl(mainActivity.finalUser));
-            Log.d("GET_Request", response);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
     }
 
-    public void loadContent(final OkHttpClient client/*, final String username*/) {
+    public void loadContent(final OkHttpClient client, final String username) {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
                 //Toast.makeText()
                 try {
-                    response = ApiCall.GET(client, /*RequestBuilder.buildUrl(username)*/ user_url);
-                    Log.d("Response:LoadContent", response);
-                    //Toast.makeText(UserAreaAct.this, "UserArea LoadContent", Toast.LENGTH_LONG).show();
-                    //test = "Kosie";
+                    response = ApiCall.GET(client, RequestBuilder.buildUrl(username) /*user_url*/);
+                    Log.d("USER_AREA:LoadContent", response);
                 }
                 catch (IOException e) {
                     e.printStackTrace();
-                    //Toast.makeText(UserAreaAct.this, "CATCH", Toast.LENGTH_LONG).show();
-                    //test = "Katools";
                 }
-                //test = "Buksie";
                 return null;
             }
         }.execute();
     }
+
+    /*public void sendMail() {
+        Log.i("Send email", "");
+    }*/
 }

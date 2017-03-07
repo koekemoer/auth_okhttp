@@ -31,7 +31,7 @@ public class RequestBuilder {
                 .host("app.dev.it.si")
                 .addPathSegment("alchemy")
                 .addPathSegment("api")
-                //.addPathSegment("1.0")
+                .addPathSegment("1.0")
                 //.addPathSegment("login")
                 .addPathSegment("users")
                 .addPathSegment(username)
