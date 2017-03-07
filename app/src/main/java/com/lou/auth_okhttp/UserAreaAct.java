@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -15,8 +16,12 @@ import okhttp3.OkHttpClient;
 
 public class UserAreaAct extends AppCompatActivity {
 
-    //private static String user_url = "https://app.dev.it.si/alchemy/api/users/harvey/books";
+    private static String user_url = "https://app.dev.it.si/alchemy/api/users/harvey/books";
     private static String response;
+
+    //public String test = "Wiele";
+
+    //final TextView txt_test = (TextView) findViewById(R.id.textView_test);
 
     //private OkHttpClient client;
 
@@ -48,11 +53,15 @@ public class UserAreaAct extends AppCompatActivity {
 
         Log.d("UserArea:Username", mainActivity.finalUser);
 
-        //mainActivity.loadContent(mainActivity.finalUser);
+        //mainActivity.loadContent(obj.user.username);
 
-        loadContent(mainActivity.getClient(), mainActivity.finalUser);
+        loadContent(mainActivity.getClient()/*, obj.user.username.toString()*/);
 
-        txt_test.setText(response);
+        txt_test.setText(mainActivity.finalUser);
+        Toast.makeText(UserAreaAct.this, "After LoadContent", Toast.LENGTH_LONG).show();
+        /*if (response == null) {
+            txt_test.setText("Wiele met 'n P");
+        }*/
 
         /*try {
             response = ApiCall.GET(mainActivity.getClient(), RequestBuilder.buildUrl(mainActivity.finalUser));
@@ -62,17 +71,23 @@ public class UserAreaAct extends AppCompatActivity {
         }*/
     }
 
-    public void loadContent(final OkHttpClient client, final String username) {
+    public void loadContent(final OkHttpClient client/*, final String username*/) {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
+                //Toast.makeText()
                 try {
-                    response = ApiCall.GET(client, RequestBuilder.buildUrl(username) /*user_url*/);
+                    response = ApiCall.GET(client, /*RequestBuilder.buildUrl(username)*/ user_url);
                     Log.d("Response:LoadContent", response);
+                    //Toast.makeText(UserAreaAct.this, "UserArea LoadContent", Toast.LENGTH_LONG).show();
+                    //test = "Kosie";
                 }
                 catch (IOException e) {
                     e.printStackTrace();
+                    //Toast.makeText(UserAreaAct.this, "CATCH", Toast.LENGTH_LONG).show();
+                    //test = "Katools";
                 }
+                //test = "Buksie";
                 return null;
             }
         }.execute();

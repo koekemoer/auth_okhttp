@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -56,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
     private static LoginInfo obj1;
 
     public static String finalUser;
+
+    public static String test;
 
     private static String url = "https://app.dev.it.si/alchemy/api/1.0/login";
 
@@ -148,12 +151,16 @@ public class MainActivity extends AppCompatActivity {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
+                //test = "Before try";
                 try {
                     response = ApiCall.GET(client, RequestBuilder.buildUrl(username));
                     Log.d("Response:LoadContent", response);
+                    //Toast.makeText(MainActivity.this, "MainActivity LoadContent", Toast.LENGTH_LONG).show();
+                  //  test = "Kosie";
                 }
                 catch (IOException e) {
                     e.printStackTrace();
+                    //test = "Buksie";
                 }
                 return null;
             }
@@ -176,8 +183,9 @@ public class MainActivity extends AppCompatActivity {
                     Gson gson = new Gson();
                     obj1 = gson.fromJson(response, LoginInfo.class);
 
+                    //loadContent(obj1.user.username.toString());
 
-                    //loadContent(finalUser);
+                    //Toast.makeText(MainActivity.this, "After MainActivity LoadContent", Toast.LENGTH_LONG).show();
 
                     if (obj1.success == true) {
                         finalUser = obj1.user.username.toString();
