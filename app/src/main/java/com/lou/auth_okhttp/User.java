@@ -11,6 +11,62 @@ import java.util.List;
 
 public class User {
 
+    /*@SerializedName("_id")
+    @Expose
+    public String id;
+    @SerializedName("_rev")
+    @Expose
+    public String rev;
+    @SerializedName("type")
+    @Expose
+    public String type;
+    @SerializedName("dataSource")
+    @Expose
+    public String dataSource;
+    @SerializedName("created")
+    @Expose
+    public Integer created;
+    @SerializedName("username")
+    @Expose
+    public String username;
+    @SerializedName("firstname")
+    @Expose
+    public String firstname;
+    @SerializedName("surname")
+    @Expose
+    public String surname;
+    @SerializedName("enabled")
+    @Expose
+    public Boolean enabled;
+
+    @SerializedName("roles")
+    @Expose
+    public List<String> roles = null;
+    @SerializedName("grants")
+    @Expose
+    public Grants grants;
+    @SerializedName("classes")
+    @Expose
+    public List<String> classes = null;
+    @SerializedName("grade")
+    @Expose
+    public Integer grade;
+    @SerializedName("hermesClasses")
+    @Expose
+    public List<String> hermesClasses = null;
+    @SerializedName("updated")
+    @Expose
+    public Integer updated;
+    @SerializedName("updatedBy")
+    @Expose
+    public String updatedBy;
+    @SerializedName("groupsUpdated")
+    @Expose
+    public Integer groupsUpdated;
+    @SerializedName("email")
+    @Expose
+    public String email;*/
+
     @SerializedName("_id")
     @Expose
     public String id;
@@ -38,9 +94,6 @@ public class User {
     @SerializedName("enabled")
     @Expose
     public Boolean enabled;
-    @SerializedName("email")
-    @Expose
-    public String email;
     @SerializedName("roles")
     @Expose
     public List<String> roles = null;
@@ -52,7 +105,10 @@ public class User {
     public List<String> classes = null;
     @SerializedName("grade")
     @Expose
-    public Integer grade;
+    public String grade;
+    @SerializedName("hermesClasses")
+    @Expose
+    public List<String> hermesClasses = null;
     @SerializedName("updated")
     @Expose
     public Integer updated;
@@ -62,4 +118,7 @@ public class User {
     @SerializedName("groupsUpdated")
     @Expose
     public Integer groupsUpdated;
+    @SerializedName("email")
+    @Expose
+    public String email;
 }

@@ -5,126 +5,75 @@ import com.google.gson.annotations.SerializedName;
 
 public class Example {
 
-    @SerializedName("id")
+    /*@SerializedName("id")
     @Expose
-    private String id;
+    public String id;
     @SerializedName("_id")
     @Expose
-    private String _id;
+    public String _id;
     @SerializedName("version")
     @Expose
-    private Integer version;
+    public Integer version;
     @SerializedName("pagesChecksum")
     @Expose
-    private String pagesChecksum;
+    public String pagesChecksum;
     @SerializedName("format")
     @Expose
-    private String format;
+    public String format;
     @SerializedName("metadata")
     @Expose
-    private Metadata metadata;
+    public Metadata metadata;
     @SerializedName("title")
     @Expose
-    private String title;
+    public String title;
     @SerializedName("filename")
     @Expose
-    private String filename;
+    public String filename;
     @SerializedName("size")
     @Expose
-    private Integer size;
+    public Integer size;
     @SerializedName("checksum")
     @Expose
-    private String checksum;
+    public String checksum;
     @SerializedName("publisher")
     @Expose
-    private String publisher;
+    public String publisher;*/
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String get_id() {
-        return _id;
-    }
-
-    public void set_id(String _id) {
-        this._id = _id;
-    }
-
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
-
-    public String getPagesChecksum() {
-        return pagesChecksum;
-    }
-
-    public void setPagesChecksum(String pagesChecksum) {
-        this.pagesChecksum = pagesChecksum;
-    }
-
-    public String getFormat() {
-        return format;
-    }
-
-    public void setFormat(String format) {
-        this.format = format;
-    }
-
-    public Metadata getMetadata() {
-        return metadata;
-    }
-
-    public void setMetadata(Metadata metadata) {
-        this.metadata = metadata;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getFilename() {
-        return filename;
-    }
-
-    public void setFilename(String filename) {
-        this.filename = filename;
-    }
-
-    public Integer getSize() {
-        return size;
-    }
-
-    public void setSize(Integer size) {
-        this.size = size;
-    }
-
-    public String getChecksum() {
-        return checksum;
-    }
-
-    public void setChecksum(String checksum) {
-        this.checksum = checksum;
-    }
-
-    public String getPublisher() {
-        return publisher;
-    }
-
-    public void setPublisher(String publisher) {
-        this.publisher = publisher;
-    }
+    @SerializedName("id")
+    @Expose
+    public String id;
+    @SerializedName("_id")
+    @Expose
+    public String _id;
+    @SerializedName("version")
+    @Expose
+    public Float version;
+    @SerializedName("pagesChecksum")
+    @Expose
+    public String pagesChecksum;
+    @SerializedName("format")
+    @Expose
+    public String format;
+    @SerializedName("metadata")
+    @Expose
+    public Metadata metadata;
+    @SerializedName("title")
+    @Expose
+    public String title;
+    @SerializedName("filename")
+    @Expose
+    public String filename;
+    @SerializedName("size")
+    @Expose
+    public Integer size;
+    @SerializedName("checksum")
+    @Expose
+    public String checksum;
+    @SerializedName("publisher")
+    @Expose
+    public String publisher;
+    @SerializedName("mathZipChecksum")
+    @Expose
+    public String mathZipChecksum;
 
 }

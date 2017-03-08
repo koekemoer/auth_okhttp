@@ -178,14 +178,13 @@ public class MainActivity extends AppCompatActivity {
                     Gson gson = new Gson();
                     obj1 = gson.fromJson(response, LoginInfo.class);
 
-                    //loadContent(obj1.user.username.toString());
-
-                    //Toast.makeText(MainActivity.this, "After MainActivity LoadContent", Toast.LENGTH_LONG).show();
-
                     if (obj1.success == true) {
                         finalUser = obj1.user.username.toString();
                         Intent intent = new Intent(MainActivity.this, UserAreaAct.class);
                         MainActivity.this.startActivity(intent);
+                    }
+                    else {
+                        Toast.makeText(MainActivity.this, "Wrong Password", Toast.LENGTH_LONG).show();
                     }
                 } catch (IOException e) {
                     e.printStackTrace();

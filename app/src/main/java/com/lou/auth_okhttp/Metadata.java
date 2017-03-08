@@ -9,169 +9,104 @@ import com.google.gson.annotations.SerializedName;
 
 
 public class Metadata {
-    @SerializedName("isbn")
+    /*@SerializedName("isbn")
     @Expose
-    private String isbn;
+    public String isbn;
     @SerializedName("originalTitle")
     @Expose
-    private String originalTitle;
+    public String originalTitle;
     @SerializedName("title")
     @Expose
-    private String title;
+    public String title;
     @SerializedName("publisher")
     @Expose
-    private String publisher;
+    public String publisher;
     @SerializedName("language")
     @Expose
-    private String language;
+    public String language;
     @SerializedName("subject")
     @Expose
-    private String subject;
+    public String subject;
     @SerializedName("grade")
     @Expose
-    private List<String> grade = null;
+    public List<String> grade = null;
     @SerializedName("edition")
     @Expose
-    private String edition;
+    public String edition;
     @SerializedName("encryptor")
     @Expose
-    private String encryptor;
+    public String encryptor;
     @SerializedName("publicationDate")
     @Expose
-    private Integer publicationDate;
+    public Integer publicationDate;
     @SerializedName("year")
     @Expose
-    private Integer year;
+    public Integer year;
     @SerializedName("bookID")
     @Expose
-    private String bookID;
+    public String bookID;
     @SerializedName("version")
     @Expose
-    private Integer version;
+    public Integer version;
     @SerializedName("encryptionDate")
     @Expose
-    private Integer encryptionDate;
+    public Integer encryptionDate;
     @SerializedName("format")
     @Expose
-    private Integer format;
+    public Integer format;*/
 
-    public String getIsbn() {
-        return isbn;
-    }
-
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
-    }
-
-    public String getOriginalTitle() {
-        return originalTitle;
-    }
-
-    public void setOriginalTitle(String originalTitle) {
-        this.originalTitle = originalTitle;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getPublisher() {
-        return publisher;
-    }
-
-    public void setPublisher(String publisher) {
-        this.publisher = publisher;
-    }
-
-    public String getLanguage() {
-        return language;
-    }
-
-    public void setLanguage(String language) {
-        this.language = language;
-    }
-
-    public String getSubject() {
-        return subject;
-    }
-
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
-
-    public List<String> getGrade() {
-        return grade;
-    }
-
-    public void setGrade(List<String> grade) {
-        this.grade = grade;
-    }
-
-    public String getEdition() {
-        return edition;
-    }
-
-    public void setEdition(String edition) {
-        this.edition = edition;
-    }
-
-    public String getEncryptor() {
-        return encryptor;
-    }
-
-    public void setEncryptor(String encryptor) {
-        this.encryptor = encryptor;
-    }
-
-    public Integer getPublicationDate() {
-        return publicationDate;
-    }
-
-    public void setPublicationDate(Integer publicationDate) {
-        this.publicationDate = publicationDate;
-    }
-
-    public Integer getYear() {
-        return year;
-    }
-
-    public void setYear(Integer year) {
-        this.year = year;
-    }
-
-    public String getBookID() {
-        return bookID;
-    }
-
-    public void setBookID(String bookID) {
-        this.bookID = bookID;
-    }
-
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
-
-    public Integer getEncryptionDate() {
-        return encryptionDate;
-    }
-
-    public void setEncryptionDate(Integer encryptionDate) {
-        this.encryptionDate = encryptionDate;
-    }
-
-    public Integer getFormat() {
-        return format;
-    }
-
-    public void setFormat(Integer format) {
-        this.format = format;
-    }
+    @SerializedName("format")
+    @Expose
+    public Integer format;
+    @SerializedName("language")
+    @Expose
+    public String language;
+    @SerializedName("grade")
+    @Expose
+    public List<String> grade = null;
+    @SerializedName("originalTitle")
+    @Expose
+    public String originalTitle;
+    @SerializedName("title")
+    @Expose
+    public String title;
+    @SerializedName("subject")
+    @Expose
+    public String subject;
+    @SerializedName("encryptor")
+    @Expose
+    public String encryptor;
+    @SerializedName("isbn")
+    @Expose
+    public String isbn;
+    @SerializedName("publicationDate")
+    @Expose
+    public Integer publicationDate;
+    @SerializedName("publisher")
+    @Expose
+    public String publisher;
+    @SerializedName("year")
+    @Expose
+    public Integer year;
+    @SerializedName("bookID")
+    @Expose
+    public String bookID;
+    @SerializedName("version")
+    @Expose
+    public Float version;
+    @SerializedName("encryptionDate")
+    @Expose
+    public Integer encryptionDate;
+    @SerializedName("edition")
+    @Expose
+    public String edition;
+    @SerializedName("regions")
+    @Expose
+    public List<String> regions = null;
+    @SerializedName("curriculum")
+    @Expose
+    public List<Object> curriculum = null;
+    @SerializedName("markets")
+    @Expose
+    public List<String> markets = null;
 }
