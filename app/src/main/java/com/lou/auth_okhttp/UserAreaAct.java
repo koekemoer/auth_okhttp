@@ -55,13 +55,17 @@ public class UserAreaAct extends AppCompatActivity {
 
         loadContent(mainActivity.getClient(), obj.user.username);
 
-        //Gson gson = new Gson();
-        //objMeta = gson.fromJson(resp, Example.class);
+        /*Gson gson = new Gson();
+        objMeta = gson.fromJson(response, Example[].class);
 
-        //txt_test.setText(content);
-        //Toast.makeText(UserAreaAct.this, resp, Toast.LENGTH_LONG).show();
-        //Toast.makeText(UserAreaAct.this, objMeta.getMetadata().getTitle(), Toast.LENGTH_LONG).show();
-        //Log.d("RESPONSE###", resp);
+        for (int i = 0; i < objMeta.length; i++) {
+            Log.d("###########BOOK_ID", objMeta[i].metadata.bookID);
+            if (objMeta[i].metadata.title == null || objMeta[i].metadata.title == "") {
+                Log.d("#########BOOK_TITLE", "NULL OU BUL");
+            }
+            Log.d("###########BOOK_TITLE", objMeta[i].metadata.title);
+        }*/
+
         Log.i("####################", "AFTER GSON");
         //Log.i("USER_AREA:BookID", objList.get(0).metadata.bookID);
         //Log.i("USER_AREA:Book_Title", objList.get(0).metadata.title);
@@ -81,10 +85,13 @@ public class UserAreaAct extends AppCompatActivity {
                     objMeta = gson.fromJson(response, Example[].class);
                     //objMap = gson.fromJson(response, new TypeToken<Map<String, Object>>(){}.getType());
                     //objList = gson.fromJson(response, new TypeToken<List<Example>>(){}.getType());
-                    Log.d("###########BOOK_ID", objMeta[0].metadata.bookID);
-                    //Log.d("###########BOOK_ID", objList.get(0).metadata.bookID);
-                    //Log.d("###########BOOK_TITLE", objList.get(0).metadata.title);
-
+                    for (int i = 0; i < objMeta.length; i++) {
+                        Log.d("###########BOOK_ID", objMeta[i].metadata.bookID);
+                        if (objMeta[i].metadata.title == null || objMeta[i].metadata.title == "") {
+                            Log.d("#########BOOK_TITLE", "NULL OU BUL");
+                        }
+                        Log.d("###########BOOK_TITLE", objMeta[i].metadata.title);
+                    }
                 }
                 catch (IOException e) {
                     e.printStackTrace();
