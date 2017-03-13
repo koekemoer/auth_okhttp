@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -17,6 +19,7 @@ import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 
 import okhttp3.OkHttpClient;
 
@@ -25,6 +28,9 @@ public class UserAreaAct extends AppCompatActivity {
     //private static String user_url = "https://app.dev.it.si/alchemy/api/users/harvey/books";
     private static String response;
     private static Example[] objMeta;
+    //Button btn_show;
+
+
     //private static Example[] objExample;
     //private static Map<String, Object> objMap;
     //private static List<Example> objList = new ArrayList<>();
@@ -44,7 +50,7 @@ public class UserAreaAct extends AppCompatActivity {
 
         final TextView txt_welcome = (TextView) findViewById(R.id.textView_welcome);
         final TextView txt_test = (TextView) findViewById(R.id.textView_test);
-        final Button btn_show = (Button) findViewById(R.id.btn_show);
+        Button btn_show = (Button) findViewById(R.id.btn_show);
 
         MainActivity mainActivity = null;
         try {
@@ -62,21 +68,12 @@ public class UserAreaAct extends AppCompatActivity {
         btn_show.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Log.d("CLICKEDY CLICK", "CLICKED");
                 loadContent(client, objLogin.user.username);
-
-                /*for (int i = 0; i < objMeta.length; i++) {
-                    Log.d("###########BOOK_ID", objMeta[i].metadata.bookID);
-                    if (objMeta[i].metadata.title == null || objMeta[i].metadata.title == "") {
-                        Log.d("#########BOOK_TITLE", "NULL OU BUL");
-                    }
-                    Log.d("###########BOOK_TITLE", objMeta[i].metadata.title);
-                }*/
-
             }
         });
 
-        //loadContent(client, objLogin.user.username);
+        loadContent(client, objLogin.user.username);
 
         //loadContent(mainActivity.getClient(), objLogin.user.username);
 
@@ -100,11 +97,79 @@ public class UserAreaAct extends AppCompatActivity {
             relativeLayout.addView(textView);
         }*/
 
-        Log.i("####################", "AFTER GSON");
+        //Log.i("####################", "AFTER GSON");
         //Log.i("USER_AREA:BookID", objList.get(0).metadata.bookID);
         //Log.i("USER_AREA:Book_Title", objList.get(0).metadata.title);*/
 
     }
+
+    private void updateList(final Example[] objMeta1) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 0; i < objMeta1.length; i++) {
+                    Log.d("####BOOK_ID", objMeta1[i].metadata.bookID);
+                    if (objMeta1[i].metadata.title == null || objMeta1[i].metadata.title == "") {
+                        Log.d("###BOOK_TITLE", "NULL OU BUL");
+                    }
+                    Log.d("###BOOK_TITLE", objMeta1[i].metadata.title);
+
+                    //String[] textArr = {"One", "Two", "Three", "Four"};
+
+                    ListView listView = (ListView) findViewById(R.id.list_books);
+
+                    final ArrayList<String> list = new ArrayList<String>();
+                    for (int j = 0; j < objMeta1.length; j++) {
+                        //list.add(objMeta1[j].metadata.bookID);
+                        //list.add(objMeta1[j].metadata.title);
+                    }
+                    final ArrayAdapter adapter = new ArrayAdapter(UserAreaAct.this, android.R.layout.simple_list_item_1, list);
+                    listView.setAdapter(adapter);
+
+
+                    /*RelativeLayout relativeLayout = new RelativeLayout(UserAreaAct.this);
+                    setContentView(relativeLayout);
+                    for (int j = 0; j < textArr.length; j++) {
+                        TextView textView = new TextView(UserAreaAct.this);
+                        textView.setText(textArr[j]);
+                        layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT);
+                        relativeLayout.addView(textView);
+                    }*/
+
+                    /*LinearLayout linearLayout = new LinearLayout(UserAreaAct.this);
+                    setContentView(linearLayout);
+                    linearLayout.setOrientation(LinearLayout.VERTICAL);
+                    for (int j = 0; j < textArr.length; j++) {
+                        TextView textView = new TextView(UserAreaAct.this);
+                        textView.setText(textArr[j]);
+                        linearLayout.addView(textView);
+                    }*/
+                }
+            }
+        });
+    }
+
+    //String[] textArr = {"One", "Two", "Three", "Four"};
+
+    //ListView listView = (ListView) findViewById(R.id.list_books);
+
+                    /*RelativeLayout relativeLayout = new RelativeLayout(UserAreaAct.this);
+                    setContentView(relativeLayout);
+                    for (int j = 0; j < textArr.length; j++) {
+                        TextView textView = new TextView(UserAreaAct.this);
+                        textView.setText(textArr[j]);
+                        layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT);
+                        relativeLayout.addView(textView);
+                    }*/
+
+                    /*LinearLayout linearLayout = new LinearLayout(UserAreaAct.this);
+                    setContentView(linearLayout);
+                    linearLayout.setOrientation(LinearLayout.VERTICAL);
+                    for (int j = 0; j < textArr.length; j++) {
+                        TextView textView = new TextView(UserAreaAct.this);
+                        textView.setText(textArr[j]);
+                        linearLayout.addView(textView);
+                    }*/
 
     public Example[] getObjMeta() {
         return this.objMeta;
@@ -121,16 +186,16 @@ public class UserAreaAct extends AppCompatActivity {
 
                     Gson gson = new Gson();
                     objMeta = gson.fromJson(response, Example[].class);
-                    //objMap = gson.fromJson(response, new TypeToken<Map<String, Object>>(){}.getType());
-                    //objList = gson.fromJson(response, new TypeToken<List<Example>>(){}.getType());
 
-                    for (int i = 0; i < objMeta.length; i++) {
+                    updateList(objMeta);
+
+                    /*for (int i = 0; i < objMeta.length; i++) {
                         Log.d("###########BOOK_ID", objMeta[i].metadata.bookID);
                         if (objMeta[i].metadata.title == null || objMeta[i].metadata.title == "") {
                             Log.d("#########BOOK_TITLE", "NULL OU BUL");
                         }
                         Log.d("###########BOOK_TITLE", objMeta[i].metadata.title);
-                    }
+                    }*/
                 }
                 catch (IOException e) {
                     e.printStackTrace();
