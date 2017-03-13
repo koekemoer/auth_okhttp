@@ -1,5 +1,7 @@
 package com.lou.auth_okhttp;
 
+import android.os.AsyncTask;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 

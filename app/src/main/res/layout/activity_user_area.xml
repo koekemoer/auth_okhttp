@@ -16,19 +16,14 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:textAppearance="@android:style/TextAppearance.Material.Large" />
+        android:layout_marginBottom="10dp" />
 
-    <TextView
-        android:id="@+id/textView_test"
+    <Button
+        android:id="@+id/btn_show"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView_welcome"
-        android:layout_marginTop="36dp"
-        android:text=""
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_centerHorizontal="true"
+        android:text="SHOW" />
 
 </RelativeLayout>

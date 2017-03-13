@@ -129,6 +129,9 @@ public class MainActivity extends AppCompatActivity {
                 String pass = etPassw.getText().toString();
 
                 attemptLogin(url, uname, pass);
+                /*if (obj1.success == false) {
+                    Toast.makeText(MainActivity.this, "Wrong Password", Toast.LENGTH_LONG).show();
+                }*/
             }
         });
     }
@@ -171,15 +174,15 @@ public class MainActivity extends AppCompatActivity {
                     response = ApiCall.POST(
                             client,
                             params[0],
-                            RequestBuilder.LoginBody(username, password/*, "token"*/));
+                            RequestBuilder.LoginBody(username, password));
 
                     Log.d("Response", response);
 
                     Gson gson = new Gson();
                     obj1 = gson.fromJson(response, LoginInfo.class);
 
-                    if (obj1.success == true) {
-                        finalUser = obj1.user.username.toString();
+                    if (obj1.success) {
+                        finalUser = obj1.user.username;
                         Intent intent = new Intent(MainActivity.this, UserAreaAct.class);
                         MainActivity.this.startActivity(intent);
                     }
