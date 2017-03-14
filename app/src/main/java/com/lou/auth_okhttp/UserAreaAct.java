@@ -31,6 +31,7 @@ public class UserAreaAct extends AppCompatActivity {
     //private static String user_url = "https://app.dev.it.si/alchemy/api/users/harvey/books";
     private static String response;
     private static Example[] objMeta;
+    private ListView listView;
     //Button btn_show;
 
 
@@ -54,6 +55,7 @@ public class UserAreaAct extends AppCompatActivity {
         final TextView txt_welcome = (TextView) findViewById(R.id.textView_welcome);
         final TextView txt_test = (TextView) findViewById(R.id.textView_test);
         Button btn_show = (Button) findViewById(R.id.btn_show);
+        listView = (ListView) findViewById(R.id.list_books);
 
         MainActivity mainActivity = null;
         try {
@@ -72,11 +74,21 @@ public class UserAreaAct extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d("CLICKEDY CLICK", "CLICKED");
-                //loadContent(client, objLogin.user.username);
+                loadContent(client, objLogin.user.username);
             }
         });
 
-        loadContent(client, objLogin.user.username);
+        //loadContent(client, objLogin.user.username);
+
+        listView.setClickable(true);
+        listView.setLongClickable(true);
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("#####CLICKEDY CLICK", "CLICKED");
+                return true;
+            }
+        });
 
     }
 
@@ -91,9 +103,7 @@ public class UserAreaAct extends AppCompatActivity {
                     }
                     Log.d("###BOOK_TITLE", objMeta1[i].metadata.title);
 
-                    //String[] textArr = {"One", "Two", "Three", "Four"};
-
-                    ListView listView = (ListView) findViewById(R.id.list_books);
+                    //listView = (ListView) findViewById(R.id.list_books);
 
                     ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
 
@@ -105,7 +115,6 @@ public class UserAreaAct extends AppCompatActivity {
                         else {
                             list.add(putData(objMeta1[j].metadata.bookID, objMeta1[j].metadata.title));
                         }
-
                         //list.add(objMeta1[j].metadata.bookID);
                         //list.add(objMeta1[j].metadata.title);
                         /*map = new HashMap<String, String>();
@@ -120,26 +129,15 @@ public class UserAreaAct extends AppCompatActivity {
                     SimpleAdapter adapter = new SimpleAdapter(UserAreaAct.this, list, android.R.layout.simple_list_item_2, from, to);
                     listView.setAdapter(adapter);
 
-
-
-
-                    /*RelativeLayout relativeLayout = new RelativeLayout(UserAreaAct.this);
-                    setContentView(relativeLayout);
-                    for (int j = 0; j < textArr.length; j++) {
-                        TextView textView = new TextView(UserAreaAct.this);
-                        textView.setText(textArr[j]);
-                        layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT);
-                        relativeLayout.addView(textView);
-                    }*/
-
-                    /*LinearLayout linearLayout = new LinearLayout(UserAreaAct.this);
-                    setContentView(linearLayout);
-                    linearLayout.setOrientation(LinearLayout.VERTICAL);
-                    for (int j = 0; j < textArr.length; j++) {
-                        TextView textView = new TextView(UserAreaAct.this);
-                        textView.setText(textArr[j]);
-                        linearLayout.addView(textView);
-                    }*/
+                    /*listView.setClickable(true);
+                    listView.setLongClickable(true);
+                    listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                        @Override
+                        public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                            Log.d("#####CLICKEDY CLICK", "CLICKED");
+                            return true;
+                        }
+                    });*/
                 }
             }
         });
