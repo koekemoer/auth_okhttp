@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -71,37 +72,11 @@ public class UserAreaAct extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d("CLICKEDY CLICK", "CLICKED");
-                loadContent(client, objLogin.user.username);
+                //loadContent(client, objLogin.user.username);
             }
         });
 
         loadContent(client, objLogin.user.username);
-
-        //loadContent(mainActivity.getClient(), objLogin.user.username);
-
-        //String[] textArr = {"One", "Two", "Three", "Four"};
-
-        /*LinearLayout linearLayout = new LinearLayout(this);
-        setContentView(linearLayout);
-        linearLayout.setOrientation(LinearLayout.VERTICAL);*/
-        /*for (int i = 0; i < textArr.length; i++) {
-            TextView textView = new TextView(this);
-            textView.setText(textArr[i]);
-            linearLayout.addView(textView);
-        }*/
-
-        /*RelativeLayout relativeLayout = new RelativeLayout(this);
-        setContentView(relativeLayout);
-        for (int i = 0; i < textArr.length; i++) {
-            TextView textView = new TextView(this);
-            textView.setText(textArr[i]);
-            layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT)
-            relativeLayout.addView(textView);
-        }*/
-
-        //Log.i("####################", "AFTER GSON");
-        //Log.i("USER_AREA:BookID", objList.get(0).metadata.bookID);
-        //Log.i("USER_AREA:Book_Title", objList.get(0).metadata.title);*/
 
     }
 
@@ -124,15 +99,27 @@ public class UserAreaAct extends AppCompatActivity {
 
                     HashMap<String, String> map = new HashMap<String, String>();
                     for (int j = 0; j < objMeta1.length; j++) {
+                        if (objMeta1[j].metadata.title == "" || objMeta1[j].metadata.title == null) {
+                            list.add(putData(objMeta1[j].metadata.bookID, "(Title not available)"));
+                        }
+                        else {
+                            list.add(putData(objMeta1[j].metadata.bookID, objMeta1[j].metadata.title));
+                        }
+
                         //list.add(objMeta1[j].metadata.bookID);
                         //list.add(objMeta1[j].metadata.title);
-                        map = new HashMap<String, String>();
+                        /*map = new HashMap<String, String>();
                         map.put("BookID: ", objMeta1[j].metadata.bookID + "\n");
                         map.put("Title: ", objMeta1[j].metadata.title);
-                        list.add(map);
+                        list.add(map);*/
                     }
-                    final ArrayAdapter adapter = new ArrayAdapter(UserAreaAct.this, android.R.layout.simple_list_item_1, list);
+                    //ArrayAdapter adapter = new ArrayAdapter(UserAreaAct.this, android.R.layout.simple_list_item_1, list);
+                    //listView.setAdapter(adapter);
+                    String[] from = {"Title: ", "BookID: "};
+                    int[] to = {android.R.id.text1, android.R.id.text2};
+                    SimpleAdapter adapter = new SimpleAdapter(UserAreaAct.this, list, android.R.layout.simple_list_item_2, from, to);
                     listView.setAdapter(adapter);
+
 
 
 
@@ -158,27 +145,12 @@ public class UserAreaAct extends AppCompatActivity {
         });
     }
 
-    //String[] textArr = {"One", "Two", "Three", "Four"};
-
-    //ListView listView = (ListView) findViewById(R.id.list_books);
-
-                    /*RelativeLayout relativeLayout = new RelativeLayout(UserAreaAct.this);
-                    setContentView(relativeLayout);
-                    for (int j = 0; j < textArr.length; j++) {
-                        TextView textView = new TextView(UserAreaAct.this);
-                        textView.setText(textArr[j]);
-                        layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT);
-                        relativeLayout.addView(textView);
-                    }*/
-
-                    /*LinearLayout linearLayout = new LinearLayout(UserAreaAct.this);
-                    setContentView(linearLayout);
-                    linearLayout.setOrientation(LinearLayout.VERTICAL);
-                    for (int j = 0; j < textArr.length; j++) {
-                        TextView textView = new TextView(UserAreaAct.this);
-                        textView.setText(textArr[j]);
-                        linearLayout.addView(textView);
-                    }*/
+    private HashMap<String, String> putData(String id, String title) {
+        HashMap<String, String> item = new HashMap<String, String>();
+        item.put("Title: ", title);
+        item.put("BookID: ", id);
+        return item;
+    }
 
     public Example[] getObjMeta() {
         return this.objMeta;
