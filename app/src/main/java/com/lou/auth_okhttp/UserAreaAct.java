@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -20,6 +21,7 @@ import org.w3c.dom.Text;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import okhttp3.OkHttpClient;
 
@@ -118,13 +120,20 @@ public class UserAreaAct extends AppCompatActivity {
 
                     ListView listView = (ListView) findViewById(R.id.list_books);
 
-                    final ArrayList<String> list = new ArrayList<String>();
+                    ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+
+                    HashMap<String, String> map = new HashMap<String, String>();
                     for (int j = 0; j < objMeta1.length; j++) {
                         //list.add(objMeta1[j].metadata.bookID);
                         //list.add(objMeta1[j].metadata.title);
+                        map = new HashMap<String, String>();
+                        map.put("BookID: ", objMeta1[j].metadata.bookID + "\n");
+                        map.put("Title: ", objMeta1[j].metadata.title);
+                        list.add(map);
                     }
                     final ArrayAdapter adapter = new ArrayAdapter(UserAreaAct.this, android.R.layout.simple_list_item_1, list);
                     listView.setAdapter(adapter);
+
 
 
                     /*RelativeLayout relativeLayout = new RelativeLayout(UserAreaAct.this);
