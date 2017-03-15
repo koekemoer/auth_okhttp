@@ -38,4 +38,7 @@ public class RequestBuilder {
                 .addPathSegment("books")
                 .build();
     }
+
+    //GET(:server:/unity/api/1.0/epubs/:bookid:/key?device=auth_test
+
 }

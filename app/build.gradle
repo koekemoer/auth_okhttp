@@ -28,6 +28,7 @@ dependencies {
     compile "com.squareup.okhttp3:okhttp:3.5.0"
     compile 'com.google.code.gson:gson:2.8.0'
     compile 'org.immutables:gson:2.1.8'
+    compile files('libs/android-query-full.0.26.8.jar')
     testCompile 'junit:junit:4.12'
 }
 

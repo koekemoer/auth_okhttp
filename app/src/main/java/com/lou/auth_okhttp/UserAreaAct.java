@@ -15,8 +15,11 @@ import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import com.androidquery.AQuery;
+import com.androidquery.callback.AjaxStatus;
 import com.google.gson.Gson;
 
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.io.IOException;
@@ -32,6 +35,7 @@ public class UserAreaAct extends AppCompatActivity {
     private static String response;
     private static Example[] objMeta;
     private ListView listView;
+    private AQuery aq;
     //Button btn_show;
 
 
@@ -49,6 +53,8 @@ public class UserAreaAct extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_area);
+
+        aq = new AQuery(this);
 
         Log.d("UserArea:", "UserArea Entered");
 
@@ -86,6 +92,15 @@ public class UserAreaAct extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.d("#####CLICKEDY CLICK", "CLICKED");
+                Log.d("#####CLICKEDY CLICK", objMeta[position].metadata.bookID);
+
+                //authBook(objMeta[position].metadata.bookID);
+
+                String url = "https://app.dev.it.si/alchemy/api/1.0/epubs/" + objMeta[position].metadata.bookID + "/key?device=auth_test";
+
+
+                //aq = new AQuery(UserAreaAct.this);
+
                 return true;
             }
         });
@@ -115,12 +130,6 @@ public class UserAreaAct extends AppCompatActivity {
                         else {
                             list.add(putData(objMeta1[j].metadata.bookID, objMeta1[j].metadata.title));
                         }
-                        //list.add(objMeta1[j].metadata.bookID);
-                        //list.add(objMeta1[j].metadata.title);
-                        /*map = new HashMap<String, String>();
-                        map.put("BookID: ", objMeta1[j].metadata.bookID + "\n");
-                        map.put("Title: ", objMeta1[j].metadata.title);
-                        list.add(map);*/
                     }
                     //ArrayAdapter adapter = new ArrayAdapter(UserAreaAct.this, android.R.layout.simple_list_item_1, list);
                     //listView.setAdapter(adapter);
@@ -129,19 +138,22 @@ public class UserAreaAct extends AppCompatActivity {
                     SimpleAdapter adapter = new SimpleAdapter(UserAreaAct.this, list, android.R.layout.simple_list_item_2, from, to);
                     listView.setAdapter(adapter);
 
-                    /*listView.setClickable(true);
-                    listView.setLongClickable(true);
-                    listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-                        @Override
-                        public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                            Log.d("#####CLICKEDY CLICK", "CLICKED");
-                            return true;
-                        }
-                    });*/
                 }
             }
         });
     }
+
+    public void authBook(String bookID) {
+        String url = "https://app.dev.it.si/alchemy/api/1.0/epubs/" + bookID + "/key?device=auth_test";
+
+        aq.progress(R.id.list_books).ajax(url, JSONObject.class, this, "jsonCallback");
+    }
+
+    /*public void jsonCallback(String url, JSONObject json, AjaxStatus status) {
+        if (json != null) {
+
+        }
+    }*/
 
     private HashMap<String, String> putData(String id, String title) {
         HashMap<String, String> item = new HashMap<String, String>();
