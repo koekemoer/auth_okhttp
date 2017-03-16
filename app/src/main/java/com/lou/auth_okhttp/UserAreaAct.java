@@ -98,13 +98,65 @@ public class UserAreaAct extends AppCompatActivity {
 
                 String url = "https://app.dev.it.si/alchemy/api/1.0/epubs/" + objMeta[position].metadata.bookID + "/key?device=auth_test";
 
-
                 //aq = new AQuery(UserAreaAct.this);
+                //aq.id(R.id.textView_welcome).text("Gertryda");
+                //aq.id(R.id.btn_show).text("Show Me!").clicked(this, "buttonClicked");
+                Log.d("USER_AREA:AUTH-TEST", url);
+                //checkAuth(objMeta);
+                validate(client, objMeta[position].metadata.bookID);
+                /*try {
+                    response = ApiCall.GET(client, RequestBuilder.buildAuthUrl(objMeta[position].metadata.bookID) url);
+                    Log.d("USER_AREA:AUTH-TEST", response);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }*/
+
 
                 return true;
             }
         });
 
+    }
+
+    private void checkAuth(final Authorize objMeta1) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (objMeta1.key == null) {
+                    Log.d("####OBJECT_KEY", "FOUND BITCHES");
+                    Log.d("####OBJECT_TEST", objMeta1.key);
+                }
+                else {
+                    Log.d("####OBJECT_KEY", "Probeer maar weer");
+                    Log.d("####OBJECT_TEST", objMeta1.key);
+                }
+
+            }
+        });
+    }
+
+    public void validate(final OkHttpClient client, final String id) {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                //Toast.makeText()
+                try {
+                    String url = "https://app.dev.it.si/alchemy/api/1.0/epubs/" + id + "/key?device=auth_test";
+                    response = ApiCall.GET(client, url);
+                    Log.d("###CHECK_AUTH", response);
+
+                    Gson gson = new Gson();
+                    Authorize objAuth = gson.fromJson(response, Authorize.class);
+
+                    checkAuth(objAuth);
+
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        }.execute();
     }
 
     private void updateList(final Example[] objMeta1) {
@@ -117,37 +169,38 @@ public class UserAreaAct extends AppCompatActivity {
                         Log.d("###BOOK_TITLE", "NULL OU BUL");
                     }
                     Log.d("###BOOK_TITLE", objMeta1[i].metadata.title);
+                }
 
                     //listView = (ListView) findViewById(R.id.list_books);
 
-                    ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+                ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
 
-                    HashMap<String, String> map = new HashMap<String, String>();
-                    for (int j = 0; j < objMeta1.length; j++) {
-                        if (objMeta1[j].metadata.title == "" || objMeta1[j].metadata.title == null) {
-                            list.add(putData(objMeta1[j].metadata.bookID, "(Title not available)"));
-                        }
-                        else {
-                            list.add(putData(objMeta1[j].metadata.bookID, objMeta1[j].metadata.title));
-                        }
+                HashMap<String, String> map = new HashMap<String, String>();
+                for (int j = 0; j < objMeta1.length; j++) {
+                    if (objMeta1[j].metadata.title == "" || objMeta1[j].metadata.title == null) {
+                        list.add(putData(objMeta1[j].metadata.bookID, "(Title not available)"));
                     }
-                    //ArrayAdapter adapter = new ArrayAdapter(UserAreaAct.this, android.R.layout.simple_list_item_1, list);
-                    //listView.setAdapter(adapter);
-                    String[] from = {"Title: ", "BookID: "};
-                    int[] to = {android.R.id.text1, android.R.id.text2};
-                    SimpleAdapter adapter = new SimpleAdapter(UserAreaAct.this, list, android.R.layout.simple_list_item_2, from, to);
-                    listView.setAdapter(adapter);
-
+                    else {
+                        list.add(putData(objMeta1[j].metadata.bookID, objMeta1[j].metadata.title));
+                    }
                 }
+                //ArrayAdapter adapter = new ArrayAdapter(UserAreaAct.this, android.R.layout.simple_list_item_1, list);
+                //listView.setAdapter(adapter);
+                String[] from = {"Title: ", "BookID: "};
+                int[] to = {android.R.id.text1, android.R.id.text2};
+                SimpleAdapter adapter = new SimpleAdapter(UserAreaAct.this, list, android.R.layout.simple_list_item_2, from, to);
+                listView.setAdapter(adapter);
+
             }
         });
     }
 
-    public void authBook(String bookID) {
-        String url = "https://app.dev.it.si/alchemy/api/1.0/epubs/" + bookID + "/key?device=auth_test";
+    /*public void buttonClicked(View button) {
+        //String url = "https://app.dev.it.si/alchemy/api/1.0/epubs/" + bookID + "/key?device=auth_test";
 
-        aq.progress(R.id.list_books).ajax(url, JSONObject.class, this, "jsonCallback");
-    }
+        //aq.progress(R.id.list_books).ajax(url, JSONObject.class, this, "jsonCallback");
+        aq.id(R.id.textView_welcome).text("Wiele");
+    }*/
 
     /*public void jsonCallback(String url, JSONObject json, AjaxStatus status) {
         if (json != null) {
@@ -194,22 +247,5 @@ public class UserAreaAct extends AppCompatActivity {
                 return null;
             }
         }.execute();
-    }
-
-    public void loadContent2(final OkHttpClient client, final String username) {
-        new AsyncTask<Void, Void, String>() {
-            @Override
-            protected String doInBackground(Void... params) {
-                String resp = null;
-                try {
-                    resp = ApiCall.GET(client, RequestBuilder.buildUrl(username));
-                    Log.d("USER_AREA:LoadContent", resp);
-                    return resp;
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                return resp;
-            }
-        };
     }
 }

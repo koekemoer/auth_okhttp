@@ -78,4 +78,8 @@ public class Example {
     @Expose
     public String mathZipChecksum;
 
+    @SerializedName("key")
+    @Expose
+    public String key = null;
+
 }
