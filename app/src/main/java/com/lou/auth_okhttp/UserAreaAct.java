@@ -14,6 +14,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.androidquery.AQuery;
 import com.androidquery.callback.AjaxStatus;
@@ -118,17 +119,18 @@ public class UserAreaAct extends AppCompatActivity {
 
     }
 
-    private void checkAuth(final Authorize objMeta1) {
+    private void checkAuth(final Authorize objKey) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (objMeta1.key == null) {
+                if (objKey.key == null) {
                     Log.d("####OBJECT_KEY", "FOUND BITCHES");
-                    Log.d("####OBJECT_TEST", objMeta1.key);
+                    Log.d("####OBJECT_TEST", objKey.key);
                 }
                 else {
-                    Log.d("####OBJECT_KEY", "Probeer maar weer");
-                    Log.d("####OBJECT_TEST", objMeta1.key);
+                    //Log.d("####OBJECT_KEY", "Probeer maar weer");
+                    Log.d("####OBJECT_TEST", objKey.key);
+                    Toast.makeText(UserAreaAct.this, "KEY: \n" + objKey.key, Toast.LENGTH_LONG).show();
                 }
 
             }
