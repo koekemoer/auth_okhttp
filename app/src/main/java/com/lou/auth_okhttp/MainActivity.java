@@ -191,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
 
                             obj1 = gson.fromJson(response, LoginInfo.class);
 
-                            if (obj1.success) {
+                            /*if (obj1.success) {
                                 finalUser = obj1.user.username;
                                 Intent intent = new Intent(MainActivity.this, UserAreaAct.class);
                                 MainActivity.this.startActivity(intent);
@@ -199,19 +199,20 @@ public class MainActivity extends AppCompatActivity {
                             else {
                                 Log.d("###LOGIN", "WRONG USER OR PASSWORD");
                                 //Toast.makeText(MainActivity.this, "Wrong Password", Toast.LENGTH_LONG).show();
+                            }*/
+                            if (!obj1.success) {
+                                Log.d("###LOGIN", "WRONG USER OR PASSWORD");
+                                Toast.makeText(MainActivity.this, "Wrong User or Password", Toast.LENGTH_LONG).show();
+                            }
+                            else {
+                                finalUser = obj1.user.username;
+                                Intent intent = new Intent(MainActivity.this, UserAreaAct.class);
+                                MainActivity.this.startActivity(intent);
                             }
                 //        }
                  //   });
 
-                    /*if (obj1.success) {
-                        finalUser = obj1.user.username;
-                        Intent intent = new Intent(MainActivity.this, UserAreaAct.class);
-                        MainActivity.this.startActivity(intent);
-                    }
-                    else {
-                        Log.d("###LOGIN", "WRONG PASSWORD!!!");
-                        Toast.makeText(MainActivity.this, "Wrong Password", Toast.LENGTH_LONG).show();
-                    }*/
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

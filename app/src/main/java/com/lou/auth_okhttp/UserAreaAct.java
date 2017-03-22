@@ -1,7 +1,9 @@
 package com.lou.auth_okhttp;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.AsyncTask;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,6 +38,7 @@ public class UserAreaAct extends AppCompatActivity {
     private static String response;
     private static Example[] objMeta;
     private ListView listView;
+    final Context context = this;
     //private AQuery aq;
 
 
@@ -100,17 +103,25 @@ public class UserAreaAct extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+
+                AlertDialog.Builder alert = new AlertDialog.Builder(context);
+                alert.setTitle("Result").setCancelable(true);
+
                 if (objKey.key == null) {
                     Log.d("####OBJECT_KEY", "FOUND OBJECT_KEY");
                     Log.d("####OBJECT_TEST", objKey.key);
                     //Toast.makeText(UserAreaAct.this, objKey.key, Toast.LENGTH_LONG).show();
+                    alert.setMessage("You are not authorized\nto view this material");
                 }
                 else {
                     Log.d("####OBJECT_KEY", objKey.key);
 
                     String url = "https://app.dev.it.si/alchemy/api/1.0/epubs/" + id + "/key/confirm?device=auth_test&platform=web&model=na";
                     acknowledgeKey(url, objKey.key, client);
+                    alert.setMessage("Book Authenticated\n\nKey: " + objKey.key);
                 }
+                alert.create();
+                alert.show();
 
             }
         });
@@ -167,19 +178,6 @@ public class UserAreaAct extends AppCompatActivity {
                             progress.setCancelable(true);
                             progress.show();
                             progress.dismiss();
-
-
-
-                            if (objAuth.ack) {
-                                Log.wtf("ACKNOWLEDGE_BOOL", "IT IS TROO");
-                                //Toast.makeText(UserAreaAct.this, "Great Success!", Toast.LENGTH_LONG).show();
-                                progress.setMessage("Great Success!");
-                            }
-                            else {
-                                Log.wtf("ACKNOWLEDGE_BOOL", "IT IS NOT TROO");
-                                Toast.makeText(UserAreaAct.this, "KEY NOT FOUND", Toast.LENGTH_LONG).show();
-                                progress.setMessage("No Success :(");
-                            }
                         }
                     });
 
