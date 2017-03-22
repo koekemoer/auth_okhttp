@@ -129,9 +129,9 @@ public class MainActivity extends AppCompatActivity {
                 String pass = etPassw.getText().toString();
 
                 attemptLogin(url, uname, pass);
-                /*if (obj1.success == false) {
-                    Toast.makeText(MainActivity.this, "Wrong Password", Toast.LENGTH_LONG).show();
-                }*/
+
+                //finish();
+
             }
         });
     }
@@ -178,17 +178,40 @@ public class MainActivity extends AppCompatActivity {
 
                     Log.d("Response", response);
 
-                    Gson gson = new Gson();
-                    obj1 = gson.fromJson(response, LoginInfo.class);
+                    /*Gson gson = new Gson();
 
-                    if (obj1.success) {
+                    obj1 = gson.fromJson(response, LoginInfo.class);*/
+
+                    Log.d("###LOGIN", "###BEFORE IF###");
+
+                //    runOnUiThread(new Runnable() {
+                //        @Override
+                //        public void run() {
+                            Gson gson = new Gson();
+
+                            obj1 = gson.fromJson(response, LoginInfo.class);
+
+                            if (obj1.success) {
+                                finalUser = obj1.user.username;
+                                Intent intent = new Intent(MainActivity.this, UserAreaAct.class);
+                                MainActivity.this.startActivity(intent);
+                            }
+                            else {
+                                Log.d("###LOGIN", "WRONG USER OR PASSWORD");
+                                //Toast.makeText(MainActivity.this, "Wrong Password", Toast.LENGTH_LONG).show();
+                            }
+                //        }
+                 //   });
+
+                    /*if (obj1.success) {
                         finalUser = obj1.user.username;
                         Intent intent = new Intent(MainActivity.this, UserAreaAct.class);
                         MainActivity.this.startActivity(intent);
                     }
                     else {
+                        Log.d("###LOGIN", "WRONG PASSWORD!!!");
                         Toast.makeText(MainActivity.this, "Wrong Password", Toast.LENGTH_LONG).show();
-                    }
+                    }*/
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

@@ -27,6 +27,12 @@ public class RequestBuilder {
                 .build();
     }
 
+    public static RequestBody PostKey(String key) {
+        return new FormBody.Builder()
+                .add("key", key)
+                .build();
+    }
+
     public static HttpUrl buildUrl(final String username) {
         return new HttpUrl.Builder()
                 .scheme("https")

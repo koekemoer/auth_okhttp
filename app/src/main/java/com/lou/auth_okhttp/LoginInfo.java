@@ -17,12 +17,42 @@ public class LoginInfo {
     public String hash;
     @SerializedName("success")
     @Expose
-    public Boolean success;
+    public Boolean success = false;
     @SerializedName("firstname")
     @Expose
     public String firstname;
     @SerializedName("surname")
     @Expose
     public String surname;
+
+    // ------------------------------------------------------
+
+    @SerializedName("reqPath")
+    @Expose
+    public String reqPath;
+    @SerializedName("target")
+    @Expose
+    public String target;
+    @SerializedName("api")
+    @Expose
+    public Boolean api;
+    @SerializedName("detail")
+    @Expose
+    public String detail;
+    @SerializedName("info")
+    @Expose
+    public String info;
+
+    //-----------------------------------------
+
+    //@SerializedName("user")
+    //@Expose
+    //public String user;
+    @SerializedName("username")
+    @Expose
+    public String username;
+    @SerializedName("person")
+    @Expose
+    public String person;
 
 }

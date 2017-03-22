@@ -1,5 +1,6 @@
 package com.lou.auth_okhttp;
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -32,35 +33,23 @@ import okhttp3.OkHttpClient;
 
 public class UserAreaAct extends AppCompatActivity {
 
-    //private static String user_url = "https://app.dev.it.si/alchemy/api/users/harvey/books";
     private static String response;
     private static Example[] objMeta;
     private ListView listView;
-    private AQuery aq;
-    //Button btn_show;
+    //private AQuery aq;
 
-
-    //private static Example[] objExample;
-    //private static Map<String, Object> objMap;
-    //private static List<Example> objList = new ArrayList<>();
-
-    //public String test = "Wiele";
-
-    //final TextView txt_test = (TextView) findViewById(R.id.textView_test);
-
-    //private OkHttpClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_area);
 
-        aq = new AQuery(this);
+        //aq = new AQuery(this);
 
         Log.d("UserArea:", "UserArea Entered");
 
         final TextView txt_welcome = (TextView) findViewById(R.id.textView_welcome);
-        final TextView txt_test = (TextView) findViewById(R.id.textView_test);
+        //final TextView txt_test = (TextView) findViewById(R.id.textView_test);
         Button btn_show = (Button) findViewById(R.id.btn_show);
         listView = (ListView) findViewById(R.id.list_books);
 
@@ -77,60 +66,50 @@ public class UserAreaAct extends AppCompatActivity {
         txt_welcome.setText("Welcome Mr. " + objLogin.surname);
         Log.d("UserArea:Username", mainActivity.finalUser);
 
-        btn_show.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        //btn_show.setOnClickListener(new View.OnClickListener() {
+        //    @Override
+        //    public void onClick(View v) {
                 Log.d("CLICKEDY CLICK", "CLICKED");
                 loadContent(client, objLogin.user.username);
-            }
-        });
+        //    }
+        //});
 
         //loadContent(client, objLogin.user.username);
 
         listView.setClickable(true);
-        listView.setLongClickable(true);
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        //listView.setLongClickable(true);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.d("#####CLICKEDY CLICK", "CLICKED");
                 Log.d("#####CLICKEDY CLICK", objMeta[position].metadata.bookID);
 
-                //authBook(objMeta[position].metadata.bookID);
-
                 String url = "https://app.dev.it.si/alchemy/api/1.0/epubs/" + objMeta[position].metadata.bookID + "/key?device=auth_test";
 
-                //aq = new AQuery(UserAreaAct.this);
-                //aq.id(R.id.textView_welcome).text("Gertryda");
-                //aq.id(R.id.btn_show).text("Show Me!").clicked(this, "buttonClicked");
                 Log.d("USER_AREA:AUTH-TEST", url);
-                //checkAuth(objMeta);
+
                 validate(client, objMeta[position].metadata.bookID);
-                /*try {
-                    response = ApiCall.GET(client, RequestBuilder.buildAuthUrl(objMeta[position].metadata.bookID) url);
-                    Log.d("USER_AREA:AUTH-TEST", response);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }*/
 
-
-                return true;
+                //return true;
             }
         });
 
     }
 
-    private void checkAuth(final Authorize objKey) {
+    private void checkAuth(final Authorize objKey, final OkHttpClient client, final String id) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 if (objKey.key == null) {
-                    Log.d("####OBJECT_KEY", "FOUND BITCHES");
+                    Log.d("####OBJECT_KEY", "FOUND OBJECT_KEY");
                     Log.d("####OBJECT_TEST", objKey.key);
+                    //Toast.makeText(UserAreaAct.this, objKey.key, Toast.LENGTH_LONG).show();
                 }
                 else {
-                    //Log.d("####OBJECT_KEY", "Probeer maar weer");
-                    Log.d("####OBJECT_TEST", objKey.key);
-                    Toast.makeText(UserAreaAct.this, "KEY: \n" + objKey.key, Toast.LENGTH_LONG).show();
+                    Log.d("####OBJECT_KEY", objKey.key);
+
+                    String url = "https://app.dev.it.si/alchemy/api/1.0/epubs/" + id + "/key/confirm?device=auth_test&platform=web&model=na";
+                    acknowledgeKey(url, objKey.key, client);
                 }
 
             }
@@ -150,7 +129,7 @@ public class UserAreaAct extends AppCompatActivity {
                     Gson gson = new Gson();
                     Authorize objAuth = gson.fromJson(response, Authorize.class);
 
-                    checkAuth(objAuth);
+                    checkAuth(objAuth, client, id);
 
                 }
                 catch (IOException e) {
@@ -159,6 +138,57 @@ public class UserAreaAct extends AppCompatActivity {
                 return null;
             }
         }.execute();
+    }
+
+    private void acknowledgeKey(final String url, final String key, final OkHttpClient client) {
+        new AsyncTask<String, Void, Void>() {
+            protected Void doInBackground(String... params) {
+                assert (params[0] != null);
+                try {
+                    response = ApiCall.POST(
+                            client,
+                            params[0],
+                            RequestBuilder.PostKey(key)
+                    );
+                    Log.wtf("ACKNOWLEDGE_KEY", url);
+                    Log.wtf("ACKNOWLEDGE_KEY", response);
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Gson gson = new Gson();
+                            Authorize objAuth = gson.fromJson(response, Authorize.class);
+                            //String ackStr = Boolean.toString(objAuth.ack);
+                            //Toast.makeText(UserAreaAct.this, objAuth.key, Toast.LENGTH_LONG).show();
+
+                            ProgressDialog progress = new ProgressDialog(UserAreaAct.this);
+                            progress.setTitle("Checking");
+                            progress.setMessage("Good things come to those who wait");
+                            progress.setCancelable(true);
+                            progress.show();
+                            progress.dismiss();
+
+
+
+                            if (objAuth.ack) {
+                                Log.wtf("ACKNOWLEDGE_BOOL", "IT IS TROO");
+                                //Toast.makeText(UserAreaAct.this, "Great Success!", Toast.LENGTH_LONG).show();
+                                progress.setMessage("Great Success!");
+                            }
+                            else {
+                                Log.wtf("ACKNOWLEDGE_BOOL", "IT IS NOT TROO");
+                                Toast.makeText(UserAreaAct.this, "KEY NOT FOUND", Toast.LENGTH_LONG).show();
+                                progress.setMessage("No Success :(");
+                            }
+                        }
+                    });
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        }.execute(url);
     }
 
     private void updateList(final Example[] objMeta1) {
@@ -177,7 +207,7 @@ public class UserAreaAct extends AppCompatActivity {
 
                 ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
 
-                HashMap<String, String> map = new HashMap<String, String>();
+                //HashMap<String, String> map = new HashMap<String, String>();
                 for (int j = 0; j < objMeta1.length; j++) {
                     if (objMeta1[j].metadata.title == "" || objMeta1[j].metadata.title == null) {
                         list.add(putData(objMeta1[j].metadata.bookID, "(Title not available)"));
@@ -197,19 +227,6 @@ public class UserAreaAct extends AppCompatActivity {
         });
     }
 
-    /*public void buttonClicked(View button) {
-        //String url = "https://app.dev.it.si/alchemy/api/1.0/epubs/" + bookID + "/key?device=auth_test";
-
-        //aq.progress(R.id.list_books).ajax(url, JSONObject.class, this, "jsonCallback");
-        aq.id(R.id.textView_welcome).text("Wiele");
-    }*/
-
-    /*public void jsonCallback(String url, JSONObject json, AjaxStatus status) {
-        if (json != null) {
-
-        }
-    }*/
-
     private HashMap<String, String> putData(String id, String title) {
         HashMap<String, String> item = new HashMap<String, String>();
         item.put("Title: ", title);
@@ -225,7 +242,6 @@ public class UserAreaAct extends AppCompatActivity {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-                //Toast.makeText()
                 try {
                     response = ApiCall.GET(client, RequestBuilder.buildUrl(username) /*user_url*/);
                     Log.d("USER_AREA:LoadContent", response);
@@ -234,14 +250,6 @@ public class UserAreaAct extends AppCompatActivity {
                     objMeta = gson.fromJson(response, Example[].class);
 
                     updateList(objMeta);
-
-                    /*for (int i = 0; i < objMeta.length; i++) {
-                        Log.d("###########BOOK_ID", objMeta[i].metadata.bookID);
-                        if (objMeta[i].metadata.title == null || objMeta[i].metadata.title == "") {
-                            Log.d("#########BOOK_TITLE", "NULL OU BUL");
-                        }
-                        Log.d("###########BOOK_TITLE", objMeta[i].metadata.title);
-                    }*/
                 }
                 catch (IOException e) {
                     e.printStackTrace();
