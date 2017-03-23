@@ -50,7 +50,6 @@ import okhttp3.OkHttpClient;
 public class MainActivity extends AppCompatActivity {
 
     private static OkHttpClient client;
-    //public OkHttpClient client;
 
     private static String response;
 
@@ -96,12 +95,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //getActionBar().setLogo(R.drawable.itsi);
 
         final EditText etUname = (EditText) findViewById(R.id.et_uname);
         final EditText etPassw = (EditText) findViewById(R.id.et_passw);
         final Button bLogin = (Button) findViewById(R.id.btn_login);
-
-        //client = new OkHttpClient();
 
         try {
             client = pinnedClient();
@@ -119,8 +117,6 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        //attemptLogin(url);
-
         bLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -129,9 +125,6 @@ public class MainActivity extends AppCompatActivity {
                 String pass = etPassw.getText().toString();
 
                 attemptLogin(url, uname, pass);
-
-                //finish();
-
             }
         });
     }
@@ -155,7 +148,6 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     response = ApiCall.GET(client, RequestBuilder.buildUrl(username));
                     Log.d("Response:LoadContent", response);
-                    //Toast.makeText(MainActivity.this, "MainActivity LoadContent", Toast.LENGTH_LONG).show();
                 }
                 catch (IOException e) {
                     e.printStackTrace();
@@ -178,28 +170,15 @@ public class MainActivity extends AppCompatActivity {
 
                     Log.d("Response", response);
 
-                    /*Gson gson = new Gson();
-
-                    obj1 = gson.fromJson(response, LoginInfo.class);*/
-
                     Log.d("###LOGIN", "###BEFORE IF###");
 
-                //    runOnUiThread(new Runnable() {
-                //        @Override
-                //        public void run() {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
                             Gson gson = new Gson();
 
                             obj1 = gson.fromJson(response, LoginInfo.class);
 
-                            /*if (obj1.success) {
-                                finalUser = obj1.user.username;
-                                Intent intent = new Intent(MainActivity.this, UserAreaAct.class);
-                                MainActivity.this.startActivity(intent);
-                            }
-                            else {
-                                Log.d("###LOGIN", "WRONG USER OR PASSWORD");
-                                //Toast.makeText(MainActivity.this, "Wrong Password", Toast.LENGTH_LONG).show();
-                            }*/
                             if (!obj1.success) {
                                 Log.d("###LOGIN", "WRONG USER OR PASSWORD");
                                 Toast.makeText(MainActivity.this, "Wrong User or Password", Toast.LENGTH_LONG).show();
@@ -209,9 +188,9 @@ public class MainActivity extends AppCompatActivity {
                                 Intent intent = new Intent(MainActivity.this, UserAreaAct.class);
                                 MainActivity.this.startActivity(intent);
                             }
-                //        }
-                 //   });
 
+                        }
+                    });
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -226,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
             CertificateFactory certFactory = CertificateFactory.getInstance("X.509");
             Collection certificates = certFactory.generateCertificates(in);
             char[] password = "password".toCharArray();
-            // Put certificates in a key store
+
             KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
             keyStore.load(null, password);
             for (int i = 0; i < certificates.size(); i++) {
@@ -255,16 +234,7 @@ public class MainActivity extends AppCompatActivity {
                 .add(url, "sha1/iXvcdOUn+STyrY9ra+EyHq8un1Q=")
                 .build();
 
-        /*CookieJar cookies = new CookieJar() {
-            @Override
-            public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {
-            }
 
-            @Override
-            public List<Cookie> loadForRequest(HttpUrl url) {
-                return null;
-            }
-        };*/
 
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .sslSocketFactory(sslContext.getSocketFactory())
@@ -292,90 +262,5 @@ public class MainActivity extends AppCompatActivity {
 
         return okHttpClient;
     }
-
-    /*private static OkHttpClient getUnsafeOkHttpClient() {
-        try {
-            // Create a trust manager that does not validate certificate chains
-            final X509TrustManager trustAllCerts =
-                    new X509TrustManager() {
-                        @Override
-                        public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
-                        }
-
-                        @Override
-                        public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
-                        }
-
-                        @Override
-                        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-                            return null;
-                        }
-
-            };
-
-            // Install the all-trusting trust manager
-            final SSLContext sslContext = SSLContext.getInstance("SSL");
-            sslContext.init(null, new X509TrustManager[]{trustAllCerts}, new java.security.SecureRandom());
-            // Create an ssl socket factory with our all-trusting manager
-            final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
-
-            OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                    .sslSocketFactory(sslContext.getSocketFactory(), trustAllCerts)
-                    .hostnameVerifier(new HostnameVerifier() {
-                        @Override
-                        public boolean verify(String hostname, SSLSession session) {
-                            return true;
-                        }
-                    })
-                    .build();
-
-            return okHttpClient;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }*/
-
-    /*private static OkHttpClient getUnsafeOkHttpClient() {
-
-        TrustManagerFactory trustManagerFactory = null;
-        try {
-            trustManagerFactory = TrustManagerFactory.getInstance(
-                    TrustManagerFactory.getDefaultAlgorithm());
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        try {
-            trustManagerFactory.init((KeyStore) null);
-        } catch (KeyStoreException e) {
-            e.printStackTrace();
-        }
-        TrustManager[] trustManagers = trustManagerFactory.getTrustManagers();
-        if (trustManagers.length != 1 || !(trustManagers[0] instanceof X509TrustManager)) {
-            throw new IllegalStateException("Unexpected default trust managers:"
-                    + Arrays.toString(trustManagers));
-        }
-        X509TrustManager trustManager = (X509TrustManager) trustManagers[0];
-
-        SSLContext sslContext = null;
-        try {
-            sslContext = SSLContext.getInstance("SSL");
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        try {
-            sslContext.init(null, new TrustManager[] { trustManager }, null);
-        } catch (KeyManagementException e) {
-            e.printStackTrace();
-        }
-        SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
-
-        OkHttpClient client = new OkHttpClient.Builder()
-                .sslSocketFactory(sslSocketFactory, trustManager)
-                .build();
-
-        return client;
-
-    }*/
-
 
 }

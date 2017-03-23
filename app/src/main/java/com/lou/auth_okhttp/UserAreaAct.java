@@ -47,13 +47,9 @@ public class UserAreaAct extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_area);
 
-        //aq = new AQuery(this);
-
         Log.d("UserArea:", "UserArea Entered");
 
         final TextView txt_welcome = (TextView) findViewById(R.id.textView_welcome);
-        //final TextView txt_test = (TextView) findViewById(R.id.textView_test);
-        Button btn_show = (Button) findViewById(R.id.btn_show);
         listView = (ListView) findViewById(R.id.list_books);
 
         MainActivity mainActivity = null;
@@ -69,18 +65,10 @@ public class UserAreaAct extends AppCompatActivity {
         txt_welcome.setText("Welcome Mr. " + objLogin.surname);
         Log.d("UserArea:Username", mainActivity.finalUser);
 
-        //btn_show.setOnClickListener(new View.OnClickListener() {
-        //    @Override
-        //    public void onClick(View v) {
-                Log.d("CLICKEDY CLICK", "CLICKED");
-                loadContent(client, objLogin.user.username);
-        //    }
-        //});
-
-        //loadContent(client, objLogin.user.username);
+        Log.d("CLICKEDY CLICK", "CLICKED");
+        loadContent(client, objLogin.user.username);
 
         listView.setClickable(true);
-        //listView.setLongClickable(true);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -92,8 +80,6 @@ public class UserAreaAct extends AppCompatActivity {
                 Log.d("USER_AREA:AUTH-TEST", url);
 
                 validate(client, objMeta[position].metadata.bookID);
-
-                //return true;
             }
         });
 
@@ -131,7 +117,6 @@ public class UserAreaAct extends AppCompatActivity {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-                //Toast.makeText()
                 try {
                     String url = "https://app.dev.it.si/alchemy/api/1.0/epubs/" + id + "/key?device=auth_test";
                     response = ApiCall.GET(client, url);
@@ -169,8 +154,6 @@ public class UserAreaAct extends AppCompatActivity {
                         public void run() {
                             Gson gson = new Gson();
                             Authorize objAuth = gson.fromJson(response, Authorize.class);
-                            //String ackStr = Boolean.toString(objAuth.ack);
-                            //Toast.makeText(UserAreaAct.this, objAuth.key, Toast.LENGTH_LONG).show();
 
                             ProgressDialog progress = new ProgressDialog(UserAreaAct.this);
                             progress.setTitle("Checking");
@@ -201,11 +184,8 @@ public class UserAreaAct extends AppCompatActivity {
                     Log.d("###BOOK_TITLE", objMeta1[i].metadata.title);
                 }
 
-                    //listView = (ListView) findViewById(R.id.list_books);
-
                 ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
 
-                //HashMap<String, String> map = new HashMap<String, String>();
                 for (int j = 0; j < objMeta1.length; j++) {
                     if (objMeta1[j].metadata.title == "" || objMeta1[j].metadata.title == null) {
                         list.add(putData(objMeta1[j].metadata.bookID, "(Title not available)"));
@@ -214,8 +194,7 @@ public class UserAreaAct extends AppCompatActivity {
                         list.add(putData(objMeta1[j].metadata.bookID, objMeta1[j].metadata.title));
                     }
                 }
-                //ArrayAdapter adapter = new ArrayAdapter(UserAreaAct.this, android.R.layout.simple_list_item_1, list);
-                //listView.setAdapter(adapter);
+
                 String[] from = {"Title: ", "BookID: "};
                 int[] to = {android.R.id.text1, android.R.id.text2};
                 SimpleAdapter adapter = new SimpleAdapter(UserAreaAct.this, list, android.R.layout.simple_list_item_2, from, to);
@@ -241,7 +220,7 @@ public class UserAreaAct extends AppCompatActivity {
             @Override
             protected Void doInBackground(Void... params) {
                 try {
-                    response = ApiCall.GET(client, RequestBuilder.buildUrl(username) /*user_url*/);
+                    response = ApiCall.GET(client, RequestBuilder.buildUrl(username));
                     Log.d("USER_AREA:LoadContent", response);
 
                     Gson gson = new Gson();

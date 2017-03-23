@@ -38,7 +38,7 @@ public class LoginInfo {
     public Boolean api;
     @SerializedName("detail")
     @Expose
-    public String detail;
+    public String detail = null;
     @SerializedName("info")
     @Expose
     public String info;
@@ -54,5 +54,11 @@ public class LoginInfo {
     @SerializedName("person")
     @Expose
     public String person;
+    @SerializedName("stack")
+    @Expose
+    public String stack;
+    @SerializedName("message")
+    @Expose
+    public String message;
 
 }
