@@ -37,6 +37,8 @@ public class UserAreaAct extends AppCompatActivity {
 
     private static String response;
     private static Example[] objMeta;
+    private static Authorize objAuth;
+    //private static Ack objAck;
     private ListView listView;
     final Context context = this;
     //private AQuery aq;
@@ -62,8 +64,8 @@ public class UserAreaAct extends AppCompatActivity {
         final OkHttpClient client = mainActivity.getClient();
         final LoginInfo objLogin = mainActivity.getObj1();
 
-        txt_welcome.setText("Welcome Mr. " + objLogin.surname);
-        Log.d("UserArea:Username", mainActivity.finalUser);
+        txt_welcome.setText("Welcome " + objLogin.user.username);
+        //Log.d("UserArea:Username", mainActivity.finalUser);
 
         Log.d("CLICKEDY CLICK", "CLICKED");
         loadContent(client, objLogin.user.username);
@@ -92,10 +94,11 @@ public class UserAreaAct extends AppCompatActivity {
 
                 AlertDialog.Builder alert = new AlertDialog.Builder(context);
                 alert.setTitle("Result").setCancelable(true);
+                Log.wtf("CHECK CHECK","CHECK_AUTH");
 
                 if (objKey.key == null) {
-                    Log.d("####OBJECT_KEY", "FOUND OBJECT_KEY");
-                    Log.d("####OBJECT_TEST", objKey.key);
+                    //Log.d("####OBJECT_KEY", "FOUND OBJECT_KEY");
+                    //Log.d("####OBJECT_TEST", objAuth.key);
                     //Toast.makeText(UserAreaAct.this, objKey.key, Toast.LENGTH_LONG).show();
                     alert.setMessage("You are not authorized\nto view this material");
                 }
@@ -104,7 +107,7 @@ public class UserAreaAct extends AppCompatActivity {
 
                     String url = "https://app.dev.it.si/alchemy/api/1.0/epubs/" + id + "/key/confirm?device=auth_test&platform=web&model=na";
                     acknowledgeKey(url, objKey.key, client);
-                    alert.setMessage("Book Authenticated\n\nKey: " + objKey.key);
+                    alert.setMessage("Book Authenticated\n\nKey: " + objKey.key + "\n\n"/* + ((objAck.ack)?"Acknowledged":"Not Acknowledged")*/);
                 }
                 alert.create();
                 alert.show();
@@ -118,12 +121,13 @@ public class UserAreaAct extends AppCompatActivity {
             @Override
             protected Void doInBackground(Void... params) {
                 try {
+                    Log.wtf("CHECK CHECK","VALIDATE");
                     String url = "https://app.dev.it.si/alchemy/api/1.0/epubs/" + id + "/key?device=auth_test";
                     response = ApiCall.GET(client, url);
                     Log.d("###CHECK_AUTH", response);
 
                     Gson gson = new Gson();
-                    Authorize objAuth = gson.fromJson(response, Authorize.class);
+                    objAuth = gson.fromJson(response, Authorize.class);
 
                     checkAuth(objAuth, client, id);
 
@@ -141,6 +145,7 @@ public class UserAreaAct extends AppCompatActivity {
             protected Void doInBackground(String... params) {
                 assert (params[0] != null);
                 try {
+                    Log.wtf("CHECK CHECK","ACKNOWLEDGE_KEY");
                     response = ApiCall.POST(
                             client,
                             params[0],
@@ -153,7 +158,7 @@ public class UserAreaAct extends AppCompatActivity {
                         @Override
                         public void run() {
                             Gson gson = new Gson();
-                            Authorize objAuth = gson.fromJson(response, Authorize.class);
+                            objAuth = gson.fromJson(response, Authorize.class);
 
                             ProgressDialog progress = new ProgressDialog(UserAreaAct.this);
                             progress.setTitle("Checking");

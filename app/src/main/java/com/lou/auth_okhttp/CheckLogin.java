@@ -4,30 +4,17 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Created by lou on 2017/03/02.
+ * Created by lou on 2017/03/24.
  */
 
-public class LoginInfo {
-
-    @SerializedName("user")
-    @Expose
-    public User user;
-    @SerializedName("hash")
-    @Expose
-    public String hash;
-    @SerializedName("firstname")
-    @Expose
-    public String firstname;
-    @SerializedName("surname")
-    @Expose
-    public String surname;
+public class CheckLogin {
     @SerializedName("success")
     @Expose
     public Boolean success = false;
 
     // ------------------------------------------------------
 
-    /*@SerializedName("reqPath")
+    @SerializedName("reqPath")
     @Expose
     public String reqPath;
     @SerializedName("target")
@@ -59,6 +46,5 @@ public class LoginInfo {
     public String stack;
     @SerializedName("message")
     @Expose
-    public String message;*/
-
+    public String message;
 }

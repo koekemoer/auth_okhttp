@@ -3,6 +3,7 @@ package com.lou.auth_okhttp;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -53,9 +54,10 @@ public class MainActivity extends AppCompatActivity {
 
     private static String response;
 
+    private static CheckLogin obj2;
     private static LoginInfo obj1;
 
-    public static String finalUser;
+    //public static String finalUser;
 
     private static String url = "https://app.dev.it.si/alchemy/api/1.0/login";
 
@@ -95,7 +97,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //getActionBar().setLogo(R.drawable.itsi);
+
+        //ActionBar actionBar = getSupportActionBar();
+        //actionBar.setDisplayUseLogoEnabled(true);
+        //actionBar.setIcon(R.drawable.itsi);
+        //actionBar.setTitle("");
+        //actionBar.setLogo(R.drawable.itsi);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setIcon(R.drawable.itsi);
 
         final EditText etUname = (EditText) findViewById(R.id.et_uname);
         final EditText etPassw = (EditText) findViewById(R.id.et_passw);
@@ -133,9 +143,9 @@ public class MainActivity extends AppCompatActivity {
         return this.client;
     }
 
-    public String getResponse() {
+    /*public String getResponse() {
         return this.response;
-    }
+    }*/
 
     public LoginInfo getObj1() {
         return this.obj1;
@@ -177,14 +187,16 @@ public class MainActivity extends AppCompatActivity {
                         public void run() {
                             Gson gson = new Gson();
 
-                            obj1 = gson.fromJson(response, LoginInfo.class);
+                            obj2 = gson.fromJson(response, CheckLogin.class);
 
-                            if (!obj1.success) {
-                                Log.d("###LOGIN", "WRONG USER OR PASSWORD");
-                                Toast.makeText(MainActivity.this, "Wrong User or Password", Toast.LENGTH_LONG).show();
+                            if (!obj2.success) {
+                                Log.d("###LOGIN", "WRONG USER");
+                                Toast.makeText(MainActivity.this, obj2.info, Toast.LENGTH_LONG).show();
                             }
                             else {
-                                finalUser = obj1.user.username;
+
+                                obj1 = gson.fromJson(response, LoginInfo.class);
+
                                 Intent intent = new Intent(MainActivity.this, UserAreaAct.class);
                                 MainActivity.this.startActivity(intent);
                             }

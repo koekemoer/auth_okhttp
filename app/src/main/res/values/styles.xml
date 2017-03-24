@@ -8,4 +8,9 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+   <!-- <style name="MyActionBarLogo" parent="@style/Widget.AppCompat.ActionBar">
+        <item name="logo">@drawable/itsi</item>
+        <item name="displayOptions">useLogo|showHome</item>
+    </style>-->
+
 </resources>
