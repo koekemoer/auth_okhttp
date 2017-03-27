@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 
@@ -42,6 +43,7 @@ public class UserAreaAct extends AppCompatActivity {
     private ListView listView;
     final Context context = this;
     public static boolean ack;
+    public static boolean check = false;
     //private AQuery aq;
 
 
@@ -53,6 +55,8 @@ public class UserAreaAct extends AppCompatActivity {
         Log.d("UserArea:", "UserArea Entered");
 
         final TextView txt_welcome = (TextView) findViewById(R.id.textView_welcome);
+        final Button btn_show = (Button) findViewById(R.id.btn_show);
+        final Button btn_groups = (Button) findViewById(R.id.btn_groups);
         listView = (ListView) findViewById(R.id.list_books);
 
         MainActivity mainActivity = null;
@@ -69,7 +73,21 @@ public class UserAreaAct extends AppCompatActivity {
         //Log.d("UserArea:Username", mainActivity.finalUser);
 
         Log.d("CLICKEDY CLICK", "CLICKED");
-        loadContent(client, objLogin.user.username);
+
+        btn_show.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadContent(client, objLogin.user.username);
+            }
+        });
+
+        btn_groups.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                showGroups(client, "https://app.dev.it.si/alchemy/api/1.0/users/c/enrolment?withPrivate=true");
+            }
+        });
+        //loadContent(client, objLogin.user.username);
 
         listView.setClickable(true);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -93,28 +111,28 @@ public class UserAreaAct extends AppCompatActivity {
             @Override
             public void run() {
 
-                AlertDialog.Builder alert = new AlertDialog.Builder(context);
-                alert.setTitle("Result").setCancelable(true);
-                Log.wtf("CHECK CHECK","CHECK_AUTH");
+
 
                 if (objAuth.key == null) {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(context);
+                    alert.setTitle("Result").setCancelable(true);
+                    Log.wtf("CHECK CHECK","CHECK_AUTH");
                     //Log.d("####OBJECT_KEY", "FOUND OBJECT_KEY");
                     //Log.d("####OBJECT_TEST", objAuth.key);
                     //Toast.makeText(UserAreaAct.this, objKey.key, Toast.LENGTH_LONG).show();
-                    alert.setMessage("You are not authorized\nto view this material");
+                    alert.setMessage(objAuth.detail);
+                    alert.create();
+                    alert.show();
                 }
                 else {
                     Log.d("####OBJECT_KEY", objAuth.key);
 
                     String url = "https://app.dev.it.si/alchemy/api/1.0/epubs/" + id + "/key/confirm?device=auth_test&platform=web&model=na";
                     acknowledgeKey(url, objAuth.key, client);
-                    Log.d("####PLACEHOLDER", "!!!!!!!!!!!!!!!!!!!!!!!!!");
-                    alert.setMessage("Book Authenticated\n\nKey: " + objAuth.key + "\n\n" + (ack?"Acknowledged":"Not Acknowledged"));
+
                     //String ackstr = Boolean.toString(objAuth.ack);
                     //Log.wtf("###ACK_checkAuth", ackstr);
                 }
-                alert.create();
-                alert.show();
 
             }
         });
@@ -138,6 +156,7 @@ public class UserAreaAct extends AppCompatActivity {
                 }
                 catch (IOException e) {
                     e.printStackTrace();
+                    Log.e("ERROR TERROR", e.getMessage());
                 }
                 return null;
             }
@@ -158,12 +177,12 @@ public class UserAreaAct extends AppCompatActivity {
                     Log.wtf("ACKNOWLEDGE_KEY", url);
                     Log.wtf("ACKNOWLEDGE_KEY", response);
 
-                    //runOnUiThread(new Runnable() {
-                    //    @Override
-                    //    public void run() {
-                    Gson gson = new Gson();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Gson gson = new Gson();
                             //objAuth = gson.fromJson(response, Authorize.class);
-                    objAuth = gson.fromJson(response, Authorize.class);
+                            objAuth = gson.fromJson(response, Authorize.class);
 
 
                             /*ProgressDialog progress = new ProgressDialog(UserAreaAct.this);
@@ -173,18 +192,21 @@ public class UserAreaAct extends AppCompatActivity {
                             progress.show();
                             progress.dismiss();*/
 
-                    String ackstr = Boolean.toString(objAuth.ack);
-                    ack = objAuth.ack;
-                    String test = Boolean.toString(ack);
-                    Log.wtf("###ACK_ackFunc", ackstr);
-                    Log.wtf("###ACK_TEST", test);
-                    //    }
-                    //});
-                    /*String ackstr = Boolean.toString(objAuth.ack);
-                    ack = objAuth.ack;
-                    String test = Boolean.toString(ack);
-                    Log.wtf("###ACK_ackFunc2", ackstr);
-                    Log.wtf("###ACK_TEST2", test);*/
+                            String ackstr = Boolean.toString(objAuth.ack);
+                            ack = objAuth.ack;
+                            //check = true;
+                            String test = Boolean.toString(ack);
+                            Log.wtf("###ACK_ackFunc", ackstr);
+                            Log.wtf("###ACK_TEST", test);
+
+                            AlertDialog.Builder alert = new AlertDialog.Builder(context);
+                            alert.setTitle("Result").setCancelable(true);
+                            Log.wtf("CHECK CHECK", "CHECK_AUTH");
+                            alert.setMessage("Book Authenticated\n\nKey: " + key + "\n\n" + (ack ? "Acknowledged" : "Not Acknowledged"));
+                            alert.create();
+                            alert.show();
+                        }
+                    });
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -224,6 +246,21 @@ public class UserAreaAct extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void showGroups (final OkHttpClient client, final String url) {
+        new AsyncTask<Void, Void, Void>() {
+            protected Void doInBackground(Void... params) {
+                try {
+                    response = ApiCall.GET(client, url);
+                    Log.wtf("###_SHOW_GROUPS_###", response);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Log.e("ERROR TERROR", e.getMessage());
+                }
+                return null;
+            }
+        }.execute();
     }
 
     private HashMap<String, String> putData(String id, String title) {

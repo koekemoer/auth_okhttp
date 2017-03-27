@@ -1,9 +1,11 @@
 package com.lou.auth_okhttp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -56,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static CheckLogin obj2;
     private static LoginInfo obj1;
+    final Context context = this;
 
     //public static String finalUser;
 
@@ -187,11 +190,16 @@ public class MainActivity extends AppCompatActivity {
                         public void run() {
                             Gson gson = new Gson();
 
+                            AlertDialog.Builder alert = new AlertDialog.Builder(context);
+                            alert.setTitle("Result").setCancelable(true);
+
                             obj2 = gson.fromJson(response, CheckLogin.class);
 
                             if (!obj2.success) {
                                 Log.d("###LOGIN", "WRONG USER");
-                                Toast.makeText(MainActivity.this, obj2.info, Toast.LENGTH_LONG).show();
+                                //Toast.makeText(MainActivity.this, obj2.info, Toast.LENGTH_LONG).show();
+                                alert.setMessage(obj2.info);
+                                alert.create().show();
                             }
                             else {
 

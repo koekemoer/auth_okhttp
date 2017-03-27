@@ -14,4 +14,7 @@ public class Authorize {
     @SerializedName("ack")
     @Expose
     public boolean ack = false;
+    @SerializedName("detail")
+    @Expose
+    public String detail;
 }
