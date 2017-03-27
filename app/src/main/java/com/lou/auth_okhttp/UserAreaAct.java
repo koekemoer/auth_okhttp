@@ -38,7 +38,7 @@ public class UserAreaAct extends AppCompatActivity {
     private static String response;
     private static Example[] objMeta;
     private static Authorize objAuth;
-    //private static Ack objAck;
+    private static Ack objAck;
     private ListView listView;
     final Context context = this;
     //private AQuery aq;
@@ -87,7 +87,7 @@ public class UserAreaAct extends AppCompatActivity {
 
     }
 
-    private void checkAuth(final Authorize objKey, final OkHttpClient client, final String id) {
+    private void checkAuth(/*final Authorize objKey, */final OkHttpClient client, final String id) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -96,18 +96,18 @@ public class UserAreaAct extends AppCompatActivity {
                 alert.setTitle("Result").setCancelable(true);
                 Log.wtf("CHECK CHECK","CHECK_AUTH");
 
-                if (objKey.key == null) {
+                if (objAuth.key == null) {
                     //Log.d("####OBJECT_KEY", "FOUND OBJECT_KEY");
                     //Log.d("####OBJECT_TEST", objAuth.key);
                     //Toast.makeText(UserAreaAct.this, objKey.key, Toast.LENGTH_LONG).show();
                     alert.setMessage("You are not authorized\nto view this material");
                 }
                 else {
-                    Log.d("####OBJECT_KEY", objKey.key);
+                    Log.d("####OBJECT_KEY", objAuth.key);
 
                     String url = "https://app.dev.it.si/alchemy/api/1.0/epubs/" + id + "/key/confirm?device=auth_test&platform=web&model=na";
-                    acknowledgeKey(url, objKey.key, client);
-                    alert.setMessage("Book Authenticated\n\nKey: " + objKey.key + "\n\n"/* + ((objAck.ack)?"Acknowledged":"Not Acknowledged")*/);
+                    acknowledgeKey(url, objAuth.key, client);
+                    alert.setMessage("Book Authenticated\n\nKey: " + objAuth.key + "\n\n" + ((objAuth.ack)?"Acknowledged":"Not Acknowledged"));
                 }
                 alert.create();
                 alert.show();
@@ -129,7 +129,7 @@ public class UserAreaAct extends AppCompatActivity {
                     Gson gson = new Gson();
                     objAuth = gson.fromJson(response, Authorize.class);
 
-                    checkAuth(objAuth, client, id);
+                    checkAuth(/*objAuth, */client, id);
 
                 }
                 catch (IOException e) {
@@ -158,7 +158,9 @@ public class UserAreaAct extends AppCompatActivity {
                         @Override
                         public void run() {
                             Gson gson = new Gson();
+                            //objAuth = gson.fromJson(response, Authorize.class);
                             objAuth = gson.fromJson(response, Authorize.class);
+
 
                             ProgressDialog progress = new ProgressDialog(UserAreaAct.this);
                             progress.setTitle("Checking");
