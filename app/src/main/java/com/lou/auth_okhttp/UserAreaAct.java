@@ -41,6 +41,7 @@ public class UserAreaAct extends AppCompatActivity {
     private static Ack objAck;
     private ListView listView;
     final Context context = this;
+    public static boolean ack;
     //private AQuery aq;
 
 
@@ -107,7 +108,10 @@ public class UserAreaAct extends AppCompatActivity {
 
                     String url = "https://app.dev.it.si/alchemy/api/1.0/epubs/" + id + "/key/confirm?device=auth_test&platform=web&model=na";
                     acknowledgeKey(url, objAuth.key, client);
-                    alert.setMessage("Book Authenticated\n\nKey: " + objAuth.key + "\n\n" + ((objAuth.ack)?"Acknowledged":"Not Acknowledged"));
+                    Log.d("####PLACEHOLDER", "!!!!!!!!!!!!!!!!!!!!!!!!!");
+                    alert.setMessage("Book Authenticated\n\nKey: " + objAuth.key + "\n\n" + (ack?"Acknowledged":"Not Acknowledged"));
+                    //String ackstr = Boolean.toString(objAuth.ack);
+                    //Log.wtf("###ACK_checkAuth", ackstr);
                 }
                 alert.create();
                 alert.show();
@@ -154,22 +158,33 @@ public class UserAreaAct extends AppCompatActivity {
                     Log.wtf("ACKNOWLEDGE_KEY", url);
                     Log.wtf("ACKNOWLEDGE_KEY", response);
 
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Gson gson = new Gson();
+                    //runOnUiThread(new Runnable() {
+                    //    @Override
+                    //    public void run() {
+                    Gson gson = new Gson();
                             //objAuth = gson.fromJson(response, Authorize.class);
-                            objAuth = gson.fromJson(response, Authorize.class);
+                    objAuth = gson.fromJson(response, Authorize.class);
 
 
-                            ProgressDialog progress = new ProgressDialog(UserAreaAct.this);
+                            /*ProgressDialog progress = new ProgressDialog(UserAreaAct.this);
                             progress.setTitle("Checking");
                             progress.setMessage("Good things come to those who wait");
                             progress.setCancelable(true);
                             progress.show();
-                            progress.dismiss();
-                        }
-                    });
+                            progress.dismiss();*/
+
+                    String ackstr = Boolean.toString(objAuth.ack);
+                    ack = objAuth.ack;
+                    String test = Boolean.toString(ack);
+                    Log.wtf("###ACK_ackFunc", ackstr);
+                    Log.wtf("###ACK_TEST", test);
+                    //    }
+                    //});
+                    /*String ackstr = Boolean.toString(objAuth.ack);
+                    ack = objAuth.ack;
+                    String test = Boolean.toString(ack);
+                    Log.wtf("###ACK_ackFunc2", ackstr);
+                    Log.wtf("###ACK_TEST2", test);*/
 
                 } catch (IOException e) {
                     e.printStackTrace();
