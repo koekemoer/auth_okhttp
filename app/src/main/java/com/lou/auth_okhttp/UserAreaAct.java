@@ -28,6 +28,7 @@ import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.security.acl.Group;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
@@ -38,12 +39,14 @@ public class UserAreaAct extends AppCompatActivity {
 
     private static String response;
     private static Example[] objMeta;
+    private static Groups[] objGroup;
     private static Authorize objAuth;
-    private static Ack objAck;
-    private ListView listView;
+    //private static Ack objAck;
+    private ListView listView, listGroup;
     final Context context = this;
     public static boolean ack;
     public static boolean check = false;
+    public MainActivity mainActivity;
     //private AQuery aq;
 
 
@@ -59,7 +62,7 @@ public class UserAreaAct extends AppCompatActivity {
         final Button btn_groups = (Button) findViewById(R.id.btn_groups);
         listView = (ListView) findViewById(R.id.list_books);
 
-        MainActivity mainActivity = null;
+        /*MainActivity */mainActivity = null;
         try {
             mainActivity = new MainActivity();
         } catch (NoSuchAlgorithmException e) {
@@ -75,16 +78,38 @@ public class UserAreaAct extends AppCompatActivity {
         Log.d("CLICKEDY CLICK", "CLICKED");
 
         btn_show.setOnClickListener(new View.OnClickListener() {
+            boolean show = false;
             @Override
             public void onClick(View v) {
+                if (show) {
+                    show = false;
+                    listView.setVisibility(View.GONE);
+                }
+                else {
+                    show = true;
+                    listView.setVisibility(View.VISIBLE);
+                }
                 loadContent(client, objLogin.user.username);
+                btn_show.setText(show ? "HIDE" : "SHOW");
             }
         });
 
         btn_groups.setOnClickListener(new View.OnClickListener(){
+            boolean show = false;
             @Override
             public void onClick(View v) {
-                showGroups(client, "https://app.dev.it.si/alchemy/api/1.0/users/c/enrolment?withPrivate=true");
+                if (show) {
+                    show = false;
+                    listView.setVisibility(View.GONE);
+                }
+                else {
+                    show = true;
+                    listView.setVisibility(View.VISIBLE);
+                }
+                //listView.setVisibility(View.GONE);
+                showGroups(client, "https://app.dev.it.si/alchemy/api/1.0/users/" + objLogin.user.username + "/enrolment?withPrivate=true");
+                btn_groups.setText(show ? "HIDE" : "GROUP");
+                //Log.wtf("###GROUPS###", objGroup[0].name);
             }
         });
         //loadContent(client, objLogin.user.username);
@@ -114,15 +139,7 @@ public class UserAreaAct extends AppCompatActivity {
 
 
                 if (objAuth.key == null) {
-                    AlertDialog.Builder alert = new AlertDialog.Builder(context);
-                    alert.setTitle("Result").setCancelable(true);
-                    Log.wtf("CHECK CHECK","CHECK_AUTH");
-                    //Log.d("####OBJECT_KEY", "FOUND OBJECT_KEY");
-                    //Log.d("####OBJECT_TEST", objAuth.key);
-                    //Toast.makeText(UserAreaAct.this, objKey.key, Toast.LENGTH_LONG).show();
-                    alert.setMessage(objAuth.detail);
-                    alert.create();
-                    alert.show();
+                    showAlert(objAuth.detail);
                 }
                 else {
                     Log.d("####OBJECT_KEY", objAuth.key);
@@ -181,30 +198,24 @@ public class UserAreaAct extends AppCompatActivity {
                         @Override
                         public void run() {
                             Gson gson = new Gson();
-                            //objAuth = gson.fromJson(response, Authorize.class);
                             objAuth = gson.fromJson(response, Authorize.class);
 
-
-                            /*ProgressDialog progress = new ProgressDialog(UserAreaAct.this);
+                            ProgressDialog progress = new ProgressDialog(UserAreaAct.this);
                             progress.setTitle("Checking");
                             progress.setMessage("Good things come to those who wait");
                             progress.setCancelable(true);
                             progress.show();
-                            progress.dismiss();*/
+                            //progress.dismiss();
 
-                            String ackstr = Boolean.toString(objAuth.ack);
-                            ack = objAuth.ack;
+                            //String ackstr = Boolean.toString(objAuth.ack);
                             //check = true;
-                            String test = Boolean.toString(ack);
-                            Log.wtf("###ACK_ackFunc", ackstr);
-                            Log.wtf("###ACK_TEST", test);
+                            //String test = Boolean.toString(ack);
+                            //Log.wtf("###ACK_ackFunc", ackstr);
+                            //Log.wtf("###ACK_TEST", test);
 
-                            AlertDialog.Builder alert = new AlertDialog.Builder(context);
-                            alert.setTitle("Result").setCancelable(true);
-                            Log.wtf("CHECK CHECK", "CHECK_AUTH");
-                            alert.setMessage("Book Authenticated\n\nKey: " + key + "\n\n" + (ack ? "Acknowledged" : "Not Acknowledged"));
-                            alert.create();
-                            alert.show();
+                            ack = objAuth.ack;
+                            progress.dismiss();
+                            showAlert("Book Authenticated\n\nKey: " + key + "\n\n" + (ack ? "Acknowledged" : "Not Acknowledged"));
                         }
                     });
 
@@ -214,64 +225,6 @@ public class UserAreaAct extends AppCompatActivity {
                 return null;
             }
         }.execute(url);
-    }
-
-    private void updateList(final Example[] objMeta1) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                for (int i = 0; i < objMeta1.length; i++) {
-                    Log.d("####BOOK_ID", objMeta1[i].metadata.bookID);
-                    if (objMeta1[i].metadata.title == null || objMeta1[i].metadata.title == "") {
-                        Log.d("###BOOK_TITLE", "NULL OU BUL");
-                    }
-                    Log.d("###BOOK_TITLE", objMeta1[i].metadata.title);
-                }
-
-                ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
-
-                for (int j = 0; j < objMeta1.length; j++) {
-                    if (objMeta1[j].metadata.title == "" || objMeta1[j].metadata.title == null) {
-                        list.add(putData(objMeta1[j].metadata.bookID, "(Title not available)"));
-                    }
-                    else {
-                        list.add(putData(objMeta1[j].metadata.bookID, objMeta1[j].metadata.title));
-                    }
-                }
-
-                String[] from = {"Title: ", "BookID: "};
-                int[] to = {android.R.id.text1, android.R.id.text2};
-                SimpleAdapter adapter = new SimpleAdapter(UserAreaAct.this, list, android.R.layout.simple_list_item_2, from, to);
-                listView.setAdapter(adapter);
-
-            }
-        });
-    }
-
-    public void showGroups (final OkHttpClient client, final String url) {
-        new AsyncTask<Void, Void, Void>() {
-            protected Void doInBackground(Void... params) {
-                try {
-                    response = ApiCall.GET(client, url);
-                    Log.wtf("###_SHOW_GROUPS_###", response);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Log.e("ERROR TERROR", e.getMessage());
-                }
-                return null;
-            }
-        }.execute();
-    }
-
-    private HashMap<String, String> putData(String id, String title) {
-        HashMap<String, String> item = new HashMap<String, String>();
-        item.put("Title: ", title);
-        item.put("BookID: ", id);
-        return item;
-    }
-
-    public Example[] getObjMeta() {
-        return this.objMeta;
     }
 
     public void loadContent(final OkHttpClient client, final String username) {
@@ -293,5 +246,112 @@ public class UserAreaAct extends AppCompatActivity {
                 return null;
             }
         }.execute();
+    }
+
+    private void updateList(final Example[] objMeta1) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                /*for (int i = 0; i < objMeta1.length; i++) {
+                    Log.d("####BOOK_ID", objMeta1[i].metadata.bookID);
+                    if (objMeta1[i].metadata.title == null || objMeta1[i].metadata.title == "") {
+                        Log.d("###BOOK_TITLE", "NULL OU BUL");
+                    }
+                    Log.d("###BOOK_TITLE", objMeta1[i].metadata.title);
+                }*/
+
+                ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+
+                for (int j = 0; j < objMeta1.length; j++) {
+                    if (objMeta1[j].metadata.title == "" || objMeta1[j].metadata.title == null) {
+                        list.add(putData(objMeta1[j].metadata.bookID, "(Title not available)"));
+                    }
+                    else {
+                        list.add(putData(objMeta1[j].metadata.bookID, objMeta1[j].metadata.title));
+                    }
+                }
+
+                String[] from = {"Title: ", "BookID: "};
+                int[] to = {android.R.id.text1, android.R.id.text2};
+                SimpleAdapter adapter = new SimpleAdapter(UserAreaAct.this, list, android.R.layout.simple_list_item_2, from, to);
+                listView.setAdapter(adapter);
+
+
+            }
+        });
+    }
+
+    public void showGroups (final OkHttpClient client, final String url) {
+        new AsyncTask<Void, Void, Void>() {
+            protected Void doInBackground(Void... params) {
+                try {
+                    response = ApiCall.GET(client, url);
+                    Log.wtf("###_SHOW_GROUPS_###", response);
+
+                    Gson gson = new Gson();
+                    objGroup = gson.fromJson(response, Groups[].class);
+
+                    updateGroups(objGroup);
+
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Log.e("ERROR TERROR", e.getMessage());
+                }
+                return null;
+            }
+        }.execute();
+    }
+
+    public void updateGroups (final Groups[] objGrp) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                for (int i = 0; i < objGrp.length; i++) {
+                    Log.d("####BOOK_ID", objGrp[i].name);
+                    if (objGrp[i].name == "" || objGrp[i].name == null) {
+                        Log.d("###BOOK_TITLE", "NULL OU BUL");
+                    }
+                    Log.d("###BOOK_TITLE", objGrp[i].source);
+                }
+
+                ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+
+                for (int j = 0; j < objGrp.length; j++) {
+                    if (objGrp[j].name == "" || objGrp[j].name == null) {
+                        list.add(putData(objGrp[j].subject, "(Title not available)"));
+                    }
+                    else {
+                        list.add(putData(objGrp[j].subject, objGrp[j].name));
+                    }
+                }
+
+                String[] from = {"Subject: ", "Name: "};
+                int[] to = {android.R.id.text1, android.R.id.text2};
+                SimpleAdapter adapter = new SimpleAdapter(UserAreaAct.this, list, android.R.layout.simple_list_item_2, from, to);
+                listView.setAdapter(adapter);
+            }
+        });
+    }
+
+    private HashMap<String, String> putData(String id, String title) {
+        HashMap<String, String> item = new HashMap<String, String>();
+        item.put("Title: ", title);
+        item.put("BookID: ", id);
+        return item;
+    }
+
+    public Example[] getObjMeta() {
+        return this.objMeta;
+    }
+
+    public void showAlert(String msg) {
+        AlertDialog.Builder alert = new AlertDialog.Builder(context);
+        alert.setTitle("Result").setCancelable(true);
+        //Log.wtf("CHECK CHECK", "CHECK_AUTH");
+        alert.setMessage(msg);
+        alert.create();
+        alert.show();
     }
 }

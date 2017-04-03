@@ -1,5 +1,6 @@
 package com.lou.auth_okhttp;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -190,20 +191,29 @@ public class MainActivity extends AppCompatActivity {
                         public void run() {
                             Gson gson = new Gson();
 
-                            AlertDialog.Builder alert = new AlertDialog.Builder(context);
-                            alert.setTitle("Result").setCancelable(true);
+                            /*AlertDialog.Builder alert = new AlertDialog.Builder(context);
+                            alert.setTitle("Result").setCancelable(true);*/
 
                             obj2 = gson.fromJson(response, CheckLogin.class);
+
+                            ProgressDialog progress = new ProgressDialog(MainActivity.this);
+                            progress.setTitle("Checking");
+                            progress.setMessage("Attempting Login");
+                            progress.setCancelable(true);
+                            progress.show();
 
                             if (!obj2.success) {
                                 Log.d("###LOGIN", "WRONG USER");
                                 //Toast.makeText(MainActivity.this, obj2.info, Toast.LENGTH_LONG).show();
-                                alert.setMessage(obj2.info);
-                                alert.create().show();
+                                //alert.setMessage(obj2.info);
+                                //alert.create().show();
+                                progress.dismiss();
+                                showAlert(obj2.info);
                             }
                             else {
 
                                 obj1 = gson.fromJson(response, LoginInfo.class);
+                                progress.dismiss();
 
                                 Intent intent = new Intent(MainActivity.this, UserAreaAct.class);
                                 MainActivity.this.startActivity(intent);
@@ -218,6 +228,15 @@ public class MainActivity extends AppCompatActivity {
                 return null;
             }
         }.execute(url);
+    }
+
+    public void showAlert(String msg) {
+        AlertDialog.Builder alert = new AlertDialog.Builder(context);
+        alert.setTitle("Result").setCancelable(true);
+        //Log.wtf("CHECK CHECK", "CHECK_AUTH");
+        alert.setMessage(msg);
+        alert.create();
+        alert.show();
     }
 
 
