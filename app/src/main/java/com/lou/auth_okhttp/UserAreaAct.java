@@ -2,6 +2,7 @@ package com.lou.auth_okhttp;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -60,9 +61,9 @@ public class UserAreaAct extends AppCompatActivity {
         final TextView txt_welcome = (TextView) findViewById(R.id.textView_welcome);
         final Button btn_show = (Button) findViewById(R.id.btn_show);
         final Button btn_groups = (Button) findViewById(R.id.btn_groups);
-        listView = (ListView) findViewById(R.id.list_books);
+        listView = (ListView) findViewById(R.id.list_books1);
 
-        /*MainActivity */mainActivity = null;
+        mainActivity = null;
         try {
             mainActivity = new MainActivity();
         } catch (NoSuchAlgorithmException e) {
@@ -72,16 +73,16 @@ public class UserAreaAct extends AppCompatActivity {
         final OkHttpClient client = mainActivity.getClient();
         final LoginInfo objLogin = mainActivity.getObj1();
 
-        txt_welcome.setText("Welcome " + objLogin.user.username);
+        txt_welcome.setText("Welcome " + objLogin.user.firstname);
         //Log.d("UserArea:Username", mainActivity.finalUser);
 
         Log.d("CLICKEDY CLICK", "CLICKED");
 
         btn_show.setOnClickListener(new View.OnClickListener() {
-            boolean show = false;
+            //boolean show = false;
             @Override
             public void onClick(View v) {
-                if (show) {
+                /*if (show) {
                     show = false;
                     listView.setVisibility(View.GONE);
                 }
@@ -90,7 +91,9 @@ public class UserAreaAct extends AppCompatActivity {
                     listView.setVisibility(View.VISIBLE);
                 }
                 loadContent(client, objLogin.user.username);
-                btn_show.setText(show ? "HIDE" : "SHOW");
+                btn_show.setText(show ? "HIDE" : "SHOW");*/
+                Intent intent = new Intent(UserAreaAct.this, BooksAct.class);
+                UserAreaAct.this.startActivity(intent);
             }
         });
 
@@ -98,7 +101,7 @@ public class UserAreaAct extends AppCompatActivity {
             boolean show = false;
             @Override
             public void onClick(View v) {
-                if (show) {
+                /*if (show) {
                     show = false;
                     listView.setVisibility(View.GONE);
                 }
@@ -109,7 +112,9 @@ public class UserAreaAct extends AppCompatActivity {
                 //listView.setVisibility(View.GONE);
                 showGroups(client, "https://app.dev.it.si/alchemy/api/1.0/users/" + objLogin.user.username + "/enrolment?withPrivate=true");
                 btn_groups.setText(show ? "HIDE" : "GROUP");
-                //Log.wtf("###GROUPS###", objGroup[0].name);
+                //Log.wtf("###GROUPS###", objGroup[0].name);*/
+                Intent intent = new Intent(UserAreaAct.this, GroupsAct.class);
+                UserAreaAct.this.startActivity(intent);
             }
         });
         //loadContent(client, objLogin.user.username);
@@ -309,22 +314,22 @@ public class UserAreaAct extends AppCompatActivity {
             public void run() {
 
                 for (int i = 0; i < objGrp.length; i++) {
-                    Log.d("####BOOK_ID", objGrp[i].name);
-                    if (objGrp[i].name == "" || objGrp[i].name == null) {
-                        Log.d("###BOOK_TITLE", "NULL OU BUL");
-                    }
-                    Log.d("###BOOK_TITLE", objGrp[i].source);
+                    Log.d("####NAME/GROUP", objGrp[i].name);
+                    //if (objGrp[i].name == "" || objGrp[i].name == null) {
+                    //    Log.d("###BOOK_TITLE", "NULL OU BUL");
+                    //}
+                    Log.d("###SUBJECT", objGrp[i].subject);
                 }
 
                 ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
 
                 for (int j = 0; j < objGrp.length; j++) {
-                    if (objGrp[j].name == "" || objGrp[j].name == null) {
-                        list.add(putData(objGrp[j].subject, "(Title not available)"));
-                    }
-                    else {
-                        list.add(putData(objGrp[j].subject, objGrp[j].name));
-                    }
+                    //if (objGrp[j].subject == "" || objGrp[j].subject == null) {
+                        //list.add(putData2(objGrp[j].subject, "(Title not available)"));
+                    //}
+                    //else {
+                        list.add(putData2(objGrp[j].subject, objGrp[j].name));
+                    //}
                 }
 
                 String[] from = {"Subject: ", "Name: "};
@@ -339,6 +344,13 @@ public class UserAreaAct extends AppCompatActivity {
         HashMap<String, String> item = new HashMap<String, String>();
         item.put("Title: ", title);
         item.put("BookID: ", id);
+        return item;
+    }
+
+    private HashMap<String, String> putData2(String id, String title) {
+        HashMap<String, String> item = new HashMap<String, String>();
+        item.put("Subject: ", title);
+        item.put("Name: ", id);
         return item;
     }
 

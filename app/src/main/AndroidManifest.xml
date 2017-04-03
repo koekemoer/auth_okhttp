@@ -9,8 +9,8 @@
     <application
         android:allowBackup="true"
         android:icon="@drawable/itsi"
-        android:logo="@drawable/itsi"
         android:label="@string/app_name"
+        android:logo="@drawable/itsi"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
@@ -20,7 +20,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".UserAreaAct"></activity>
+        <activity android:name=".UserAreaAct" />
+        <activity android:name=".BooksAct" />
+        <activity android:name=".GroupsAct"></activity>
     </application>
 
 </manifest>
