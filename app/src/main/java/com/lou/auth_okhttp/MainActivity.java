@@ -10,6 +10,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -26,6 +27,9 @@ import org.json.JSONObject;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -43,7 +47,10 @@ import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509TrustManager;
 
 import okhttp3.CertificatePinner;
 import okhttp3.Cookie;
@@ -53,17 +60,23 @@ import okhttp3.OkHttpClient;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static OkHttpClient client;
+    private static OkHttpClient client, client2;
 
     private static String response;
 
     private static CheckLogin obj2;
     private static LoginInfo obj1;
+    private static Schools[] objSchool;
     final Context context = this;
 
     //public static String finalUser;
 
     private static String url = "https://app.dev.it.si/alchemy/api/1.0/login";
+
+    private static String schools = "https://schools.cdn.it.si/schools.json";
+    //a248.e.akamai.net
+
+    private static HttpUrl hschools = HttpUrl.parse("https://schools.cdn.it.si/schools.json");
 
     private static final String ITSIPEM = "-----BEGIN CERTIFICATE-----\n" +
             "MIIEXzCCA0egAwIBAgIJAMKQOgdGwN9LMA0GCSqGSIb3DQEBCwUAMIHFMQswCQYD\n" +
@@ -92,8 +105,37 @@ public class MainActivity extends AppCompatActivity {
             "1coLc8so8GjOjLb71Xovlnps/w==\n" +
             "-----END CERTIFICATE-----";
 
+    /*private static final String ITSIMEH = "-----BEGIN CERTIFICATE-----\n" +
+            "MIIEujCCBGCgAwIBAgIQY7nsfv+YgzXxE9Z9L4ZNNTAKBggqhkjOPQQDAjCBgDEL\n" +
+            "MAkGA1UEBhMCVVMxHTAbBgNVBAoTFFN5bWFudGVjIENvcnBvcmF0aW9uMR8wHQYD\n" +
+            "VQQLExZTeW1hbnRlYyBUcnVzdCBOZXR3b3JrMTEwLwYDVQQDEyhTeW1hbnRlYyBD\n" +
+            "bGFzcyAzIEVDQyAyNTYgYml0IFNTTCBDQSAtIEcyMB4XDTE2MDcyODAwMDAwMFoX\n" +
+            "DTE3MDcyODIzNTk1OVoweTELMAkGA1UEBhMCVVMxFjAUBgNVBAgMDU1hc3NhY2h1\n" +
+            "c2V0dHMxEjAQBgNVBAcMCUNhbWJyaWRnZTEiMCAGA1UECgwZQWthbWFpIFRlY2hu\n" +
+            "b2xvZ2llcywgSW5jLjEaMBgGA1UEAwwRYTI0OC5lLmFrYW1haS5uZXQwWTATBgcq\n" +
+            "hkjOPQIBBggqhkjOPQMBBwNCAAQCpvwTzWb1uqosqE52ItPukH6zYbx1GjvTx4Bg\n" +
+            "HGulRdgt9psnHybLLv404jXSmt1KkitP6xmokBA4qb1HZnQro4ICwDCCArwwbgYD\n" +
+            "VR0RBGcwZYIOKi5ha2FtYWloZC5uZXSCFiouYWthbWFpaGQtc3RhZ2luZy5uZXSC\n" +
+            "FyouYWthbWFpemVkLXN0YWdpbmcubmV0gg8qLmFrYW1haXplZC5uZXSCEWEyNDgu\n" +
+            "ZS5ha2FtYWkubmV0MAkGA1UdEwQCMAAwDgYDVR0PAQH/BAQDAgeAMGEGA1UdIARa\n" +
+            "MFgwVgYGZ4EMAQICMEwwIwYIKwYBBQUHAgEWF2h0dHBzOi8vZC5zeW1jYi5jb20v\n" +
+            "Y3BzMCUGCCsGAQUFBwICMBkMF2h0dHBzOi8vZC5zeW1jYi5jb20vcnBhMCsGA1Ud\n" +
+            "HwQkMCIwIKAeoByGGmh0dHA6Ly9yYy5zeW1jYi5jb20vcmMuY3JsMB0GA1UdJQQW\n" +
+            "MBQGCCsGAQUFBwMBBggrBgEFBQcDAjAfBgNVHSMEGDAWgBQl8IrhS3rZAZUK7cZT\n" +
+            "8Yx4H9nz+DBXBggrBgEFBQcBAQRLMEkwHwYIKwYBBQUHMAGGE2h0dHA6Ly9yYy5z\n" +
+            "eW1jZC5jb20wJgYIKwYBBQUHMAKGGmh0dHA6Ly9yYy5zeW1jYi5jb20vcmMuY3J0\n" +
+            "MIIBBAYKKwYBBAHWeQIEAgSB9QSB8gDwAHYA3esdK3oNT6Ygi4GtgWhwfi6OnQHV\n" +
+            "XIiNPRHEzbbsvswAAAFWMxw8DAAABAMARzBFAiEA0jnhAc04ytMqwcpzdhepDolx\n" +
+            "k4/Ly01z7TbzhrdEm68CIDBoqkfHeUf/Egy4Dc6WtF7d4Yaz6VQwtPZtE62nYobW\n" +
+            "AHYApLkJkLQYWBSHuxOizGdwCjw1mAT5G9+443fNDsgN3BAAAAFWMxw8aQAABAMA\n" +
+            "RzBFAiEAtmv/WDAEkIzPoAmNg8rDB3hxjrqDE28O9ypcHfLfDKQCIAkexztlslo9\n" +
+            "vvg88draHLAFn6LehOKa+CDmG+7iBshSMAoGCCqGSM49BAMCA0gAMEUCIQCaLLx7\n" +
+            "OCmOUhNgoZX/s6pyGzE4p5dFiLJJm3u6dDw/jQIgS8vB1RZeveychMbXDPrx5y/W\n" +
+            "HvfPyxlCkvHQR9TX15o=\n" +
+            "-----END CERTIFICATE-----";*/
 
-    public MainActivity() throws NoSuchAlgorithmException {
+
+    public MainActivity() throws NoSuchAlgorithmException, IOException {
     }
 
 
@@ -102,21 +144,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //ActionBar actionBar = getSupportActionBar();
-        //actionBar.setDisplayUseLogoEnabled(true);
-        //actionBar.setIcon(R.drawable.itsi);
-        //actionBar.setTitle("");
-        //actionBar.setLogo(R.drawable.itsi);
-        getSupportActionBar().setDisplayUseLogoEnabled(true);
+        /*getSupportActionBar().setDisplayUseLogoEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setIcon(R.drawable.itsi);
+        getSupportActionBar().setIcon(R.drawable.miebooks);*/
 
         final EditText etUname = (EditText) findViewById(R.id.et_uname);
         final EditText etPassw = (EditText) findViewById(R.id.et_passw);
         final Button bLogin = (Button) findViewById(R.id.btn_login);
 
         try {
-            client = pinnedClient();
+            client = pinnedClient(ITSIPEM);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (CertificateException e) {
@@ -131,6 +168,10 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        client2 = getUnsafeOkHttpClient();
+
+        getSchools(schools, client2);
+
         bLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -138,7 +179,15 @@ public class MainActivity extends AppCompatActivity {
                 String uname = etUname.getText().toString();
                 String pass = etPassw.getText().toString();
 
-                attemptLogin(url, uname, pass);
+                //Gson gson = new Gson();
+                //objSchool = gson.fromJson(response, Schools[].class);
+
+                //getSchools(schools, client2);
+                /*for (int i = 0; i < objSchool.length; i++) {
+                    Log.d("###SCHOOLS", objSchool[i].name);
+                }*/
+
+                attemptLogin(client, url, uname, pass);
             }
         });
     }
@@ -155,23 +204,54 @@ public class MainActivity extends AppCompatActivity {
         return this.obj1;
     }
 
-    public void loadContent(final String username) {
+    public void getSchools(final String schools, final OkHttpClient client) {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
+                Log.d("###WIELE###", "!@#$%^&*()(*&^%$#@#$%^&**&^%$#@#$%^*%*&%*%^&^%&^%&%&^%&%&^%");
                 try {
-                    response = ApiCall.GET(client, RequestBuilder.buildUrl(username));
+                    response = ApiCall.GET(client, schools);
                     Log.d("Response:LoadContent", response);
+                    //Log.d("###SCHOOLS", response);
+                    Integer strlen = response.length();
+                    Log.d("###SCHOOLS", strlen.toString());
+
+                    //Gson gson = new Gson();
+                    //objSchool = gson.fromJson(response, Schools[].class);
+
+                    /*runOnUiThread(new Runnable() {
+                       @Override
+                        public void run() {
+                           Gson gson = new Gson();
+                           objSchool = gson.fromJson(response, Schools[].class);
+
+                    //       for (int i = 0; i < objSchool.length; i++) {
+                    //           Log.d("###SCHOOLS", objSchool[i].name);
+                    //       }
+                        }
+                    });*/
                 }
                 catch (IOException e) {
                     e.printStackTrace();
+                    Log.e("ERROR TERROR", e.toString());
                 }
                 return null;
             }
         }.execute();
     }
 
-    private void attemptLogin(String url, final String username, final String password) {
+    /*private void updateSchools(final Schools[] schools) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Gson gson = new Gson();
+                objSchool = gson.fromJson(response, Schools[].class);
+
+            }
+        });
+    }*/
+
+    private void attemptLogin(final OkHttpClient client, String url, final String username, final String password) {
 
         new AsyncTask<String, Void, Void>() {
             protected Void doInBackground(String... params) {
@@ -204,9 +284,6 @@ public class MainActivity extends AppCompatActivity {
 
                             if (!obj2.success) {
                                 Log.d("###LOGIN", "WRONG USER");
-                                //Toast.makeText(MainActivity.this, obj2.info, Toast.LENGTH_LONG).show();
-                                //alert.setMessage(obj2.info);
-                                //alert.create().show();
                                 progress.dismiss();
                                 showAlert(obj2.info);
                             }
@@ -261,12 +338,12 @@ public class MainActivity extends AppCompatActivity {
             sslContext.init(kmFactory.getKeyManagers(), tmFactory.getTrustManagers(),
                     new SecureRandom());
             return sslContext;
-        }
+    }
 
-    private static OkHttpClient pinnedClient() throws IOException, CertificateException, UnrecoverableKeyException, NoSuchAlgorithmException, KeyManagementException, KeyStoreException {
+    private static OkHttpClient pinnedClient(final String cert) throws IOException, CertificateException, UnrecoverableKeyException, NoSuchAlgorithmException, KeyManagementException, KeyStoreException {
 
         SSLContext sslContext = sslContextForTrustedCertificates(
-                new ByteArrayInputStream(ITSIPEM.getBytes("UTF-8")));
+                new ByteArrayInputStream(cert.getBytes("UTF-8")));
 
         CertificatePinner pinner = new okhttp3.CertificatePinner.Builder()
                 .add(url, "sha1/3gMBWEcd/5uQKWBUio2xcJnLCrk=")
@@ -301,5 +378,49 @@ public class MainActivity extends AppCompatActivity {
 
         return okHttpClient;
     }
+
+    private static OkHttpClient getUnsafeOkHttpClient() {
+        try {
+            // Create a trust manager that does not validate certificate chains
+            final TrustManager[] trustAllCerts = new TrustManager[] {
+                    new X509TrustManager() {
+                        @Override
+                        public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+                        }
+
+                        @Override
+                        public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+                        }
+
+                        @Override
+                        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                            return new java.security.cert.X509Certificate[]{};
+                        }
+                    }
+            };
+
+            // Install the all-trusting trust manager
+            final SSLContext sslContext = SSLContext.getInstance("SSL");
+            sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+            // Create an ssl socket factory with our all-trusting manager
+            final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
+
+            OkHttpClient.Builder builder = new OkHttpClient.Builder();
+            builder.sslSocketFactory(sslSocketFactory, (X509TrustManager)trustAllCerts[0]);
+            builder.hostnameVerifier(new HostnameVerifier() {
+                @Override
+                public boolean verify(String hostname, SSLSession session) {
+                    return true;
+                }
+            });
+
+            OkHttpClient okHttpClient = builder.build();
+            return okHttpClient;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
 
 }

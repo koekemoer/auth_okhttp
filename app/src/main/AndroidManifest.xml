@@ -8,9 +8,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/itsi"
+        android:icon="@drawable/miebooks"
         android:label="@string/app_name"
-        android:logo="@drawable/itsi"
+        android:logo="@drawable/miebooks"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">

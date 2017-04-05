@@ -31,6 +31,10 @@ public class GroupsAct extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_groups);
 
+        /*getSupportActionBar().setDisplayUseLogoEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setIcon(R.drawable.miebooks);*/
+
         final TextView txt_books = (TextView) findViewById(R.id.tview_groups);
         txt_books.setText("Groups Activity");
 
@@ -40,6 +44,8 @@ public class GroupsAct extends AppCompatActivity {
         try {
             mainActivity = new MainActivity();
         } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
 

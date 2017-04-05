@@ -19,6 +19,7 @@
         android:layout_marginTop="15dp"
         android:ems="10"
         android:inputType="textPersonName"
+        android:outlineProvider="paddedBounds"
         android:text="harvey" />
 
     <EditText
@@ -30,7 +31,10 @@
         android:layout_below="@+id/et_uname"
         android:ems="10"
         android:inputType="textPassword"
+        android:outlineProvider="paddedBounds"
         android:text="p" />
+
+
 
     <Button
         android:text="Login"

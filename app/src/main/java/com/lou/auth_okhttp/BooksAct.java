@@ -38,6 +38,10 @@ public class BooksAct extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_books);
 
+        /*getSupportActionBar().setDisplayUseLogoEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setIcon(R.drawable.miebooks);*/
+
         final TextView txt_books = (TextView) findViewById(R.id.tview_books);
         txt_books.setText("Books Activity");
 
@@ -47,6 +51,8 @@ public class BooksAct extends AppCompatActivity {
         try {
             mainActivity = new MainActivity();
         } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -160,7 +166,7 @@ public class BooksAct extends AppCompatActivity {
                     Gson gson = new Gson();
                     objAuth = gson.fromJson(response, Authorize.class);
 
-                    checkAuth(/*objAuth, */client, id);
+                    checkAuth(client, id);
 
                 }
                 catch (IOException e) {
@@ -205,9 +211,9 @@ public class BooksAct extends AppCompatActivity {
                             //Log.wtf("###ACK_ackFunc", ackstr);
                             //Log.wtf("###ACK_TEST", test);
 
-                            ack = objAuth.ack;
+                            //ack = objAuth.ack;
                             progress.dismiss();
-                            showAlert("Book Authenticated\n\nKey: " + key + "\n\n" + (ack ? "Acknowledged" : "Not Acknowledged"));
+                            showAlert("Book Authenticated\n\nKey: " + key + "\n\n" + (objAuth.ack ? "Acknowledged" : "Not Acknowledged"));
                         }
                     });
 

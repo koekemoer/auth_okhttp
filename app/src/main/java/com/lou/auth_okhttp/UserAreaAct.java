@@ -58,6 +58,10 @@ public class UserAreaAct extends AppCompatActivity {
 
         Log.d("UserArea:", "UserArea Entered");
 
+        /*getSupportActionBar().setDisplayUseLogoEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setIcon(R.drawable.miebooks);*/
+
         final TextView txt_welcome = (TextView) findViewById(R.id.textView_welcome);
         final Button btn_show = (Button) findViewById(R.id.btn_show);
         final Button btn_groups = (Button) findViewById(R.id.btn_groups);
@@ -67,6 +71,8 @@ public class UserAreaAct extends AppCompatActivity {
         try {
             mainActivity = new MainActivity();
         } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -79,19 +85,9 @@ public class UserAreaAct extends AppCompatActivity {
         Log.d("CLICKEDY CLICK", "CLICKED");
 
         btn_show.setOnClickListener(new View.OnClickListener() {
-            //boolean show = false;
             @Override
             public void onClick(View v) {
-                /*if (show) {
-                    show = false;
-                    listView.setVisibility(View.GONE);
-                }
-                else {
-                    show = true;
-                    listView.setVisibility(View.VISIBLE);
-                }
-                loadContent(client, objLogin.user.username);
-                btn_show.setText(show ? "HIDE" : "SHOW");*/
+
                 Intent intent = new Intent(UserAreaAct.this, BooksAct.class);
                 UserAreaAct.this.startActivity(intent);
             }
@@ -101,25 +97,13 @@ public class UserAreaAct extends AppCompatActivity {
             boolean show = false;
             @Override
             public void onClick(View v) {
-                /*if (show) {
-                    show = false;
-                    listView.setVisibility(View.GONE);
-                }
-                else {
-                    show = true;
-                    listView.setVisibility(View.VISIBLE);
-                }
-                //listView.setVisibility(View.GONE);
-                showGroups(client, "https://app.dev.it.si/alchemy/api/1.0/users/" + objLogin.user.username + "/enrolment?withPrivate=true");
-                btn_groups.setText(show ? "HIDE" : "GROUP");
-                //Log.wtf("###GROUPS###", objGroup[0].name);*/
+
                 Intent intent = new Intent(UserAreaAct.this, GroupsAct.class);
                 UserAreaAct.this.startActivity(intent);
             }
         });
-        //loadContent(client, objLogin.user.username);
 
-        listView.setClickable(true);
+        /*listView.setClickable(true);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -132,11 +116,11 @@ public class UserAreaAct extends AppCompatActivity {
 
                 validate(client, objMeta[position].metadata.bookID);
             }
-        });
+        });*/
 
     }
 
-    private void checkAuth(/*final Authorize objKey, */final OkHttpClient client, final String id) {
+    /*private void checkAuth(final OkHttpClient client, final String id) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -158,9 +142,9 @@ public class UserAreaAct extends AppCompatActivity {
 
             }
         });
-    }
+    }*/
 
-    public void validate(final OkHttpClient client, final String id) {
+    /*public void validate(final OkHttpClient client, final String id) {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
@@ -173,7 +157,7 @@ public class UserAreaAct extends AppCompatActivity {
                     Gson gson = new Gson();
                     objAuth = gson.fromJson(response, Authorize.class);
 
-                    checkAuth(/*objAuth, */client, id);
+                    checkAuth(client, id);
 
                 }
                 catch (IOException e) {
@@ -183,9 +167,9 @@ public class UserAreaAct extends AppCompatActivity {
                 return null;
             }
         }.execute();
-    }
+    }*/
 
-    private void acknowledgeKey(final String url, final String key, final OkHttpClient client) {
+    /*private void acknowledgeKey(final String url, final String key, final OkHttpClient client) {
         new AsyncTask<String, Void, Void>() {
             protected Void doInBackground(String... params) {
                 assert (params[0] != null);
@@ -230,9 +214,9 @@ public class UserAreaAct extends AppCompatActivity {
                 return null;
             }
         }.execute(url);
-    }
+    }*/
 
-    public void loadContent(final OkHttpClient client, final String username) {
+    /*public void loadContent(final OkHttpClient client, final String username) {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
@@ -257,13 +241,13 @@ public class UserAreaAct extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                /*for (int i = 0; i < objMeta1.length; i++) {
+                for (int i = 0; i < objMeta1.length; i++) {
                     Log.d("####BOOK_ID", objMeta1[i].metadata.bookID);
                     if (objMeta1[i].metadata.title == null || objMeta1[i].metadata.title == "") {
                         Log.d("###BOOK_TITLE", "NULL OU BUL");
                     }
                     Log.d("###BOOK_TITLE", objMeta1[i].metadata.title);
-                }*/
+                }
 
                 ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
 
@@ -284,9 +268,9 @@ public class UserAreaAct extends AppCompatActivity {
 
             }
         });
-    }
+    }*/
 
-    public void showGroups (final OkHttpClient client, final String url) {
+    /*public void showGroups (final OkHttpClient client, final String url) {
         new AsyncTask<Void, Void, Void>() {
             protected Void doInBackground(Void... params) {
                 try {
@@ -306,9 +290,9 @@ public class UserAreaAct extends AppCompatActivity {
                 return null;
             }
         }.execute();
-    }
+    }*/
 
-    public void updateGroups (final Groups[] objGrp) {
+    /*public void updateGroups (final Groups[] objGrp) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -338,9 +322,9 @@ public class UserAreaAct extends AppCompatActivity {
                 listView.setAdapter(adapter);
             }
         });
-    }
+    }*/
 
-    private HashMap<String, String> putData(String id, String title) {
+    /*private HashMap<String, String> putData(String id, String title) {
         HashMap<String, String> item = new HashMap<String, String>();
         item.put("Title: ", title);
         item.put("BookID: ", id);
@@ -352,7 +336,7 @@ public class UserAreaAct extends AppCompatActivity {
         item.put("Subject: ", title);
         item.put("Name: ", id);
         return item;
-    }
+    }*/
 
     public Example[] getObjMeta() {
         return this.objMeta;
