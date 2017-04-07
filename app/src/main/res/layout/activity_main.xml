@@ -14,13 +14,12 @@
         android:id="@+id/et_uname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/auto_txt"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:outlineProvider="paddedBounds"
-        android:text="harvey" />
+        android:text="c" />
 
     <EditText
         android:id="@+id/et_passw"
@@ -32,7 +31,7 @@
         android:ems="10"
         android:inputType="textPassword"
         android:outlineProvider="paddedBounds"
-        android:text="p" />
+        android:text="a" />
 
 
 
@@ -49,7 +48,38 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:layout_below="@+id/et_passw"
-        android:layout_alignLeft="@+id/et_passw"
-        android:layout_alignStart="@+id/et_passw" />
+        android:layout_alignParentTop="true"
+        android:layout_alignLeft="@+id/et_uname"
+        android:layout_alignStart="@+id/et_uname" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="School:"
+        android:layout_alignBaseline="@+id/auto_txt"
+        android:layout_alignBottom="@+id/auto_txt"
+        android:layout_alignRight="@+id/textView2"
+        android:layout_alignEnd="@+id/textView2" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Username:"
+        android:layout_alignBaseline="@+id/et_uname"
+        android:layout_alignBottom="@+id/et_uname"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Password:"
+        android:layout_alignBaseline="@+id/et_passw"
+        android:layout_alignBottom="@+id/et_passw"
+        android:layout_alignRight="@+id/textView2"
+        android:layout_alignEnd="@+id/textView2" />
+
 </RelativeLayout>

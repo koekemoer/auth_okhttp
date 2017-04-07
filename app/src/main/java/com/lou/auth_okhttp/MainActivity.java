@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
     private static LoginInfo obj1;
     private static Schools objSchools;
     private static School[] arr;
-    private static String[] nameArr;
+    private static String[] nameArr, dnsArr;
     private static final String[] names = new String[] {
             "Willie", "Pieter", "Kosie", "Gerhard", "Jannie", "Wilhelm"
     };
@@ -87,8 +87,6 @@ public class MainActivity extends AppCompatActivity {
 
     private static String schools = "https://schools.cdn.it.si/schools.json";
     //a248.e.akamai.net
-
-    private static HttpUrl hschools = HttpUrl.parse("https://schools.cdn.it.si/schools.json");
 
     private static final String ITSIPEM = "-----BEGIN CERTIFICATE-----\n" +
             "MIIEXzCCA0egAwIBAgIJAMKQOgdGwN9LMA0GCSqGSIb3DQEBCwUAMIHFMQswCQYD\n" +
@@ -116,35 +114,6 @@ public class MainActivity extends AppCompatActivity {
             "GzJ9DaugccvYof0WnL+83SJm8mQXhFIIzjWodDocAgc/Xo511TSRZRugITfythM6\n" +
             "1coLc8so8GjOjLb71Xovlnps/w==\n" +
             "-----END CERTIFICATE-----";
-
-    /*private static final String ITSIMEH = "-----BEGIN CERTIFICATE-----\n" +
-            "MIIEujCCBGCgAwIBAgIQY7nsfv+YgzXxE9Z9L4ZNNTAKBggqhkjOPQQDAjCBgDEL\n" +
-            "MAkGA1UEBhMCVVMxHTAbBgNVBAoTFFN5bWFudGVjIENvcnBvcmF0aW9uMR8wHQYD\n" +
-            "VQQLExZTeW1hbnRlYyBUcnVzdCBOZXR3b3JrMTEwLwYDVQQDEyhTeW1hbnRlYyBD\n" +
-            "bGFzcyAzIEVDQyAyNTYgYml0IFNTTCBDQSAtIEcyMB4XDTE2MDcyODAwMDAwMFoX\n" +
-            "DTE3MDcyODIzNTk1OVoweTELMAkGA1UEBhMCVVMxFjAUBgNVBAgMDU1hc3NhY2h1\n" +
-            "c2V0dHMxEjAQBgNVBAcMCUNhbWJyaWRnZTEiMCAGA1UECgwZQWthbWFpIFRlY2hu\n" +
-            "b2xvZ2llcywgSW5jLjEaMBgGA1UEAwwRYTI0OC5lLmFrYW1haS5uZXQwWTATBgcq\n" +
-            "hkjOPQIBBggqhkjOPQMBBwNCAAQCpvwTzWb1uqosqE52ItPukH6zYbx1GjvTx4Bg\n" +
-            "HGulRdgt9psnHybLLv404jXSmt1KkitP6xmokBA4qb1HZnQro4ICwDCCArwwbgYD\n" +
-            "VR0RBGcwZYIOKi5ha2FtYWloZC5uZXSCFiouYWthbWFpaGQtc3RhZ2luZy5uZXSC\n" +
-            "FyouYWthbWFpemVkLXN0YWdpbmcubmV0gg8qLmFrYW1haXplZC5uZXSCEWEyNDgu\n" +
-            "ZS5ha2FtYWkubmV0MAkGA1UdEwQCMAAwDgYDVR0PAQH/BAQDAgeAMGEGA1UdIARa\n" +
-            "MFgwVgYGZ4EMAQICMEwwIwYIKwYBBQUHAgEWF2h0dHBzOi8vZC5zeW1jYi5jb20v\n" +
-            "Y3BzMCUGCCsGAQUFBwICMBkMF2h0dHBzOi8vZC5zeW1jYi5jb20vcnBhMCsGA1Ud\n" +
-            "HwQkMCIwIKAeoByGGmh0dHA6Ly9yYy5zeW1jYi5jb20vcmMuY3JsMB0GA1UdJQQW\n" +
-            "MBQGCCsGAQUFBwMBBggrBgEFBQcDAjAfBgNVHSMEGDAWgBQl8IrhS3rZAZUK7cZT\n" +
-            "8Yx4H9nz+DBXBggrBgEFBQcBAQRLMEkwHwYIKwYBBQUHMAGGE2h0dHA6Ly9yYy5z\n" +
-            "eW1jZC5jb20wJgYIKwYBBQUHMAKGGmh0dHA6Ly9yYy5zeW1jYi5jb20vcmMuY3J0\n" +
-            "MIIBBAYKKwYBBAHWeQIEAgSB9QSB8gDwAHYA3esdK3oNT6Ygi4GtgWhwfi6OnQHV\n" +
-            "XIiNPRHEzbbsvswAAAFWMxw8DAAABAMARzBFAiEA0jnhAc04ytMqwcpzdhepDolx\n" +
-            "k4/Ly01z7TbzhrdEm68CIDBoqkfHeUf/Egy4Dc6WtF7d4Yaz6VQwtPZtE62nYobW\n" +
-            "AHYApLkJkLQYWBSHuxOizGdwCjw1mAT5G9+443fNDsgN3BAAAAFWMxw8aQAABAMA\n" +
-            "RzBFAiEAtmv/WDAEkIzPoAmNg8rDB3hxjrqDE28O9ypcHfLfDKQCIAkexztlslo9\n" +
-            "vvg88draHLAFn6LehOKa+CDmG+7iBshSMAoGCCqGSM49BAMCA0gAMEUCIQCaLLx7\n" +
-            "OCmOUhNgoZX/s6pyGzE4p5dFiLJJm3u6dDw/jQIgS8vB1RZeveychMbXDPrx5y/W\n" +
-            "HvfPyxlCkvHQR9TX15o=\n" +
-            "-----END CERTIFICATE-----";*/
 
 
     public MainActivity() throws NoSuchAlgorithmException, IOException {
@@ -280,12 +249,14 @@ public class MainActivity extends AppCompatActivity {
                 //arr = schools.schools.toArray(new School[schools.schools.size()]);
 
                 nameArr = new String[schools.schools.size()];
+                dnsArr = new String[schools.schools.size()];
 
                 for (int i = 0; i < schools.schools.size(); i++) {
                     arr[i] = schools.schools.get(i);
                     Log.d("###SCHOOLS", arr[i].name);
                     nameArr[i] = arr[i].name;
-                    Log.d("NAME_ARR", nameArr[i]);
+                    dnsArr[i] = arr[i].dns;
+                    Log.d("NAME_ARR", dnsArr[i]);
                 }
                 autoComplete();
             }
