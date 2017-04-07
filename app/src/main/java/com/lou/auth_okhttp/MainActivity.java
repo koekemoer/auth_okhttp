@@ -73,17 +73,15 @@ public class MainActivity extends AppCompatActivity {
 
     private static CheckLogin obj2;
     private static LoginInfo obj1;
-    private static Schools objSchools;
+    private static Schools objSchools = null;
     private static School[] arr;
     private static String[] nameArr, dnsArr;
-    private static final String[] names = new String[] {
-            "Willie", "Pieter", "Kosie", "Gerhard", "Jannie", "Wilhelm"
-    };
+    private static String dns;
     final Context context = this;
 
     //public static String finalUser;
 
-    private static String url = "https://app.dev.it.si/alchemy/api/1.0/login";
+    private static String url;// = "https://app.dev.it.si/alchemy/api/1.0/login";
 
     private static String schools = "https://schools.cdn.it.si/schools.json";
     //a248.e.akamai.net
@@ -129,12 +127,16 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.drawable.miebooks);*/
 
+        Log.wtf("!@#$%^&*()1234567890", "1");
+
         final EditText etUname = (EditText) findViewById(R.id.et_uname);
         final EditText etPassw = (EditText) findViewById(R.id.et_passw);
         final Button bLogin = (Button) findViewById(R.id.btn_login);
         final AutoCompleteTextView autoTxt = (AutoCompleteTextView) findViewById(R.id.auto_txt);
 
-        try {
+        Log.wtf("!@#$%^&*()1234567890", "2");
+
+        /*try {
             client = pinnedClient(ITSIPEM);
         } catch (IOException e) {
             e.printStackTrace();
@@ -148,41 +150,75 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         } catch (KeyStoreException e) {
             e.printStackTrace();
-        }
+        }*/
 
         Log.d("CHECK CHECK", "START OF ON CREATE");
 
+        Log.wtf("!@#$%^&*()1234567890", "3");
+
         client2 = getUnsafeOkHttpClient();
 
-        Log.d("CHECK CHECK", "BEFORE GET SCHOOLS");
+        Log.wtf("!@#$%^&*()1234567890", "4");
 
         getSchools(schools, client2);
 
-
-        Log.d("CHECK CHECK", "AFTER GET SCHOOLS");
-
-        /*for (int i = 0; i < objSchools.schools.size(); i++) {
-            //arr[i] = objSchools.schools.get(i);
-            //Log.d("###SCHOOLS", arr[i].name);
-            //nameArr[i] = arr[i].name;
-            Log.d("ON_CREATE", nameArr[i]);
-        }*/
-
-
-        /*ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, nameArr);
-        AutoCompleteTextView autoTxt = (AutoCompleteTextView) findViewById(R.id.auto_txt);
-        autoTxt.setThreshold(1);
-        autoTxt.setAdapter(adapter);*/
-
-
-        /*for (int i = 0; i < objSchools.schools.size(); i++) {
-            arr[i] = objSchools.schools.get(i);
-            Log.d("###SCHOOLS", arr[i].name);
-        }*/
+        Log.wtf("!@#$%^&*()1234567890", "5");
 
         bLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                Log.wtf("!@#$%^&*()1234567890", "6");
+
+                String tmp = null;
+
+                if (autoTxt.getText() != null) {
+                    tmp = autoTxt.getText().toString();
+                }
+                /*String */dns = "app.dev.it.si";
+
+                Log.wtf("!@#$%^&*()1234567890", "7");
+                //String url;
+
+                for (int i = 0; i < objSchools.schools.size(); i++) {
+                    if (tmp != null && tmp.equals(nameArr[i])) {
+                        dns = dnsArr[i];
+                        break;
+                    }
+                }
+
+                Log.wtf("!@#$%^&*()1234567890", "8");
+
+
+                //if (dns == null || tmp.isEmpty()) {
+                //    url = "https://app.dev.it.si/alchemy/api/1.0/login";
+                //}
+                //else {
+                url = "https://" + dns + "/alchemy/api/1.0/login";
+                //}
+
+                //url = "https://app.dev.it.si/alchemy/api/1.0/login";
+
+                Log.wtf("!@#$%^&*()1234567890", "9");
+                Log.d("#####!!!!##!#!#URL:", url);
+
+                try {
+                    client = pinnedClient(ITSIPEM);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (CertificateException e) {
+                    e.printStackTrace();
+                } catch (UnrecoverableKeyException e) {
+                    e.printStackTrace();
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                } catch (KeyManagementException e) {
+                    e.printStackTrace();
+                } catch (KeyStoreException e) {
+                    e.printStackTrace();
+                }
+
+                Log.wtf("!@#$%^&*()1234567890", "10");
 
                 String uname = etUname.getText().toString();
                 String pass = etPassw.getText().toString();
@@ -200,6 +236,10 @@ public class MainActivity extends AppCompatActivity {
         return this.obj1;
     }
 
+    public String getDns() {
+        return this.dns;
+    }
+
     public void getSchools(final String schools, final OkHttpClient client) {
         new AsyncTask<Void, Void, Schools>() {
             @Override
@@ -207,7 +247,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("###WIELE###", "!@#$%^&*()(*&^%$#@#$%^&**&^%$#@#$%^*%*&%*%^&^%&^%&%&^%&%&^%");
                 try {
                     response = ApiCall.GET(client, schools);
-                    Log.d("Response:LoadContent", response);
+                    //Log.d("Response:LoadContent", response);
 
                     Gson gson = new Gson();
                     objSchools = gson.fromJson(response, Schools.class);
@@ -223,13 +263,11 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            protected void onPostExecute(Schools schools1) {
-                super.onPostExecute(schools1);
-                updateSchools(schools1);
-
+            protected void onPostExecute(Schools schools) {
+                super.onPostExecute(schools);
+                if (schools != null)
+                    updateSchools(schools);
             }
-
-
         }.execute();
 
     }
@@ -253,10 +291,10 @@ public class MainActivity extends AppCompatActivity {
 
                 for (int i = 0; i < schools.schools.size(); i++) {
                     arr[i] = schools.schools.get(i);
-                    Log.d("###SCHOOLS", arr[i].name);
+                    //Log.d("###SCHOOLS", arr[i].name);
                     nameArr[i] = arr[i].name;
                     dnsArr[i] = arr[i].dns;
-                    Log.d("NAME_ARR", dnsArr[i]);
+                    //Log.d("DNS_ARR", dnsArr[i]);
                 }
                 autoComplete();
             }

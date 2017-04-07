@@ -24,6 +24,7 @@ public class GroupsAct extends AppCompatActivity {
     private static Example[] objMeta;
     private static Groups[] objGroup;
     private static Authorize objAuth;
+    private String dns;
     public MainActivity mainActivity;
 
     @Override
@@ -51,8 +52,9 @@ public class GroupsAct extends AppCompatActivity {
 
         final OkHttpClient client = mainActivity.getClient();
         final LoginInfo objLogin = mainActivity.getObj1();
+        dns = mainActivity.getDns();
 
-        showGroups(client, "https://app.dev.it.si/alchemy/api/1.0/users/" + objLogin.user.username + "/enrolment?withPrivate=true");
+        showGroups(client, "https://" + dns + "/alchemy/api/1.0/users/" + objLogin.user.username + "/enrolment?withPrivate=true");
     }
 
     public void showGroups (final OkHttpClient client, final String url) {
@@ -93,12 +95,7 @@ public class GroupsAct extends AppCompatActivity {
                 ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
 
                 for (int j = 0; j < objGrp.length; j++) {
-                    //if (objGrp[j].subject == "" || objGrp[j].subject == null) {
-                    //list.add(putData2(objGrp[j].subject, "(Title not available)"));
-                    //}
-                    //else {
                     list.add(putData(objGrp[j].subject, objGrp[j].name));
-                    //}
                 }
 
                 String[] from = {"Subject: ", "Name: "};

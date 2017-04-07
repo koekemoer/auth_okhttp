@@ -29,6 +29,7 @@ public class BooksAct extends AppCompatActivity {
     private static Example[] objMeta;
     private static Groups[] objGroup;
     private static Authorize objAuth;
+    private String dns;
     public static boolean ack;
     public MainActivity mainActivity;
     final Context context = this;
@@ -58,6 +59,7 @@ public class BooksAct extends AppCompatActivity {
 
         final OkHttpClient client = mainActivity.getClient();
         final LoginInfo objLogin = mainActivity.getObj1();
+        dns = mainActivity.getDns();
 
         loadContent(client, objLogin.user.username);
 
@@ -68,7 +70,7 @@ public class BooksAct extends AppCompatActivity {
                 Log.d("#####CLICKEDY CLICK", "CLICKED");
                 Log.d("#####CLICKEDY CLICK", objMeta[position].metadata.bookID);
 
-                String url = "https://app.dev.it.si/alchemy/api/1.0/epubs/" + objMeta[position].metadata.bookID + "/key?device=auth_test";
+                String url = "https://" + dns + "/alchemy/api/1.0/epubs/" + objMeta[position].metadata.bookID + "/key?device=auth_test";
 
                 Log.d("USER_AREA:AUTH-TEST", url);
 
@@ -142,7 +144,7 @@ public class BooksAct extends AppCompatActivity {
                 else {
                     Log.d("####OBJECT_KEY", objAuth.key);
 
-                    String url = "https://app.dev.it.si/alchemy/api/1.0/epubs/" + id + "/key/confirm?device=auth_test&platform=web&model=na";
+                    String url = "https://" + dns + "/alchemy/api/1.0/epubs/" + id + "/key/confirm?device=auth_test&platform=web&model=na";
                     acknowledgeKey(url, objAuth.key, client);
 
                     //String ackstr = Boolean.toString(objAuth.ack);
@@ -159,7 +161,7 @@ public class BooksAct extends AppCompatActivity {
             protected Void doInBackground(Void... params) {
                 try {
                     Log.wtf("CHECK CHECK","VALIDATE");
-                    String url = "https://app.dev.it.si/alchemy/api/1.0/epubs/" + id + "/key?device=auth_test";
+                    String url = "https://" + dns + "/alchemy/api/1.0/epubs/" + id + "/key?device=auth_test";
                     response = ApiCall.GET(client, url);
                     Log.d("###CHECK_AUTH", response);
 
