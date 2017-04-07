@@ -14,12 +14,13 @@
         android:id="@+id/et_uname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/auto_txt"
-        android:layout_centerHorizontal="true"
         android:ems="10"
         android:inputType="textPersonName"
         android:outlineProvider="paddedBounds"
-        android:text="c" />
+        android:text="c"
+        android:layout_below="@+id/auto_txt"
+        android:layout_alignLeft="@+id/auto_txt"
+        android:layout_alignStart="@+id/auto_txt" />
 
     <EditText
         android:id="@+id/et_passw"
@@ -49,8 +50,10 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:layout_alignParentTop="true"
-        android:layout_alignLeft="@+id/et_uname"
-        android:layout_alignStart="@+id/et_uname" />
+        android:layout_toRightOf="@+id/textView"
+        android:layout_toEndOf="@+id/textView"
+        android:layout_marginLeft="21dp"
+        android:layout_marginStart="21dp" />
 
     <TextView
         android:id="@+id/textView"
@@ -67,6 +70,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Username:"
+        android:layout_marginLeft="22dp"
+        android:layout_marginStart="22dp"
         android:layout_alignBaseline="@+id/et_uname"
         android:layout_alignBottom="@+id/et_uname"
         android:layout_alignParentLeft="true"
