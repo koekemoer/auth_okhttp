@@ -40,8 +40,16 @@
         android:text="Login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/btn_login"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <AutoCompleteTextView
+        android:id="@+id/auto_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
         android:layout_below="@+id/et_passw"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="23dp"
-        android:id="@+id/btn_login" />
+        android:layout_alignLeft="@+id/et_passw"
+        android:layout_alignStart="@+id/et_passw" />
 </RelativeLayout>

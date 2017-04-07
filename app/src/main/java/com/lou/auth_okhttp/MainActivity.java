@@ -10,16 +10,19 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -27,6 +30,7 @@ import org.json.JSONObject;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -40,8 +44,11 @@ import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.KeyManagerFactory;
@@ -66,7 +73,12 @@ public class MainActivity extends AppCompatActivity {
 
     private static CheckLogin obj2;
     private static LoginInfo obj1;
-    private static Schools[] objSchool;
+    private static Schools objSchools;
+    private static School[] arr;
+    private static String[] nameArr;
+    private static final String[] names = new String[] {
+            "Willie", "Pieter", "Kosie", "Gerhard", "Jannie", "Wilhelm"
+    };
     final Context context = this;
 
     //public static String finalUser;
@@ -151,6 +163,7 @@ public class MainActivity extends AppCompatActivity {
         final EditText etUname = (EditText) findViewById(R.id.et_uname);
         final EditText etPassw = (EditText) findViewById(R.id.et_passw);
         final Button bLogin = (Button) findViewById(R.id.btn_login);
+        final AutoCompleteTextView autoTxt = (AutoCompleteTextView) findViewById(R.id.auto_txt);
 
         try {
             client = pinnedClient(ITSIPEM);
@@ -168,9 +181,35 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        Log.d("CHECK CHECK", "START OF ON CREATE");
+
         client2 = getUnsafeOkHttpClient();
 
+        Log.d("CHECK CHECK", "BEFORE GET SCHOOLS");
+
         getSchools(schools, client2);
+
+
+        Log.d("CHECK CHECK", "AFTER GET SCHOOLS");
+
+        /*for (int i = 0; i < objSchools.schools.size(); i++) {
+            //arr[i] = objSchools.schools.get(i);
+            //Log.d("###SCHOOLS", arr[i].name);
+            //nameArr[i] = arr[i].name;
+            Log.d("ON_CREATE", nameArr[i]);
+        }*/
+
+
+        /*ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, nameArr);
+        AutoCompleteTextView autoTxt = (AutoCompleteTextView) findViewById(R.id.auto_txt);
+        autoTxt.setThreshold(1);
+        autoTxt.setAdapter(adapter);*/
+
+
+        /*for (int i = 0; i < objSchools.schools.size(); i++) {
+            arr[i] = objSchools.schools.get(i);
+            Log.d("###SCHOOLS", arr[i].name);
+        }*/
 
         bLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -178,14 +217,6 @@ public class MainActivity extends AppCompatActivity {
 
                 String uname = etUname.getText().toString();
                 String pass = etPassw.getText().toString();
-
-                //Gson gson = new Gson();
-                //objSchool = gson.fromJson(response, Schools[].class);
-
-                //getSchools(schools, client2);
-                /*for (int i = 0; i < objSchool.length; i++) {
-                    Log.d("###SCHOOLS", objSchool[i].name);
-                }*/
 
                 attemptLogin(client, url, uname, pass);
             }
@@ -196,60 +227,70 @@ public class MainActivity extends AppCompatActivity {
         return this.client;
     }
 
-    /*public String getResponse() {
-        return this.response;
-    }*/
-
     public LoginInfo getObj1() {
         return this.obj1;
     }
 
     public void getSchools(final String schools, final OkHttpClient client) {
-        new AsyncTask<Void, Void, Void>() {
+        new AsyncTask<Void, Void, Schools>() {
             @Override
-            protected Void doInBackground(Void... params) {
+            protected Schools doInBackground(Void... params) {
                 Log.d("###WIELE###", "!@#$%^&*()(*&^%$#@#$%^&**&^%$#@#$%^*%*&%*%^&^%&^%&%&^%&%&^%");
                 try {
                     response = ApiCall.GET(client, schools);
                     Log.d("Response:LoadContent", response);
-                    //Log.d("###SCHOOLS", response);
-                    Integer strlen = response.length();
-                    Log.d("###SCHOOLS", strlen.toString());
 
-                    //Gson gson = new Gson();
-                    //objSchool = gson.fromJson(response, Schools[].class);
+                    Gson gson = new Gson();
+                    objSchools = gson.fromJson(response, Schools.class);
 
-                    /*runOnUiThread(new Runnable() {
-                       @Override
-                        public void run() {
-                           Gson gson = new Gson();
-                           objSchool = gson.fromJson(response, Schools[].class);
+                    arr = objSchools.schools.toArray(new School[objSchools.schools.size()]);
 
-                    //       for (int i = 0; i < objSchool.length; i++) {
-                    //           Log.d("###SCHOOLS", objSchool[i].name);
-                    //       }
-                        }
-                    });*/
                 }
                 catch (IOException e) {
                     e.printStackTrace();
                     Log.e("ERROR TERROR", e.toString());
                 }
-                return null;
+                return objSchools;
             }
+
+            @Override
+            protected void onPostExecute(Schools schools1) {
+                super.onPostExecute(schools1);
+                updateSchools(schools1);
+
+            }
+
+
         }.execute();
+
     }
 
-    /*private void updateSchools(final Schools[] schools) {
+    private void autoComplete() {
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_dropdown_item_1line, nameArr);
+        AutoCompleteTextView autoTxt = (AutoCompleteTextView) findViewById(R.id.auto_txt);
+        autoTxt.setThreshold(1);
+        autoTxt.setAdapter(adapter);
+    }
+
+    private void updateSchools(final Schools schools) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Gson gson = new Gson();
-                objSchool = gson.fromJson(response, Schools[].class);
 
+                //arr = schools.schools.toArray(new School[schools.schools.size()]);
+
+                nameArr = new String[schools.schools.size()];
+
+                for (int i = 0; i < schools.schools.size(); i++) {
+                    arr[i] = schools.schools.get(i);
+                    Log.d("###SCHOOLS", arr[i].name);
+                    nameArr[i] = arr[i].name;
+                    Log.d("NAME_ARR", nameArr[i]);
+                }
+                autoComplete();
             }
         });
-    }*/
+    }
 
     private void attemptLogin(final OkHttpClient client, String url, final String username, final String password) {
 
