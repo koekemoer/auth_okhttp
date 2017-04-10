@@ -65,7 +65,7 @@ public class UserAreaAct extends AppCompatActivity {
         final TextView txt_welcome = (TextView) findViewById(R.id.textView_welcome);
         final Button btn_show = (Button) findViewById(R.id.btn_show);
         final Button btn_groups = (Button) findViewById(R.id.btn_groups);
-        listView = (ListView) findViewById(R.id.list_books1);
+        //listView = (ListView) findViewById(R.id.list_books1);
 
         mainActivity = null;
         try {
@@ -77,7 +77,12 @@ public class UserAreaAct extends AppCompatActivity {
         }
 
         final OkHttpClient client = mainActivity.getClient();
+
+        Log.wtf("USERAREA!@#$%^&*()", "1");
+
         final LoginInfo objLogin = mainActivity.getObj1();
+
+        //loadContent(client, objLogin.user.username);
 
         txt_welcome.setText("Welcome " + objLogin.user.firstname);
         //Log.d("UserArea:Username", mainActivity.finalUser);
@@ -87,9 +92,11 @@ public class UserAreaAct extends AppCompatActivity {
         btn_show.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.wtf("USERAREA!@#$%^&*()", "2");
 
                 Intent intent = new Intent(UserAreaAct.this, BooksAct.class);
                 UserAreaAct.this.startActivity(intent);
+                Log.wtf("USERAREA!@#$%^&*()", "3");
             }
         });
 
@@ -97,9 +104,11 @@ public class UserAreaAct extends AppCompatActivity {
             boolean show = false;
             @Override
             public void onClick(View v) {
+                Log.wtf("USERAREA!@#$%^&*()", "4");
 
                 Intent intent = new Intent(UserAreaAct.this, GroupsAct.class);
                 UserAreaAct.this.startActivity(intent);
+                Log.wtf("USERAREA!@#$%^&*()", "5");
             }
         });
 
@@ -221,18 +230,39 @@ public class UserAreaAct extends AppCompatActivity {
             @Override
             protected Void doInBackground(Void... params) {
                 try {
+
+                    Log.wtf("BOOKS_ACT!@#$%^&*()", "6");
                     response = ApiCall.GET(client, RequestBuilder.buildUrl(username));
                     Log.d("USER_AREA:LoadContent", response);
 
-                    Gson gson = new Gson();
-                    objMeta = gson.fromJson(response, Example[].class);
+                    Log.wtf("BOOKS_ACT!@#$%^&*()", "7");
 
-                    updateList(objMeta);
+                    if (response.equals("Unauthorized")) {
+                        showAlert("You are not Authorized\nto view this content");
+                    }
+                    else {
+                        Gson gson = new Gson();
+                        objMeta = gson.fromJson(response, Example[].class);
+
+                        Log.wtf("BOOKS_ACT!@#$%^&*()", "8");
+                    }
+
+                    //updateList(objMeta);
                 }
                 catch (IOException e) {
                     e.printStackTrace();
                 }
                 return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+                if (objMeta != null) {
+                    Log.wtf("BOOKS_ACT!@#$%^&*()", "9");
+                    updateList(objMeta);
+                    Log.wtf("BOOKS_ACT!@#$%^&*()", "10");
+                }
             }
         }.execute();
     }
@@ -262,12 +292,19 @@ public class UserAreaAct extends AppCompatActivity {
 
                 String[] from = {"Title: ", "BookID: "};
                 int[] to = {android.R.id.text1, android.R.id.text2};
-                SimpleAdapter adapter = new SimpleAdapter(UserAreaAct.this, list, android.R.layout.simple_list_item_2, from, to);
+                SimpleAdapter adapter = new SimpleAdapter(BooksAct.this, list, android.R.layout.simple_list_item_2, from, to);
                 listView.setAdapter(adapter);
 
 
             }
         });
+    }
+
+    private HashMap<String, String> putData(String id, String title) {
+        HashMap<String, String> item = new HashMap<String, String>();
+        item.put("Title: ", title);
+        item.put("BookID: ", id);
+        return item;
     }*/
 
     /*public void showGroups (final OkHttpClient client, final String url) {

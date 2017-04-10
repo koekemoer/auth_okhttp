@@ -76,6 +76,8 @@ public class MainActivity extends AppCompatActivity {
     private static Schools objSchools = null;
     private static School[] arr;
     private static String[] nameArr, dnsArr;
+    private static ArrayList nameList = new ArrayList();
+    private static ArrayList dnsList = new ArrayList();
     private static String dns;
     final Context context = this;
 
@@ -171,33 +173,29 @@ public class MainActivity extends AppCompatActivity {
                 Log.wtf("!@#$%^&*()1234567890", "6");
 
                 String tmp = null;
+                dns = null;
 
                 if (autoTxt.getText() != null) {
                     tmp = autoTxt.getText().toString();
                 }
-                /*String */dns = "app.dev.it.si";
+                //dns = "app.dev.it.si";
+                //dns = "app.staging.it.si";
 
                 Log.wtf("!@#$%^&*()1234567890", "7");
+                Log.wtf("TMP_1234567890", tmp);
                 //String url;
 
-                for (int i = 0; i < objSchools.schools.size(); i++) {
-                    if (tmp != null && tmp.equals(nameArr[i])) {
-                        dns = dnsArr[i];
+                for (int i = 0; i < nameList.size(); i++) {
+                    if (tmp != null && tmp.equals(nameList.get(i).toString())) {
+                        dns = dnsList.get(i).toString();
                         break;
                     }
                 }
+                Log.wtf("TMP_1234567890", dns);
 
                 Log.wtf("!@#$%^&*()1234567890", "8");
 
-
-                //if (dns == null || tmp.isEmpty()) {
-                //    url = "https://app.dev.it.si/alchemy/api/1.0/login";
-                //}
-                //else {
                 url = "https://" + dns + "/alchemy/api/1.0/login";
-                //}
-
-                //url = "https://app.dev.it.si/alchemy/api/1.0/login";
 
                 Log.wtf("!@#$%^&*()1234567890", "9");
                 Log.d("#####!!!!##!#!#URL:", url);
@@ -222,6 +220,8 @@ public class MainActivity extends AppCompatActivity {
 
                 String uname = etUname.getText().toString();
                 String pass = etPassw.getText().toString();
+
+                Log.wtf("!@#$%^&*()1234567890", "11");
 
                 attemptLogin(client, url, uname, pass);
             }
@@ -273,7 +273,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void autoComplete() {
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_dropdown_item_1line, nameArr);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_dropdown_item_1line, nameList);
         AutoCompleteTextView autoTxt = (AutoCompleteTextView) findViewById(R.id.auto_txt);
         autoTxt.setThreshold(1);
         autoTxt.setAdapter(adapter);
@@ -292,10 +292,15 @@ public class MainActivity extends AppCompatActivity {
                 for (int i = 0; i < schools.schools.size(); i++) {
                     arr[i] = schools.schools.get(i);
                     //Log.d("###SCHOOLS", arr[i].name);
-                    nameArr[i] = arr[i].name;
-                    dnsArr[i] = arr[i].dns;
-                    //Log.d("DNS_ARR", dnsArr[i]);
+                    //nameArr[i] = arr[i].name;
+                    //dnsArr[i] = arr[i].dns;
+                    nameList.add(arr[i].name);
+                    dnsList.add(arr[i].dns);
                 }
+                nameList.add("App Dev");
+                dnsList.add("app.dev.it.si");
+                nameList.add("Staging Dev");
+                dnsList.add("app.staging.it.si");
                 autoComplete();
             }
         });
@@ -332,12 +337,16 @@ public class MainActivity extends AppCompatActivity {
                             progress.setCancelable(true);
                             progress.show();
 
+                            Log.wtf("!@#$%^&*()1234567890", "11");
+
                             if (!obj2.success) {
                                 Log.d("###LOGIN", "WRONG USER");
                                 progress.dismiss();
                                 showAlert(obj2.info);
                             }
                             else {
+
+                                Log.wtf("!@#$%^&*()1234567890", "12");
 
                                 obj1 = gson.fromJson(response, LoginInfo.class);
                                 progress.dismiss();

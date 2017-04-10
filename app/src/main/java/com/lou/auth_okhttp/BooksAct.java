@@ -26,7 +26,7 @@ public class BooksAct extends AppCompatActivity {
 
     private ListView listView;
     private static String response;
-    private static Example[] objMeta;
+    private static Example[] objMeta = null;
     private static Groups[] objGroup;
     private static Authorize objAuth;
     private String dns;
@@ -39,6 +39,8 @@ public class BooksAct extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_books);
 
+        Log.wtf("BOOKS_ACT!@#$%^&*()", "1");
+
         /*getSupportActionBar().setDisplayUseLogoEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.drawable.miebooks);*/
@@ -47,6 +49,8 @@ public class BooksAct extends AppCompatActivity {
         txt_books.setText("Books Activity");
 
         listView = (ListView) findViewById(R.id.list_books);
+
+        Log.wtf("BOOKS_ACT!@#$%^&*()", "2");
 
         mainActivity = null;
         try {
@@ -57,11 +61,17 @@ public class BooksAct extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        Log.wtf("BOOKS_ACT!@#$%^&*()", "3");
+
         final OkHttpClient client = mainActivity.getClient();
         final LoginInfo objLogin = mainActivity.getObj1();
         dns = mainActivity.getDns();
 
+        Log.wtf("BOOKS_ACT!@#$%^&*()", "4");
+
         loadContent(client, objLogin.user.username);
+
+        Log.wtf("BOOKS_ACT!@#$%^&*()", "5");
 
         listView.setClickable(true);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -84,18 +94,39 @@ public class BooksAct extends AppCompatActivity {
             @Override
             protected Void doInBackground(Void... params) {
                 try {
+
+                    Log.wtf("BOOKS_ACT!@#$%^&*()", "6");
                     response = ApiCall.GET(client, RequestBuilder.buildUrl(username));
                     Log.d("USER_AREA:LoadContent", response);
 
-                    Gson gson = new Gson();
-                    objMeta = gson.fromJson(response, Example[].class);
+                    Log.wtf("BOOKS_ACT!@#$%^&*()", "7");
 
-                    updateList(objMeta);
+                    if (response.equals("Unauthorized")) {
+                        showAlert("You are not Authorized\nto view this content");
+                    }
+                    else {
+                        Gson gson = new Gson();
+                        objMeta = gson.fromJson(response, Example[].class);
+
+                        Log.wtf("BOOKS_ACT!@#$%^&*()", "8");
+                    }
+
+                    //updateList(objMeta);
                 }
                 catch (IOException e) {
                     e.printStackTrace();
                 }
                 return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+                if (objMeta != null) {
+                    Log.wtf("BOOKS_ACT!@#$%^&*()", "9");
+                    updateList(objMeta);
+                    Log.wtf("BOOKS_ACT!@#$%^&*()", "10");
+                }
             }
         }.execute();
     }
@@ -168,7 +199,7 @@ public class BooksAct extends AppCompatActivity {
                     Gson gson = new Gson();
                     objAuth = gson.fromJson(response, Authorize.class);
 
-                    checkAuth(client, id);
+                    //checkAuth(client, id);
 
                 }
                 catch (IOException e) {
@@ -176,6 +207,12 @@ public class BooksAct extends AppCompatActivity {
                     Log.e("ERROR TERROR", e.getMessage());
                 }
                 return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+                checkAuth(client, id);
             }
         }.execute();
     }
