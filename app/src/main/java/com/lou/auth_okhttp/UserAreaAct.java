@@ -82,7 +82,7 @@ public class UserAreaAct extends AppCompatActivity {
 
         final LoginInfo objLogin = mainActivity.getObj1();
 
-        //loadContent(client, objLogin.user.username);
+        loadContent(client, objLogin.user.username);
 
         txt_welcome.setText("Welcome " + objLogin.user.firstname);
         //Log.d("UserArea:Username", mainActivity.finalUser);
@@ -225,10 +225,10 @@ public class UserAreaAct extends AppCompatActivity {
         }.execute(url);
     }*/
 
-    /*public void loadContent(final OkHttpClient client, final String username) {
-        new AsyncTask<Void, Void, Void>() {
+    public void loadContent(final OkHttpClient client, final String username) {
+        new AsyncTask<Void, Void, Example[]>() {
             @Override
-            protected Void doInBackground(Void... params) {
+            protected Example[] doInBackground(Void... params) {
                 try {
 
                     Log.wtf("BOOKS_ACT!@#$%^&*()", "6");
@@ -239,8 +239,7 @@ public class UserAreaAct extends AppCompatActivity {
 
                     if (response.equals("Unauthorized")) {
                         showAlert("You are not Authorized\nto view this content");
-                    }
-                    else {
+                    } else {
                         Gson gson = new Gson();
                         objMeta = gson.fromJson(response, Example[].class);
 
@@ -248,26 +247,29 @@ public class UserAreaAct extends AppCompatActivity {
                     }
 
                     //updateList(objMeta);
-                }
-                catch (IOException e) {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
                 return null;
             }
 
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
+            /*@Override
+            protected void onPostExecute(Example[] books) {
+                super.onPostExecute(books);
                 if (objMeta != null) {
                     Log.wtf("BOOKS_ACT!@#$%^&*()", "9");
-                    updateList(objMeta);
+                    //updateList(objMeta);
                     Log.wtf("BOOKS_ACT!@#$%^&*()", "10");
                 }
-            }
+            }*/
         }.execute();
     }
 
-    private void updateList(final Example[] objMeta1) {
+    public Example[] getObjmeta() {
+        return this.objMeta;
+    }
+
+    /*private void updateList(final Example[] objMeta1) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -298,14 +300,14 @@ public class UserAreaAct extends AppCompatActivity {
 
             }
         });
-    }
+    }*/
 
-    private HashMap<String, String> putData(String id, String title) {
+    /*private HashMap<String, String> putData(String id, String title) {
         HashMap<String, String> item = new HashMap<String, String>();
         item.put("Title: ", title);
         item.put("BookID: ", id);
         return item;
-    }*/
+    }/*
 
     /*public void showGroups (final OkHttpClient client, final String url) {
         new AsyncTask<Void, Void, Void>() {
@@ -361,7 +363,7 @@ public class UserAreaAct extends AppCompatActivity {
         });
     }*/
 
-    /*private HashMap<String, String> putData(String id, String title) {
+    private HashMap<String, String> putData(String id, String title) {
         HashMap<String, String> item = new HashMap<String, String>();
         item.put("Title: ", title);
         item.put("BookID: ", id);
@@ -373,7 +375,7 @@ public class UserAreaAct extends AppCompatActivity {
         item.put("Subject: ", title);
         item.put("Name: ", id);
         return item;
-    }*/
+    }
 
     public Example[] getObjMeta() {
         return this.objMeta;

@@ -15,6 +15,10 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -32,6 +36,7 @@ public class BooksAct extends AppCompatActivity {
     private String dns;
     public static boolean ack;
     public MainActivity mainActivity;
+    private UserAreaAct userArea;
     final Context context = this;
 
     @Override
@@ -61,15 +66,20 @@ public class BooksAct extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        /*UserAreaAct */userArea = new UserAreaAct();
+
         Log.wtf("BOOKS_ACT!@#$%^&*()", "3");
 
         final OkHttpClient client = mainActivity.getClient();
         final LoginInfo objLogin = mainActivity.getObj1();
+        final Example[] books = userArea.getObjmeta();
         dns = mainActivity.getDns();
 
         Log.wtf("BOOKS_ACT!@#$%^&*()", "4");
 
-        loadContent(client, objLogin.user.username);
+        //loadContent(client, objLogin.user.username);
+
+        updateList(books);
 
         Log.wtf("BOOKS_ACT!@#$%^&*()", "5");
 
@@ -78,18 +88,18 @@ public class BooksAct extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.d("#####CLICKEDY CLICK", "CLICKED");
-                Log.d("#####CLICKEDY CLICK", objMeta[position].metadata.bookID);
+                Log.d("#####CLICKEDY CLICK", books[position].metadata.bookID);
 
-                String url = "https://" + dns + "/alchemy/api/1.0/epubs/" + objMeta[position].metadata.bookID + "/key?device=auth_test";
+                String url = "https://" + dns + "/alchemy/api/1.0/epubs/" + books[position].metadata.bookID + "/key?device=auth_test";
 
                 Log.d("USER_AREA:AUTH-TEST", url);
 
-                validate(client, objMeta[position].metadata.bookID);
+                validate(client, books[position].metadata.bookID);
             }
         });
     }
 
-    public void loadContent(final OkHttpClient client, final String username) {
+    /*public void loadContent(final OkHttpClient client, final String username) {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
@@ -107,6 +117,19 @@ public class BooksAct extends AppCompatActivity {
                     else {
                         Gson gson = new Gson();
                         objMeta = gson.fromJson(response, Example[].class);
+
+                        /*JSONArray jsonResponse = new JSONArray(response);
+                        for (int x = 0; x < jsonResponse.length() ; x++)
+                        {
+                            JSONObject bookStr = jsonResponse.getJSONObject(x);
+                            if (bookStr)
+
+                                Example example = new Example()
+                        }
+
+                        JSONObject bookStr = jsonResponse.getJSONObject(0);
+
+                        String title = bookStr.optString("title");
 
                         Log.wtf("BOOKS_ACT!@#$%^&*()", "8");
                     }
@@ -129,7 +152,7 @@ public class BooksAct extends AppCompatActivity {
                 }
             }
         }.execute();
-    }
+    }*/
 
     private void updateList(final Example[] objMeta1) {
         runOnUiThread(new Runnable() {
@@ -174,6 +197,7 @@ public class BooksAct extends AppCompatActivity {
                 }
                 else {
                     Log.d("####OBJECT_KEY", objAuth.key);
+                    Log.wtf("SARIE_SLEEP_SEWE_SAKKE_SOUT", "5");
 
                     String url = "https://" + dns + "/alchemy/api/1.0/epubs/" + id + "/key/confirm?device=auth_test&platform=web&model=na";
                     acknowledgeKey(url, objAuth.key, client);
@@ -192,12 +216,17 @@ public class BooksAct extends AppCompatActivity {
             protected Void doInBackground(Void... params) {
                 try {
                     Log.wtf("CHECK CHECK","VALIDATE");
+                    Log.wtf("SARIE_SLEEP_SEWE_SAKKE_SOUT", "1");
                     String url = "https://" + dns + "/alchemy/api/1.0/epubs/" + id + "/key?device=auth_test";
                     response = ApiCall.GET(client, url);
                     Log.d("###CHECK_AUTH", response);
+                    Log.wtf("SARIE_SLEEP_SEWE_SAKKE_SOUT", "2");
+
 
                     Gson gson = new Gson();
                     objAuth = gson.fromJson(response, Authorize.class);
+
+                    Log.wtf("SARIE_SLEEP_SEWE_SAKKE_SOUT", "3");
 
                     //checkAuth(client, id);
 
@@ -212,6 +241,7 @@ public class BooksAct extends AppCompatActivity {
             @Override
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
+                Log.wtf("SARIE_SLEEP_SEWE_SAKKE_SOUT", "4");
                 checkAuth(client, id);
             }
         }.execute();

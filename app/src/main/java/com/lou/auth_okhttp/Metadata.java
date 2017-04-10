@@ -29,7 +29,7 @@ public class Metadata {
     public String subject;
     @SerializedName("grade")
     @Expose
-    public List<String> grade = null;
+    public List<Object> grade = null;
     @SerializedName("edition")
     @Expose
     public String edition;
@@ -61,9 +61,9 @@ public class Metadata {
     @SerializedName("language")
     @Expose
     public String language;
-    @SerializedName("grade")
+    /*@SerializedName("grade")
     @Expose
-    public List<String> grade = null;
+    public List<String> grade = null;*/
     @SerializedName("originalTitle")
     @Expose
     public String originalTitle;

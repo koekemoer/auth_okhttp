@@ -76,9 +76,9 @@ public class MainActivity extends AppCompatActivity {
     private static Schools objSchools = null;
     private static School[] arr;
     private static String[] nameArr, dnsArr;
-    private static ArrayList nameList = new ArrayList();
-    private static ArrayList dnsList = new ArrayList();
-    private static String dns;
+    private static ArrayList<String> nameList = new ArrayList();
+    private static ArrayList<String> dnsList = new ArrayList();
+    private static String dns = null;
     final Context context = this;
 
     //public static String finalUser;
@@ -178,6 +178,10 @@ public class MainActivity extends AppCompatActivity {
                 if (autoTxt.getText() != null) {
                     tmp = autoTxt.getText().toString();
                 }
+
+                if (tmp == null || tmp.equals("")) {
+                    showAlert("Please enter school name");
+                }
                 //dns = "app.dev.it.si";
                 //dns = "app.staging.it.si";
 
@@ -185,11 +189,16 @@ public class MainActivity extends AppCompatActivity {
                 Log.wtf("TMP_1234567890", tmp);
                 //String url;
 
+                boolean found = false;
                 for (int i = 0; i < nameList.size(); i++) {
-                    if (tmp != null && tmp.equals(nameList.get(i).toString())) {
-                        dns = dnsList.get(i).toString();
+                    if (tmp != null && tmp.equals(nameList.get(i))) {
+                        dns = dnsList.get(i);
+                        found = true;
                         break;
                     }
+                }
+                if (!found && autoTxt.getText() != null) {
+                    showAlert("Wrong school name entered");
                 }
                 Log.wtf("TMP_1234567890", dns);
 
@@ -279,18 +288,18 @@ public class MainActivity extends AppCompatActivity {
         autoTxt.setAdapter(adapter);
     }
 
-    private void updateSchools(final Schools schools) {
+    private void updateSchools(final Schools objSchools) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
 
                 //arr = schools.schools.toArray(new School[schools.schools.size()]);
 
-                nameArr = new String[schools.schools.size()];
-                dnsArr = new String[schools.schools.size()];
+                nameArr = new String[objSchools.schools.size()];
+                dnsArr = new String[objSchools.schools.size()];
 
-                for (int i = 0; i < schools.schools.size(); i++) {
-                    arr[i] = schools.schools.get(i);
+                for (int i = 0; i < objSchools.schools.size(); i++) {
+                    arr[i] = objSchools.schools.get(i);
                     //Log.d("###SCHOOLS", arr[i].name);
                     //nameArr[i] = arr[i].name;
                     //dnsArr[i] = arr[i].dns;
