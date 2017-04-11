@@ -65,6 +65,7 @@ public class UserAreaAct extends AppCompatActivity {
         final TextView txt_welcome = (TextView) findViewById(R.id.textView_welcome);
         final Button btn_show = (Button) findViewById(R.id.btn_show);
         final Button btn_groups = (Button) findViewById(R.id.btn_groups);
+        final Button btn_logout = (Button) findViewById(R.id.btn_logout);
         //listView = (ListView) findViewById(R.id.list_books1);
 
         mainActivity = null;
@@ -82,9 +83,9 @@ public class UserAreaAct extends AppCompatActivity {
 
         final LoginInfo objLogin = mainActivity.getObj1();
 
-        loadContent(client, objLogin.user.username);
+        loadContent(client, objLogin.getUser().getUsername());
 
-        txt_welcome.setText("Welcome " + objLogin.user.firstname);
+        txt_welcome.setText("Welcome " + objLogin.getUser().getFirstname());
         //Log.d("UserArea:Username", mainActivity.finalUser);
 
         Log.d("CLICKEDY CLICK", "CLICKED");
@@ -109,6 +110,14 @@ public class UserAreaAct extends AppCompatActivity {
                 Intent intent = new Intent(UserAreaAct.this, GroupsAct.class);
                 UserAreaAct.this.startActivity(intent);
                 Log.wtf("USERAREA!@#$%^&*()", "5");
+            }
+        });
+
+        btn_logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mainActivity.clearLogin();
+                finish();
             }
         });
 

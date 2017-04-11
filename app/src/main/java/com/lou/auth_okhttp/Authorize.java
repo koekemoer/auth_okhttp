@@ -8,13 +8,38 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class Authorize {
+
     @SerializedName("key")
     @Expose
-    public String key;
+    private String key;
     @SerializedName("ack")
     @Expose
-    public boolean ack = false;
+    private boolean ack = false;
     @SerializedName("detail")
     @Expose
-    public String detail;
+    private String detail;
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public boolean isAck() {
+        return ack;
+    }
+
+    public void setAck(boolean ack) {
+        this.ack = ack;
+    }
+
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
+    }
 }

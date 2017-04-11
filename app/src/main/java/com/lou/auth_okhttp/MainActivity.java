@@ -136,41 +136,25 @@ public class MainActivity extends AppCompatActivity {
         final Button bLogin = (Button) findViewById(R.id.btn_login);
         final AutoCompleteTextView autoTxt = (AutoCompleteTextView) findViewById(R.id.auto_txt);
 
-        Log.wtf("!@#$%^&*()1234567890", "2");
+        //Log.wtf("!@#$%^&*()1234567890", "2");
 
-        /*try {
-            client = pinnedClient(ITSIPEM);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (CertificateException e) {
-            e.printStackTrace();
-        } catch (UnrecoverableKeyException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (KeyManagementException e) {
-            e.printStackTrace();
-        } catch (KeyStoreException e) {
-            e.printStackTrace();
-        }*/
+        //Log.d("CHECK CHECK", "START OF ON CREATE");
 
-        Log.d("CHECK CHECK", "START OF ON CREATE");
-
-        Log.wtf("!@#$%^&*()1234567890", "3");
+        //Log.wtf("!@#$%^&*()1234567890", "3");
 
         client2 = getUnsafeOkHttpClient();
 
-        Log.wtf("!@#$%^&*()1234567890", "4");
+        //Log.wtf("!@#$%^&*()1234567890", "4");
 
         getSchools(schools, client2);
 
-        Log.wtf("!@#$%^&*()1234567890", "5");
+        //Log.wtf("!@#$%^&*()1234567890", "5");
 
         bLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                Log.wtf("!@#$%^&*()1234567890", "6");
+                //Log.wtf("!@#$%^&*()1234567890", "6");
 
                 String tmp = null;
                 dns = null;
@@ -182,11 +166,9 @@ public class MainActivity extends AppCompatActivity {
                 if (tmp == null || tmp.equals("")) {
                     showAlert("Please enter school name");
                 }
-                //dns = "app.dev.it.si";
-                //dns = "app.staging.it.si";
 
-                Log.wtf("!@#$%^&*()1234567890", "7");
-                Log.wtf("TMP_1234567890", tmp);
+                //Log.wtf("!@#$%^&*()1234567890", "7");
+                //Log.wtf("TMP_1234567890", tmp);
                 //String url;
 
                 boolean found = false;
@@ -200,14 +182,14 @@ public class MainActivity extends AppCompatActivity {
                 if (!found && autoTxt.getText() != null) {
                     showAlert("Wrong school name entered");
                 }
-                Log.wtf("TMP_1234567890", dns);
+                //Log.wtf("TMP_1234567890", dns);
 
-                Log.wtf("!@#$%^&*()1234567890", "8");
+                //Log.wtf("!@#$%^&*()1234567890", "8");
 
                 url = "https://" + dns + "/alchemy/api/1.0/login";
 
-                Log.wtf("!@#$%^&*()1234567890", "9");
-                Log.d("#####!!!!##!#!#URL:", url);
+                //Log.wtf("!@#$%^&*()1234567890", "9");
+                //Log.d("#####!!!!##!#!#URL:", url);
 
                 try {
                     client = pinnedClient(ITSIPEM);
@@ -225,12 +207,12 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                Log.wtf("!@#$%^&*()1234567890", "10");
+                //Log.wtf("!@#$%^&*()1234567890", "10");
 
                 String uname = etUname.getText().toString();
                 String pass = etPassw.getText().toString();
 
-                Log.wtf("!@#$%^&*()1234567890", "11");
+                //Log.wtf("!@#$%^&*()1234567890", "11");
 
                 attemptLogin(client, url, uname, pass);
             }
@@ -249,6 +231,10 @@ public class MainActivity extends AppCompatActivity {
         return this.dns;
     }
 
+    public void clearLogin() {
+        obj1 = null;
+    }
+
     public void getSchools(final String schools, final OkHttpClient client) {
         new AsyncTask<Void, Void, Schools>() {
             @Override
@@ -261,7 +247,7 @@ public class MainActivity extends AppCompatActivity {
                     Gson gson = new Gson();
                     objSchools = gson.fromJson(response, Schools.class);
 
-                    arr = objSchools.schools.toArray(new School[objSchools.schools.size()]);
+                    arr = objSchools.getSchools().toArray(new School[objSchools.getSchools().size()]);
 
                 }
                 catch (IOException e) {
@@ -295,16 +281,15 @@ public class MainActivity extends AppCompatActivity {
 
                 //arr = schools.schools.toArray(new School[schools.schools.size()]);
 
-                nameArr = new String[objSchools.schools.size()];
-                dnsArr = new String[objSchools.schools.size()];
+                int size = objSchools.getSchools().size();
 
-                for (int i = 0; i < objSchools.schools.size(); i++) {
-                    arr[i] = objSchools.schools.get(i);
-                    //Log.d("###SCHOOLS", arr[i].name);
-                    //nameArr[i] = arr[i].name;
-                    //dnsArr[i] = arr[i].dns;
-                    nameList.add(arr[i].name);
-                    dnsList.add(arr[i].dns);
+                nameArr = new String[size];
+                dnsArr = new String[size];
+
+                for (int i = 0; i < size; i++) {
+                    arr[i] = objSchools.getSchools().get(i);
+                    nameList.add(arr[i].getName());
+                    dnsList.add(arr[i].getDns());
                 }
                 nameList.add("App Dev");
                 dnsList.add("app.dev.it.si");
@@ -348,10 +333,10 @@ public class MainActivity extends AppCompatActivity {
 
                             Log.wtf("!@#$%^&*()1234567890", "11");
 
-                            if (!obj2.success) {
+                            if (!obj2.getSuccess()) {
                                 Log.d("###LOGIN", "WRONG USER");
                                 progress.dismiss();
-                                showAlert(obj2.info);
+                                showAlert(obj2.getInfo());
                             }
                             else {
 

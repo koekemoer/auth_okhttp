@@ -10,5 +10,13 @@ import com.google.gson.annotations.SerializedName;
 public class Ack {
     @SerializedName("ack")
     @Expose
-    public boolean ack = false;
+    private boolean ack = false;
+
+    public boolean isAck() {
+        return ack;
+    }
+
+    public void setAck(boolean ack) {
+        this.ack = ack;
+    }
 }

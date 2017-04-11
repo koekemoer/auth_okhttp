@@ -12,7 +12,7 @@ import java.util.List;
 public class Groups {
     @SerializedName("name")
     @Expose
-    public String name;
+    private String name;
     /*@SerializedName("code")
     @Expose
     public String code;
@@ -27,7 +27,7 @@ public class Groups {
     public String owner;
     */@SerializedName("subject")
     @Expose
-    public String subject;/*
+    private String subject;/*
     @SerializedName("language")
     @Expose
     public String language;
@@ -45,5 +45,29 @@ public class Groups {
     public Integer updated;*/
     @SerializedName("source")
     @Expose
-    public String source;
+    private String source;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
 }

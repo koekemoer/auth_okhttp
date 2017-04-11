@@ -11,54 +11,57 @@ public class LoginInfo {
 
     @SerializedName("user")
     @Expose
-    public User user;
+    private User user;
     @SerializedName("hash")
     @Expose
-    public String hash;
+    private String hash;
     @SerializedName("firstname")
     @Expose
-    public String firstname;
+    private String firstname;
     @SerializedName("surname")
     @Expose
-    public String surname;
+    private String surname;
     @SerializedName("success")
     @Expose
-    public Boolean success = false;
+    private Boolean success = false;
 
-    // ------------------------------------------------------
+    public User getUser() {
+        return user;
+    }
 
-    /*@SerializedName("reqPath")
-    @Expose
-    public String reqPath;
-    @SerializedName("target")
-    @Expose
-    public String target;
-    @SerializedName("api")
-    @Expose
-    public Boolean api;
-    @SerializedName("detail")
-    @Expose
-    public String detail = null;
-    @SerializedName("info")
-    @Expose
-    public String info;
+    public void setUser(User user) {
+        this.user = user;
+    }
 
-    //-----------------------------------------
+    public String getHash() {
+        return hash;
+    }
 
-    //@SerializedName("user")
-    //@Expose
-    //public String user;
-    @SerializedName("username")
-    @Expose
-    public String username;
-    @SerializedName("person")
-    @Expose
-    public String person;
-    @SerializedName("stack")
-    @Expose
-    public String stack;
-    @SerializedName("message")
-    @Expose
-    public String message;*/
+    public void setHash(String hash) {
+        this.hash = hash;
+    }
 
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public Boolean getSuccess() {
+        return success;
+    }
+
+    public void setSuccess(Boolean success) {
+        this.success = success;
+    }
 }

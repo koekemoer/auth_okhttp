@@ -30,7 +30,7 @@ public class BooksAct extends AppCompatActivity {
 
     private ListView listView;
     private static String response;
-    private static Example[] objMeta = null;
+    //private static Example[] objMeta = null;
     private static Groups[] objGroup;
     private static Authorize objAuth;
     private String dns;
@@ -88,92 +88,37 @@ public class BooksAct extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.d("#####CLICKEDY CLICK", "CLICKED");
-                Log.d("#####CLICKEDY CLICK", books[position].metadata.bookID);
+                Log.d("#####CLICKEDY CLICK", books[position].getMetadata().getBookID());
 
-                String url = "https://" + dns + "/alchemy/api/1.0/epubs/" + books[position].metadata.bookID + "/key?device=auth_test";
+                String url = "https://" + dns + "/alchemy/api/1.0/epubs/" + books[position].getMetadata().getBookID() + "/key?device=auth_test";
 
                 Log.d("USER_AREA:AUTH-TEST", url);
 
-                validate(client, books[position].metadata.bookID);
+                validate(client, books[position].getMetadata().getBookID());
             }
         });
     }
 
-    /*public void loadContent(final OkHttpClient client, final String username) {
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... params) {
-                try {
-
-                    Log.wtf("BOOKS_ACT!@#$%^&*()", "6");
-                    response = ApiCall.GET(client, RequestBuilder.buildUrl(username));
-                    Log.d("USER_AREA:LoadContent", response);
-
-                    Log.wtf("BOOKS_ACT!@#$%^&*()", "7");
-
-                    if (response.equals("Unauthorized")) {
-                        showAlert("You are not Authorized\nto view this content");
-                    }
-                    else {
-                        Gson gson = new Gson();
-                        objMeta = gson.fromJson(response, Example[].class);
-
-                        /*JSONArray jsonResponse = new JSONArray(response);
-                        for (int x = 0; x < jsonResponse.length() ; x++)
-                        {
-                            JSONObject bookStr = jsonResponse.getJSONObject(x);
-                            if (bookStr)
-
-                                Example example = new Example()
-                        }
-
-                        JSONObject bookStr = jsonResponse.getJSONObject(0);
-
-                        String title = bookStr.optString("title");
-
-                        Log.wtf("BOOKS_ACT!@#$%^&*()", "8");
-                    }
-
-                    //updateList(objMeta);
-                }
-                catch (IOException e) {
-                    e.printStackTrace();
-                }
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-                if (objMeta != null) {
-                    Log.wtf("BOOKS_ACT!@#$%^&*()", "9");
-                    updateList(objMeta);
-                    Log.wtf("BOOKS_ACT!@#$%^&*()", "10");
-                }
-            }
-        }.execute();
-    }*/
-
-    private void updateList(final Example[] objMeta1) {
+    private void updateList(final Example[] objBooks) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                for (int i = 0; i < objMeta1.length; i++) {
-                    Log.d("####BOOK_ID", objMeta1[i].metadata.bookID);
-                    if (objMeta1[i].metadata.title == null || objMeta1[i].metadata.title == "") {
+                for (int i = 0; i < objBooks.length; i++) {
+                    Log.d("####BOOK_ID", objBooks[i].getMetadata().getBookID());
+                    if (objBooks[i].getMetadata().getTitle() == null || objBooks[i].getMetadata().getTitle() == "") {
                         Log.d("###BOOK_TITLE", "NULL OU BUL");
                     }
-                    Log.d("###BOOK_TITLE", objMeta1[i].metadata.title);
+                    Log.d("###BOOK_TITLE", objBooks[i].getMetadata().getTitle());
                 }
 
                 ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
 
-                for (int j = 0; j < objMeta1.length; j++) {
-                    if (objMeta1[j].metadata.title == "" || objMeta1[j].metadata.title == null) {
-                        list.add(putData(objMeta1[j].metadata.bookID, "(Title not available)"));
+                for (int j = 0; j < objBooks.length; j++) {
+                    if (objBooks[j].getMetadata().getTitle() == "" || objBooks[j].getMetadata().getTitle() == null) {
+                        list.add(putData(objBooks[j].getMetadata().getBookID(), "(Title not available)"));
                     }
                     else {
-                        list.add(putData(objMeta1[j].metadata.bookID, objMeta1[j].metadata.title));
+                        list.add(putData(objBooks[j].getMetadata().getBookID(), objBooks[j].getMetadata().getTitle()));
                     }
                 }
 
@@ -192,15 +137,15 @@ public class BooksAct extends AppCompatActivity {
             @Override
             public void run() {
 
-                if (objAuth.key == null) {
-                    showAlert(objAuth.detail);
+                if (objAuth.getKey() == null) {
+                    showAlert(objAuth.getDetail());
                 }
                 else {
-                    Log.d("####OBJECT_KEY", objAuth.key);
+                    Log.d("####OBJECT_KEY", objAuth.getKey());
                     Log.wtf("SARIE_SLEEP_SEWE_SAKKE_SOUT", "5");
 
                     String url = "https://" + dns + "/alchemy/api/1.0/epubs/" + id + "/key/confirm?device=auth_test&platform=web&model=na";
-                    acknowledgeKey(url, objAuth.key, client);
+                    acknowledgeKey(url, objAuth.getKey(), client);
 
                     //String ackstr = Boolean.toString(objAuth.ack);
                     //Log.wtf("###ACK_checkAuth", ackstr);
@@ -282,7 +227,7 @@ public class BooksAct extends AppCompatActivity {
 
                             //ack = objAuth.ack;
                             progress.dismiss();
-                            showAlert("Book Authenticated\n\nKey: " + key + "\n\n" + (objAuth.ack ? "Acknowledged" : "Not Acknowledged"));
+                            showAlert("Book Authenticated\n\nKey: " + key + "\n\n" + (objAuth.isAck() ? "Acknowledged" : "Not Acknowledged"));
                         }
                     });
 

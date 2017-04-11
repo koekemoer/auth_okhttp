@@ -12,24 +12,79 @@ import java.util.List;
 public class School {
     @SerializedName("name")
     @Expose
-    public String name;
+    private String name;
     @SerializedName("id")
     @Expose
-    public String id;
+    private String id;
     @SerializedName("guid")
     @Expose
-    public String guid;
+    private String guid;
     @SerializedName("grades")
     @Expose
-    public List<Object> grades = null;
+    private List<Object> grades = null;
     @SerializedName("languages")
     @Expose
-    public List<Object> languages = null;
+    private List<Object> languages = null;
     @SerializedName("dnsadress")
     @Expose
-    public String dnsadress;
+    private String dnsadress;
     @SerializedName("dns")
     @Expose
-    public String dns;
+    private String dns;
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getGuid() {
+        return guid;
+    }
+
+    public void setGuid(String guid) {
+        this.guid = guid;
+    }
+
+    public List<Object> getGrades() {
+        return grades;
+    }
+
+    public void setGrades(List<Object> grades) {
+        this.grades = grades;
+    }
+
+    public List<Object> getLanguages() {
+        return languages;
+    }
+
+    public void setLanguages(List<Object> languages) {
+        this.languages = languages;
+    }
+
+    public String getDnsadress() {
+        return dnsadress;
+    }
+
+    public void setDnsadress(String dnsadress) {
+        this.dnsadress = dnsadress;
+    }
+
+    public String getDns() {
+        return dns;
+    }
+
+    public void setDns(String dns) {
+        this.dns = dns;
+    }
 }

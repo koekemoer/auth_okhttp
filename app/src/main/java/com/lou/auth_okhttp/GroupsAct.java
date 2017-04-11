@@ -54,7 +54,7 @@ public class GroupsAct extends AppCompatActivity {
         final LoginInfo objLogin = mainActivity.getObj1();
         dns = mainActivity.getDns();
 
-        showGroups(client, "https://" + dns + "/alchemy/api/1.0/users/" + objLogin.user.username + "/enrolment?withPrivate=true");
+        showGroups(client, "https://" + dns + "/alchemy/api/1.0/users/" + objLogin.getUser().getUsername() + "/enrolment?withPrivate=true");
     }
 
     public void showGroups (final OkHttpClient client, final String url) {
@@ -85,17 +85,17 @@ public class GroupsAct extends AppCompatActivity {
             public void run() {
 
                 for (int i = 0; i < objGrp.length; i++) {
-                    Log.d("####NAME/GROUP", objGrp[i].name);
+                    Log.d("####NAME/GROUP", objGrp[i].getName());
                     //if (objGrp[i].name == "" || objGrp[i].name == null) {
                     //    Log.d("###BOOK_TITLE", "NULL OU BUL");
                     //}
-                    Log.d("###SUBJECT", objGrp[i].subject);
+                    Log.d("###SUBJECT", objGrp[i].getSubject());
                 }
 
                 ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
 
                 for (int j = 0; j < objGrp.length; j++) {
-                    list.add(putData(objGrp[j].subject, objGrp[j].name));
+                    list.add(putData(objGrp[j].getSubject(), objGrp[j].getName()));
                 }
 
                 String[] from = {"Subject: ", "Name: "};

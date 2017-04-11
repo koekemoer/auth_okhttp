@@ -3,110 +3,224 @@ package com.lou.auth_okhttp;
 /**
  * Created by lou on 2017/03/07.
  */
+import android.util.Log;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 
 public class Metadata {
-    /*@SerializedName("isbn")
-    @Expose
-    public String isbn;
-    @SerializedName("originalTitle")
-    @Expose
-    public String originalTitle;
-    @SerializedName("title")
-    @Expose
-    public String title;
-    @SerializedName("publisher")
-    @Expose
-    public String publisher;
-    @SerializedName("language")
-    @Expose
-    public String language;
-    @SerializedName("subject")
-    @Expose
-    public String subject;
-    @SerializedName("grade")
-    @Expose
-    public List<Object> grade = null;
-    @SerializedName("edition")
-    @Expose
-    public String edition;
-    @SerializedName("encryptor")
-    @Expose
-    public String encryptor;
-    @SerializedName("publicationDate")
-    @Expose
-    public Integer publicationDate;
-    @SerializedName("year")
-    @Expose
-    public Integer year;
-    @SerializedName("bookID")
-    @Expose
-    public String bookID;
-    @SerializedName("version")
-    @Expose
-    public Integer version;
-    @SerializedName("encryptionDate")
-    @Expose
-    public Integer encryptionDate;
-    @SerializedName("format")
-    @Expose
-    public Integer format;*/
 
     @SerializedName("format")
     @Expose
-    public Integer format;
+    private Integer format;
     @SerializedName("language")
     @Expose
-    public String language;
-    /*@SerializedName("grade")
+    private String language;
+    @SerializedName("grade")
     @Expose
-    public List<String> grade = null;*/
+    private List<String> grade = null;
     @SerializedName("originalTitle")
     @Expose
-    public String originalTitle;
+    private String originalTitle;
     @SerializedName("title")
     @Expose
-    public String title;
+    private String title;
     @SerializedName("subject")
     @Expose
-    public String subject;
+    private String subject;
     @SerializedName("encryptor")
     @Expose
-    public String encryptor;
+    private String encryptor;
     @SerializedName("isbn")
     @Expose
-    public String isbn;
+    private String isbn;
     @SerializedName("publicationDate")
     @Expose
-    public Integer publicationDate;
+    private Integer publicationDate;
     @SerializedName("publisher")
     @Expose
-    public String publisher;
+    private String publisher;
     @SerializedName("year")
     @Expose
-    public Integer year;
+    private Integer year;
     @SerializedName("bookID")
     @Expose
-    public String bookID;
+    private String bookID;
     @SerializedName("version")
     @Expose
-    public Float version;
+    private Float version;
     @SerializedName("encryptionDate")
     @Expose
-    public Integer encryptionDate;
+    private Integer encryptionDate;
     @SerializedName("edition")
     @Expose
-    public String edition;
+    private String edition;
     @SerializedName("regions")
     @Expose
-    public List<String> regions = null;
+    private List<String> regions = null;
     @SerializedName("curriculum")
     @Expose
-    public List<Object> curriculum = null;
+    private List<Object> curriculum = null;
     @SerializedName("markets")
     @Expose
-    public List<String> markets = null;
+    private List<String> markets = null;
+
+    public Integer getFormat() {
+        return format;
+    }
+
+    public void setFormat(Integer format) {
+        this.format = format;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public List<String> getGrade() {
+        return grade;
+    }
+
+    public void setGrade(List<String> grade) {
+        this.grade = grade;
+    }
+
+    public void setGrade(int grade) {
+        Integer n = new Integer(grade);
+        String tmp = n.toString();
+        Log.wtf("CHECK DIE SHIT!!!!!!!", tmp);
+        //tmp = grade.toString();
+        List<String> gd = new ArrayList<String>();
+        gd.add(tmp);
+        this.grade = gd;
+    }
+
+    public String getOriginalTitle() {
+        return originalTitle;
+    }
+
+    public void setOriginalTitle(String originalTitle) {
+        this.originalTitle = originalTitle;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    public String getEncryptor() {
+        return encryptor;
+    }
+
+    public void setEncryptor(String encryptor) {
+        this.encryptor = encryptor;
+    }
+
+    public String getIsbn() {
+        return isbn;
+    }
+
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
+    }
+
+    public Integer getPublicationDate() {
+        return publicationDate;
+    }
+
+    public void setPublicationDate(Integer publicationDate) {
+        this.publicationDate = publicationDate;
+    }
+
+    public String getPublisher() {
+        return publisher;
+    }
+
+    public void setPublisher(String publisher) {
+        this.publisher = publisher;
+    }
+
+    public Integer getYear() {
+        return year;
+    }
+
+    public void setYear(Integer year) {
+        this.year = year;
+    }
+
+    public String getBookID() {
+        return bookID;
+    }
+
+    public void setBookID(String bookID) {
+        this.bookID = bookID;
+    }
+
+    public Float getVersion() {
+        return version;
+    }
+
+    public void setVersion(Float version) {
+        this.version = version;
+    }
+
+    public Integer getEncryptionDate() {
+        return encryptionDate;
+    }
+
+    public void setEncryptionDate(Integer encryptionDate) {
+        this.encryptionDate = encryptionDate;
+    }
+
+    public String getEdition() {
+        return edition;
+    }
+
+    public void setEdition(String edition) {
+        this.edition = edition;
+    }
+
+    public List<String> getRegions() {
+        return regions;
+    }
+
+    public void setRegions(List<String> regions) {
+        this.regions = regions;
+    }
+
+    public List<Object> getCurriculum() {
+        return curriculum;
+    }
+
+    public void setCurriculum(List<Object> curriculum) {
+        this.curriculum = curriculum;
+    }
+
+    public List<String> getMarkets() {
+        return markets;
+    }
+
+    public void setMarkets(List<String> markets) {
+        this.markets = markets;
+    }
 }
