@@ -136,25 +136,13 @@ public class MainActivity extends AppCompatActivity {
         final Button bLogin = (Button) findViewById(R.id.btn_login);
         final AutoCompleteTextView autoTxt = (AutoCompleteTextView) findViewById(R.id.auto_txt);
 
-        //Log.wtf("!@#$%^&*()1234567890", "2");
-
-        //Log.d("CHECK CHECK", "START OF ON CREATE");
-
-        //Log.wtf("!@#$%^&*()1234567890", "3");
-
         client2 = getUnsafeOkHttpClient();
 
-        //Log.wtf("!@#$%^&*()1234567890", "4");
-
         getSchools(schools, client2);
-
-        //Log.wtf("!@#$%^&*()1234567890", "5");
 
         bLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                //Log.wtf("!@#$%^&*()1234567890", "6");
 
                 String tmp = null;
                 dns = null;
@@ -167,10 +155,6 @@ public class MainActivity extends AppCompatActivity {
                     showAlert("Please enter school name");
                 }
 
-                //Log.wtf("!@#$%^&*()1234567890", "7");
-                //Log.wtf("TMP_1234567890", tmp);
-                //String url;
-
                 boolean found = false;
                 for (int i = 0; i < nameList.size(); i++) {
                     if (tmp != null && tmp.equals(nameList.get(i))) {
@@ -182,14 +166,8 @@ public class MainActivity extends AppCompatActivity {
                 if (!found && autoTxt.getText() != null) {
                     showAlert("Wrong school name entered");
                 }
-                //Log.wtf("TMP_1234567890", dns);
-
-                //Log.wtf("!@#$%^&*()1234567890", "8");
 
                 url = "https://" + dns + "/alchemy/api/1.0/login";
-
-                //Log.wtf("!@#$%^&*()1234567890", "9");
-                //Log.d("#####!!!!##!#!#URL:", url);
 
                 try {
                     client = pinnedClient(ITSIPEM);

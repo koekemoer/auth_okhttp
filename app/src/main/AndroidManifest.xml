@@ -22,7 +22,8 @@
         </activity>
         <activity android:name=".UserAreaAct" />
         <activity android:name=".BooksAct" />
-        <activity android:name=".GroupsAct"></activity>
+        <activity android:name=".GroupsAct" />
+        <activity android:name=".ApiCallAct"></activity>
     </application>
 
 </manifest>

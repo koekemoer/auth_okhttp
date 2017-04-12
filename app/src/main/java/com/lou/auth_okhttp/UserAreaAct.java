@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.androidquery.AQuery;
 import com.androidquery.callback.AjaxStatus;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.json.JSONObject;
 import org.w3c.dom.Text;
@@ -39,14 +40,14 @@ import okhttp3.OkHttpClient;
 public class UserAreaAct extends AppCompatActivity {
 
     private static String response;
-    private static Example[] objMeta;
-    private static Groups[] objGroup;
-    private static Authorize objAuth;
+    private static Example[] objBooks;
+    //private static Groups[] objGroup;
+    //private static Authorize objAuth;
     //private static Ack objAck;
-    private ListView listView, listGroup;
+    //private ListView listView, listGroup;
     final Context context = this;
-    public static boolean ack;
-    public static boolean check = false;
+    //public static boolean ack;
+    //public static boolean check = false;
     public MainActivity mainActivity;
     //private AQuery aq;
 
@@ -66,6 +67,7 @@ public class UserAreaAct extends AppCompatActivity {
         final Button btn_show = (Button) findViewById(R.id.btn_show);
         final Button btn_groups = (Button) findViewById(R.id.btn_groups);
         final Button btn_logout = (Button) findViewById(R.id.btn_logout);
+        final Button btn_api = (Button) findViewById(R.id.btn_api);
         //listView = (ListView) findViewById(R.id.list_books1);
 
         mainActivity = null;
@@ -113,6 +115,14 @@ public class UserAreaAct extends AppCompatActivity {
             }
         });
 
+        btn_api.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(UserAreaAct.this, ApiCallAct.class);
+                UserAreaAct.this.startActivity(intent);
+            }
+        });
+
         btn_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -120,21 +130,6 @@ public class UserAreaAct extends AppCompatActivity {
                 finish();
             }
         });
-
-        /*listView.setClickable(true);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("#####CLICKEDY CLICK", "CLICKED");
-                Log.d("#####CLICKEDY CLICK", objMeta[position].metadata.bookID);
-
-                String url = "https://app.dev.it.si/alchemy/api/1.0/epubs/" + objMeta[position].metadata.bookID + "/key?device=auth_test";
-
-                Log.d("USER_AREA:AUTH-TEST", url);
-
-                validate(client, objMeta[position].metadata.bookID);
-            }
-        });*/
 
     }
 
@@ -250,7 +245,10 @@ public class UserAreaAct extends AppCompatActivity {
                         showAlert("You are not Authorized\nto view this content");
                     } else {
                         Gson gson = new Gson();
-                        objMeta = gson.fromJson(response, Example[].class);
+                        objBooks = gson.fromJson(response, Example[].class);
+
+                        /*GsonBuilder builder = new GsonBuilder();
+                        builder.registerTypeAdapterFactory(new )*/
 
                         Log.wtf("BOOKS_ACT!@#$%^&*()", "8");
                     }
@@ -274,8 +272,8 @@ public class UserAreaAct extends AppCompatActivity {
         }.execute();
     }
 
-    public Example[] getObjmeta() {
-        return this.objMeta;
+    public Example[] getObjBooks() {
+        return this.objBooks;
     }
 
     /*private void updateList(final Example[] objMeta1) {
@@ -387,7 +385,7 @@ public class UserAreaAct extends AppCompatActivity {
     }
 
     public Example[] getObjMeta() {
-        return this.objMeta;
+        return this.objBooks;
     }
 
     public void showAlert(String msg) {

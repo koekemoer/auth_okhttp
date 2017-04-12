@@ -21,9 +21,9 @@ public class Metadata {
     @SerializedName("language")
     @Expose
     private String language;
-    @SerializedName("grade")
+    /*@SerializedName("grade")
     @Expose
-    private List<String> grade = null;
+    private List<String> grade = null;*/
     @SerializedName("originalTitle")
     @Expose
     private String originalTitle;
@@ -86,7 +86,7 @@ public class Metadata {
         this.language = language;
     }
 
-    public List<String> getGrade() {
+    /*public List<String> getGrade() {
         return grade;
     }
 
@@ -102,7 +102,7 @@ public class Metadata {
         List<String> gd = new ArrayList<String>();
         gd.add(tmp);
         this.grade = gd;
-    }
+    }*/
 
     public String getOriginalTitle() {
         return originalTitle;

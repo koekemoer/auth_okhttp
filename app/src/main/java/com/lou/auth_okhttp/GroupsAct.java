@@ -37,7 +37,7 @@ public class GroupsAct extends AppCompatActivity {
         getSupportActionBar().setIcon(R.drawable.miebooks);*/
 
         final TextView txt_books = (TextView) findViewById(R.id.tview_groups);
-        txt_books.setText("Groups Activity");
+        txt_books.setText("Groups");
 
         listView = (ListView) findViewById(R.id.list_groups);
 

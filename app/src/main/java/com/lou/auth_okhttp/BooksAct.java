@@ -51,7 +51,7 @@ public class BooksAct extends AppCompatActivity {
         getSupportActionBar().setIcon(R.drawable.miebooks);*/
 
         final TextView txt_books = (TextView) findViewById(R.id.tview_books);
-        txt_books.setText("Books Activity");
+        txt_books.setText("Books");
 
         listView = (ListView) findViewById(R.id.list_books);
 
@@ -72,7 +72,7 @@ public class BooksAct extends AppCompatActivity {
 
         final OkHttpClient client = mainActivity.getClient();
         final LoginInfo objLogin = mainActivity.getObj1();
-        final Example[] books = userArea.getObjmeta();
+        final Example[] books = userArea.getObjBooks();
         dns = mainActivity.getDns();
 
         Log.wtf("BOOKS_ACT!@#$%^&*()", "4");
@@ -103,13 +103,13 @@ public class BooksAct extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                for (int i = 0; i < objBooks.length; i++) {
+                /*for (int i = 0; i < objBooks.length; i++) {
                     Log.d("####BOOK_ID", objBooks[i].getMetadata().getBookID());
                     if (objBooks[i].getMetadata().getTitle() == null || objBooks[i].getMetadata().getTitle() == "") {
                         Log.d("###BOOK_TITLE", "NULL OU BUL");
                     }
                     Log.d("###BOOK_TITLE", objBooks[i].getMetadata().getTitle());
-                }
+                }*/
 
                 ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
 
