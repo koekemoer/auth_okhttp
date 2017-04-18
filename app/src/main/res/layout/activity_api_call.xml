@@ -18,22 +18,18 @@
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp" />
 
-    <AutoCompleteTextView
-        android:id="@+id/autotxt_api"
-        android:layout_width="276dp"
-        android:layout_height="43dp"
-        tools:layout_editor_absoluteX="55dp"
-        tools:layout_editor_absoluteY="54dp"
-        android:layout_below="@+id/txt_api"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="19dp" />
-
     <Button
         android:id="@+id/btn_call"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="59dp"
-        android:text="Gooi" />
+        android:text="Gooi"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="300sp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txt_api"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>

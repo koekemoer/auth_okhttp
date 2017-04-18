@@ -10,19 +10,20 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
-
-import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+
+import android.app.Activity;
+import com.chilkatsoft.*;
+
+
+import org.json.JSONException;
 
 import okhttp3.OkHttpClient;
 
@@ -39,8 +40,9 @@ public class ApiCallAct extends AppCompatActivity {
     private String finalStr = null;
     HashMap calls = new HashMap();
     AutoCompleteTextView autoApi;
+    Spinner spinner;
     final Context context = this;
-    //private String
+    private static final String TAG = "Chilkat";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,46 +60,50 @@ public class ApiCallAct extends AppCompatActivity {
 
         UserAreaAct userArea = new UserAreaAct();
 
+        Log.d("WTF WTF WTF WTF", "WHY U NO WORK?");
+
         final TextView txt_api = (TextView) findViewById(R.id.txt_api);
         final Button btn_call = (Button) findViewById(R.id.btn_call);
-        /*AutoCompleteTextView */autoApi = (AutoCompleteTextView) findViewById(R.id.autotxt_api);
+        ///*AutoCompleteTextView */autoApi = (AutoCompleteTextView) findViewById(R.id.autotxt_api);
+        /*Spinner*/ spinner = (Spinner) findViewById(R.id.spinner);
         txt_api.setText("API Calls");
+        //ArrayAdapter<String> adapter = ArrayAdapter.createFromResource(this, null, )
 
         /*final String*/ dns = mainAct.getDns();
         final OkHttpClient client = mainAct.getClient();
         final LoginInfo objLogin = mainAct.getObj1();
         final Example[] objBooks = userArea.getObjBooks();
+        String http = "https://";
 
         ArrayList<String> apiList = new ArrayList(Arrays.asList(apiCalls));
 
         //HashMap calls = new HashMap();
-        String serverTime = "/unity/time";
+        String serverTime = http + dns + "/unity/time";
         calls.put("Server Time", serverTime);
-        String iOS = "/unity/api/1.0/ios/version";
+        String iOS = http + dns + "/unity/api/1.0/ios/version";
         calls.put("iOS Version", iOS);
-        String androidDns = "/unity/api/1.0/apk/version";
+        String androidDns = http + dns + "/unity/api/1.0/apk/version";
         calls.put("Android Version", androidDns);
-        String windows = "/unity/api/1.0/windows/version";
+        String windows = http + dns + "/unity/api/1.0/windows/version";
         calls.put("Windows Version", windows);
-        String events = "/unity/api/1.0/calendar/since/0";
+        String events = http + dns + "/unity/api/1.0/calendar/since/0";
         calls.put("Upcoming Events", events);
-        String studentStats = "/answers/api/student/" + objLogin.getUser().getUsername();
+        String studentStats = http + dns + "/answers/api/student/" + objLogin.getUser().getUsername();
         calls.put("Student Stats", studentStats);
-        String bookResc = "/unity/api/1.0/epubs/bulk/content/since/0?noDeletes=1";
+        String bookResc = http + dns + "/unity/api/1.0/epubs/bulk/content/since/0?noDeletes=1";
         for (int i = 0; i < objBooks.length; i++) {
             bookResc = bookResc + "&id=" + objBooks[i].getId();
         }
         calls.put("Book Resources", bookResc);
-        String userContent = "/unity/api/1.0/epubs/bulk/userContent/since/0?noDeletes=1";
+        String userContent = http + dns + "/unity/api/1.0/epubs/bulk/userContent/since/0?noDeletes=1";
         for (int i = 0; i < objBooks.length; i++) {
-            bookResc = bookResc + "&id=" + objBooks[i].getId();
+            userContent = userContent + "&id=" + objBooks[i].getId();
         }
         calls.put("User Content", userContent);
-        /*Set set = calls.entrySet();
-
-        Iterator i = set.iterator();*/
 
         autoComplete(apiList);
+
+        //apiCall(finalStr, client);
 
 
         btn_call.setOnClickListener(new View.OnClickListener() {
@@ -106,11 +112,12 @@ public class ApiCallAct extends AppCompatActivity {
                 /*if (autoApi.getText().toString() == null) {
                     showAlert("Not a valid API Call");
                 }*/
-                String tmpCall = autoApi.getText().toString();
-                String callStr = (String) calls.get(tmpCall);
-                finalStr = "https://" + dns + callStr;
+                String tmpCall = String.valueOf(spinner.getSelectedItem());
+                /*String callStr*/ finalStr = (String) calls.get(tmpCall);
+                //finalStr = "https://" + dns + callStr;
 
                 apiCall(finalStr, client);
+                //showAlert(response);
             }
         });
 
@@ -118,20 +125,23 @@ public class ApiCallAct extends AppCompatActivity {
 
     }
     private void autoComplete(ArrayList calls) {
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(ApiCallAct.this, android.R.layout.simple_dropdown_item_1line, calls);
-        AutoCompleteTextView autoTxt = (AutoCompleteTextView) findViewById(R.id.autotxt_api);
-        autoTxt.setThreshold(1);
-        autoTxt.setAdapter(adapter);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(ApiCallAct.this, android.R.layout.select_dialog_item, calls);
+        //ArrayAdapter<String> adapter = ArrayAdapter.createFromResource(ApiCallAct.this, R.array.calls, R.layout.api_call_spinner)
+        //AutoCompleteTextView autoTxt = (AutoCompleteTextView) findViewById(R.id.autotxt_api);
+        spinner = (Spinner) findViewById(R.id.spinner);
+        //spinner.setThreshold(1);
+        spinner.setAdapter(adapter);
     }
 
 
-    public void apiCall (final String dns, final OkHttpClient client) {
+    public void apiCall (final String str, final OkHttpClient client) {
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
                 //Log.d("###WIELE###", "!@#$%^&*()(*&^%$#@#$%^&**&^%$#@#$%^*%*&%*%^&^%&^%&%&^%&%&^%");
                 try {
-                    response = ApiCall.GET(client, dns);
+                    response = ApiCall.GET(client, str);
+
                     Log.d("Response:LoadContent", response);
 
                 }
@@ -145,8 +155,25 @@ public class ApiCallAct extends AppCompatActivity {
             @Override
             protected void onPostExecute(String resp) {
                 super.onPostExecute(resp);
-                showAlert(resp);
 
+                /*CkJsonObject json = new CkJsonObject();
+                boolean success = json.Load(resp);
+                json.put_EmitCompact(false);*/
+
+                CkJsonObject json = new CkJsonObject();
+                boolean success = json.Load(resp);
+                if (success != true) {
+                    Log.i(TAG, json.lastErrorText());
+                }
+
+                json.put_EmitCompact(false);
+                //json.put_EmitCrLf(false);
+                if (spinner.getSelectedItem().toString().equals("Server Time")) {
+                    showAlert(resp);
+                }
+                else {
+                    showAlert(json.emit());
+                }
             }
         }.execute();
 
@@ -167,4 +194,7 @@ public class ApiCallAct extends AppCompatActivity {
         alert.show();
     }
 
+    static {
+        System.loadLibrary("chilkat");
+    }
 }
