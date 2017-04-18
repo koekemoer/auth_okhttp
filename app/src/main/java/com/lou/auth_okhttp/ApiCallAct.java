@@ -1,15 +1,21 @@
 package com.lou.auth_okhttp;
 
+import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.ScrollView;
+import android.widget.Scroller;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -20,6 +26,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 import android.app.Activity;
+import android.widget.Toast;
+
 import com.chilkatsoft.*;
 
 
@@ -185,13 +193,48 @@ public class ApiCallAct extends AppCompatActivity {
         return item;
     }
 
-    public void showAlert(String msg) {
-        AlertDialog.Builder alert = new AlertDialog.Builder(context);
-        alert.setTitle("Result").setCancelable(true);
-        //Log.wtf("CHECK CHECK", "CHECK_AUTH");
-        alert.setMessage(msg);
-        alert.create();
-        alert.show();
+    public void showAlert(final String msg) {
+        //TextView showText = new TextView(this);
+
+        //ScrollView showText = new ScrollView(this);
+
+        /*showText.setTextColor(Color.BLACK);
+        showText.setTextSize(18);
+        showText.setTextIsSelectable(true);
+        showText.setPadding(5, 5, 5, 5);
+        //showText.setVerticalScrollBarEnabled(true);
+        showText.setMovementMethod(new ScrollingMovementMethod());
+        showText.setText(msg);
+        showText.setHighlightColor(Color.BLUE);
+        showText.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                ClipboardManager manager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                TextView showTextParam = (TextView) v;
+                manager.setText(showTextParam.getText());
+                Toast.makeText(v.getContext(), "Text in Clipboard", Toast.LENGTH_LONG).show();
+                return true;
+            }
+        });*/
+
+        AlertDialog dialog;
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        //alert.setView(showText);
+        dialog = alert.create();
+        dialog.setTitle("Response");
+        dialog.setCancelable(true);
+        dialog.setMessage(msg);
+        dialog.setButton(DialogInterface.BUTTON_NEUTRAL, "Copy", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ClipboardManager manager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                AlertDialog showTextParam = (AlertDialog) dialog;
+                manager.setText(msg);
+                Toast.makeText(((AlertDialog) dialog).getContext(), "Text in Clipboard", Toast.LENGTH_LONG).show();
+                //return true;
+            }
+        });
+        dialog.show();
     }
 
     static {
