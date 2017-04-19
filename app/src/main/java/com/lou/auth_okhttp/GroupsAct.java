@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -36,8 +37,8 @@ public class GroupsAct extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.drawable.miebooks);*/
 
-        final TextView txt_books = (TextView) findViewById(R.id.tview_groups);
-        txt_books.setText("Groups");
+        //final TextView txt_books = (TextView) findViewById(R.id.tview_groups);
+        //txt_books.setText("Groups");
 
         listView = (ListView) findViewById(R.id.list_groups);
 
@@ -53,6 +54,10 @@ public class GroupsAct extends AppCompatActivity {
         final OkHttpClient client = mainActivity.getClient();
         final LoginInfo objLogin = mainActivity.getObj1();
         dns = mainActivity.getDns();
+
+        getSupportActionBar().setTitle(objLogin.getUser().getFirstname() + "'s Groups");
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         showGroups(client, "https://" + dns + "/alchemy/api/1.0/users/" + objLogin.getUser().getUsername() + "/enrolment?withPrivate=true");
     }
@@ -104,6 +109,17 @@ public class GroupsAct extends AppCompatActivity {
                 listView.setAdapter(adapter);
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private HashMap<String, String> putData(String id, String title) {

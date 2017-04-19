@@ -75,15 +75,12 @@ public class MainActivity extends AppCompatActivity {
     private static LoginInfo obj1;
     private static Schools objSchools = null;
     private static School[] arr;
-    private static String[] nameArr, dnsArr;
     private static ArrayList<String> nameList = new ArrayList();
     private static ArrayList<String> dnsList = new ArrayList();
     private static String dns = null;
     final Context context = this;
 
-    //public static String finalUser;
-
-    private static String url;// = "https://app.dev.it.si/alchemy/api/1.0/login";
+    private static String url;
 
     private static String schools = "https://schools.cdn.it.si/schools.json";
     //a248.e.akamai.net
@@ -185,12 +182,8 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                //Log.wtf("!@#$%^&*()1234567890", "10");
-
                 String uname = etUname.getText().toString();
                 String pass = etPassw.getText().toString();
-
-                //Log.wtf("!@#$%^&*()1234567890", "11");
 
                 attemptLogin(client, url, uname, pass);
             }
@@ -217,10 +210,9 @@ public class MainActivity extends AppCompatActivity {
         new AsyncTask<Void, Void, Schools>() {
             @Override
             protected Schools doInBackground(Void... params) {
-                Log.d("###WIELE###", "!@#$%^&*()(*&^%$#@#$%^&**&^%$#@#$%^*%*&%*%^&^%&^%&%&^%&%&^%");
+                //Log.d("###WIELE###", "!@#$%^&*()(*&^%$#@#$%^&**&^%$#@#$%^*%*&%*%^&^%&^%&%&^%&%&^%");
                 try {
                     response = ApiCall.GET(client, schools);
-                    //Log.d("Response:LoadContent", response);
 
                     Gson gson = new Gson();
                     objSchools = gson.fromJson(response, Schools.class);
@@ -261,9 +253,6 @@ public class MainActivity extends AppCompatActivity {
 
                 int size = objSchools.getSchools().size();
 
-                nameArr = new String[size];
-                dnsArr = new String[size];
-
                 for (int i = 0; i < size; i++) {
                     arr[i] = objSchools.getSchools().get(i);
                     nameList.add(arr[i].getName());
@@ -298,9 +287,6 @@ public class MainActivity extends AppCompatActivity {
                         public void run() {
                             Gson gson = new Gson();
 
-                            /*AlertDialog.Builder alert = new AlertDialog.Builder(context);
-                            alert.setTitle("Result").setCancelable(true);*/
-
                             obj2 = gson.fromJson(response, CheckLogin.class);
 
                             ProgressDialog progress = new ProgressDialog(MainActivity.this);
@@ -309,7 +295,7 @@ public class MainActivity extends AppCompatActivity {
                             progress.setCancelable(true);
                             progress.show();
 
-                            Log.wtf("!@#$%^&*()1234567890", "11");
+                            //Log.wtf("!@#$%^&*()1234567890", "11");
 
                             if (!obj2.getSuccess()) {
                                 Log.d("###LOGIN", "WRONG USER");
@@ -318,7 +304,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                             else {
 
-                                Log.wtf("!@#$%^&*()1234567890", "12");
+                                //Log.wtf("!@#$%^&*()1234567890", "12");
 
                                 obj1 = gson.fromJson(response, LoginInfo.class);
                                 progress.dismiss();

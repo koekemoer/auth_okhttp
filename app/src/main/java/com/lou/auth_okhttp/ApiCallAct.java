@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -70,17 +71,34 @@ public class ApiCallAct extends AppCompatActivity {
 
         Log.d("WTF WTF WTF WTF", "WHY U NO WORK?");
 
-        final TextView txt_api = (TextView) findViewById(R.id.txt_api);
+        //final TextView txt_api = (TextView) findViewById(R.id.txt_api);
         final Button btn_call = (Button) findViewById(R.id.btn_call);
         ///*AutoCompleteTextView */autoApi = (AutoCompleteTextView) findViewById(R.id.autotxt_api);
         /*Spinner*/ spinner = (Spinner) findViewById(R.id.spinner);
-        txt_api.setText("API Calls");
+        //txt_api.setText("API Calls");
         //ArrayAdapter<String> adapter = ArrayAdapter.createFromResource(this, null, )
 
         /*final String*/ dns = mainAct.getDns();
         final OkHttpClient client = mainAct.getClient();
         final LoginInfo objLogin = mainAct.getObj1();
         final Example[] objBooks = userArea.getObjBooks();
+
+        getSupportActionBar().setTitle("API Calls");
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        /*@Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            switch (item.getItemId()) {
+                case android.R.id.home:
+                    this.finish();
+                    return true;
+                default:
+                    return super.onOptionsItemSelected(item);
+            }
+        }*/
+
         String http = "https://";
 
         ArrayList<String> apiList = new ArrayList(Arrays.asList(apiCalls));
@@ -228,13 +246,24 @@ public class ApiCallAct extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 ClipboardManager manager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                AlertDialog showTextParam = (AlertDialog) dialog;
+                //AlertDialog showTextParam = (AlertDialog) dialog;
                 manager.setText(msg);
                 Toast.makeText(((AlertDialog) dialog).getContext(), "Text in Clipboard", Toast.LENGTH_LONG).show();
                 //return true;
             }
         });
         dialog.show();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     static {

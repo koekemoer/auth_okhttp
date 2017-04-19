@@ -7,6 +7,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -50,8 +51,8 @@ public class BooksAct extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.drawable.miebooks);*/
 
-        final TextView txt_books = (TextView) findViewById(R.id.tview_books);
-        txt_books.setText("Books");
+        //final TextView txt_books = (TextView) findViewById(R.id.tview_books);
+        //txt_books.setText("Books");
 
         listView = (ListView) findViewById(R.id.list_books);
 
@@ -74,6 +75,10 @@ public class BooksAct extends AppCompatActivity {
         final LoginInfo objLogin = mainActivity.getObj1();
         final Example[] books = userArea.getObjBooks();
         dns = mainActivity.getDns();
+
+        getSupportActionBar().setTitle(objLogin.getUser().getFirstname() + "'s Books");
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Log.wtf("BOOKS_ACT!@#$%^&*()", "4");
 
@@ -244,6 +249,17 @@ public class BooksAct extends AppCompatActivity {
         item.put("Title: ", title);
         item.put("BookID: ", id);
         return item;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     public void showAlert(String msg) {
