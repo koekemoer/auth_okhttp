@@ -38,16 +38,13 @@ import okhttp3.OkHttpClient;
 
 public class ApiCallAct extends AppCompatActivity {
 
-    private MainActivity mainAct;
-
     private static String response;
-    private String dns;
 
     String[] apiCalls = {"Server Time", "iOS Version", "Android Version", "Windows Version",
                         "Upcoming Events", "Student Stats", "Book Resources", "User Content"};
     private String callStr = null;
     private String finalStr = null;
-    HashMap calls = new HashMap();
+    private HashMap<String, String> calls = new HashMap<String, String>();
     AutoCompleteTextView autoApi;
     Spinner spinner;
     final Context context = this;
@@ -58,7 +55,7 @@ public class ApiCallAct extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_api_call);
 
-        mainAct = null;
+        MainActivity mainAct = null;
         try {
             mainAct = new MainActivity();
         } catch (NoSuchAlgorithmException e) {
@@ -78,7 +75,8 @@ public class ApiCallAct extends AppCompatActivity {
         //txt_api.setText("API Calls");
         //ArrayAdapter<String> adapter = ArrayAdapter.createFromResource(this, null, )
 
-        /*final String*/ dns = mainAct.getDns();
+        /*final String*/
+        String dns = mainAct.getDns();
         final OkHttpClient client = mainAct.getClient();
         final LoginInfo objLogin = mainAct.getObj1();
         final Example[] objBooks = userArea.getObjBooks();
@@ -101,7 +99,7 @@ public class ApiCallAct extends AppCompatActivity {
 
         String http = "https://";
 
-        ArrayList<String> apiList = new ArrayList(Arrays.asList(apiCalls));
+        ArrayList<String> apiList = new ArrayList<>(Arrays.asList(apiCalls));
 
         //HashMap calls = new HashMap();
         String serverTime = http + dns + "/unity/time";
@@ -119,11 +117,13 @@ public class ApiCallAct extends AppCompatActivity {
         String bookResc = http + dns + "/unity/api/1.0/epubs/bulk/content/since/0?noDeletes=1";
         for (int i = 0; i < objBooks.length; i++) {
             bookResc = bookResc + "&id=" + objBooks[i].getId();
+            //Log.wtf("BOOK RESOURCE", bookResc);
         }
         calls.put("Book Resources", bookResc);
         String userContent = http + dns + "/unity/api/1.0/epubs/bulk/userContent/since/0?noDeletes=1";
         for (int i = 0; i < objBooks.length; i++) {
             userContent = userContent + "&id=" + objBooks[i].getId();
+            //Log.wtf("USER CONTENT", userContent);
         }
         calls.put("User Content", userContent);
 
@@ -182,23 +182,26 @@ public class ApiCallAct extends AppCompatActivity {
             protected void onPostExecute(String resp) {
                 super.onPostExecute(resp);
 
-                /*CkJsonObject json = new CkJsonObject();
-                boolean success = json.Load(resp);
-                json.put_EmitCompact(false);*/
-
                 CkJsonObject json = new CkJsonObject();
-                boolean success = json.Load(resp);
-                if (success != true) {
-                    Log.i(TAG, json.lastErrorText());
-                }
+                CkJsonArray jsonArray = new CkJsonArray();
 
-                json.put_EmitCompact(false);
-                //json.put_EmitCrLf(false);
-                if (spinner.getSelectedItem().toString().equals("Server Time")) {
-                    showAlert(resp);
+                boolean success = jsonArray.Load(resp);
+                if (success != true) {
+                    Log.i(TAG, jsonArray.lastErrorText());
+                    boolean s = json.Load(resp);
+                    if (s) {
+                        json.put_EmitCompact(false);
+                        if (spinner.getSelectedItem().toString().equals("Server Time")) {
+                            showAlert(resp);
+                        }
+                        else {
+                            showAlert(json.emit());
+                        }
+                    }
                 }
                 else {
-                    showAlert(json.emit());
+                    jsonArray.put_EmitCompact(false);
+                    showAlert(jsonArray.emit());
                 }
             }
         }.execute();
