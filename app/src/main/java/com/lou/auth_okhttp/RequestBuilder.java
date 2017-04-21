@@ -33,10 +33,10 @@ public class RequestBuilder {
                 .build();
     }
 
-    public static HttpUrl buildUrl(final String username) {
+    public static HttpUrl buildUrl(final String username, final String dns) {
         return new HttpUrl.Builder()
                 .scheme("https")
-                .host("app.dev.it.si")
+                .host(dns)
                 .addPathSegment("alchemy")
                 .addPathSegment("api")
                 .addPathSegment("1.0")

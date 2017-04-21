@@ -17,7 +17,7 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:outlineProvider="paddedBounds"
-        android:text="c"
+        android:text="laj"
         android:layout_below="@+id/auto_txt"
         android:layout_alignLeft="@+id/auto_txt"
         android:layout_alignStart="@+id/auto_txt" />
@@ -32,7 +32,7 @@
         android:ems="10"
         android:inputType="textPassword"
         android:outlineProvider="paddedBounds"
-        android:text="a" />
+        android:text="Password1!" />
 
 
 

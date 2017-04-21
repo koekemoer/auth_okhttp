@@ -166,6 +166,8 @@ public class MainActivity extends AppCompatActivity {
 
                 url = "https://" + dns + "/alchemy/api/1.0/login";
 
+                Log.d("#####################", url);
+
                 try {
                     client = pinnedClient(ITSIPEM);
                 } catch (IOException e) {
@@ -192,6 +194,10 @@ public class MainActivity extends AppCompatActivity {
 
     public OkHttpClient getClient() {
         return this.client;
+    }
+
+    public OkHttpClient getClient2() {
+        return this.client2;
     }
 
     public LoginInfo getObj1() {

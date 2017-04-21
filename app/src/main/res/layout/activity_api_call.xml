@@ -38,11 +38,21 @@
 
     <TextView
         android:id="@+id/textView4"
-        android:layout_width="wrap_content"
+        android:layout_width="300sp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/spinner"
         android:layout_marginTop="34dp"
         android:layout_toLeftOf="@+id/spinner"
         android:layout_toStartOf="@+id/spinner"
         android:text="TextView" />
+
+    <AutoCompleteTextView
+        android:id="@+id/autotxt_books"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/textView4"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignLeft="@+id/btn_call"
+        android:layout_alignStart="@+id/btn_call" />
 </RelativeLayout>

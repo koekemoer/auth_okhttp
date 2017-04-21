@@ -72,6 +72,8 @@ public class GroupsAct extends AppCompatActivity {
                     Gson gson = new Gson();
                     objGroup = gson.fromJson(response, Groups[].class);
 
+                    Log.wtf("###_CHECK CHECK_###", "1");
+
                     updateGroups(objGroup);
 
 
@@ -89,24 +91,46 @@ public class GroupsAct extends AppCompatActivity {
             @Override
             public void run() {
 
+                Log.wtf("###_CHECK CHECK_###", "2");
+
                 for (int i = 0; i < objGrp.length; i++) {
-                    Log.d("####NAME/GROUP", objGrp[i].getName());
-                    //if (objGrp[i].name == "" || objGrp[i].name == null) {
-                    //    Log.d("###BOOK_TITLE", "NULL OU BUL");
-                    //}
-                    Log.d("###SUBJECT", objGrp[i].getSubject());
+
+                    if (objGrp[i].getName() == "" || objGrp[i].getName() == null) {
+                        Log.d("###BOOK_TITLE", "(Name not available)");
+                    }
+                    else {
+                        Log.d("####NAME/GROUP", objGrp[i].getName());
+                    }
+                    //Log.d("###SUBJECT", objGrp[i].getSubject());
+                    if (objGrp[i].getSubject() == "" || objGrp[i].getSubject() == null) {
+                        Log.d("###SUBJECT", "(Subject Not available");
+                    }
+                    else {
+                        Log.d("###SUBJECT", objGrp[i].getSubject());
+                    }
                 }
+
+                Log.wtf("###_CHECK CHECK_###", "3");
 
                 ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
 
                 for (int j = 0; j < objGrp.length; j++) {
-                    list.add(putData(objGrp[j].getSubject(), objGrp[j].getName()));
+                    if (objGrp[j].getName() == "" || objGrp[j].getName() == null) {
+                        list.add(putData(objGrp[j].getSubject(), "(Name not Available)"));
+                    }
+                    else {
+                        list.add(putData(objGrp[j].getSubject(), objGrp[j].getName()));
+                    }
                 }
+
+                Log.wtf("###_CHECK CHECK_###", "4");
 
                 String[] from = {"Subject: ", "Name: "};
                 int[] to = {android.R.id.text1, android.R.id.text2};
                 SimpleAdapter adapter = new SimpleAdapter(GroupsAct.this, list, android.R.layout.simple_list_item_2, from, to);
                 listView.setAdapter(adapter);
+
+                Log.wtf("###_CHECK CHECK_###", "5");
             }
         });
     }

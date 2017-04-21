@@ -82,6 +82,7 @@ public class UserAreaAct extends AppCompatActivity {
         }
 
         final OkHttpClient client = mainActivity.getClient();
+        final OkHttpClient client2 = mainActivity.getClient2();
 
         Log.wtf("USERAREA!@#$%^&*()", "1");
 
@@ -91,7 +92,7 @@ public class UserAreaAct extends AppCompatActivity {
         //getSupportActionBar().setHomeButtonEnabled(true);
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        loadContent(client, objLogin.getUser().getUsername());
+        loadContent(client, objLogin.getUser().getUsername(), mainActivity.getDns());
 
         //txt_welcome.setText("Welcome " + objLogin.getUser().getFirstname());
         //Log.d("UserArea:Username", mainActivity.finalUser);
@@ -139,17 +140,17 @@ public class UserAreaAct extends AppCompatActivity {
 
     }
 
-    public void loadContent(final OkHttpClient client, final String username) {
+    public void loadContent(final OkHttpClient client, final String username, final String dns) {
         new AsyncTask<Void, Void, Example[]>() {
             @Override
             protected Example[] doInBackground(Void... params) {
                 try {
 
-                    //Log.wtf("BOOKS_ACT!@#$%^&*()", "6");
-                    response = ApiCall.GET(client, RequestBuilder.buildUrl(username));
-                    //Log.d("USER_AREA:LoadContent", response);
+                    Log.wtf("BOOKS_ACT!@#$%^&*()", "6");
+                    response = ApiCall.GET(client, RequestBuilder.buildUrl(username, dns));
+                    Log.d("USER_AREA:LoadContent", response);
 
-                    //Log.wtf("BOOKS_ACT!@#$%^&*()", "7");
+                    Log.wtf("BOOKS_ACT!@#$%^&*()", "7");
 
                     if (response.equals("Unauthorized")) {
                         showAlert("You are not Authorized\nto view this content");

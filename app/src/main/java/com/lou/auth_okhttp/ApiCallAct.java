@@ -1,5 +1,6 @@
 package com.lou.auth_okhttp;
 
+import android.app.ProgressDialog;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -40,10 +41,11 @@ public class ApiCallAct extends AppCompatActivity {
 
     private static String response;
 
-    String[] apiCalls = {"Server Time", "iOS Version", "Android Version", "Windows Version",
+    private String[] apiCalls = {"Server Time", "iOS Version", "Android Version", "Windows Version",
                         "Upcoming Events", "Student Stats", "Book Resources", "User Content"};
     private String callStr = null;
     private String finalStr = null;
+    private ProgressDialog progress;
     private HashMap<String, String> calls = new HashMap<String, String>();
     AutoCompleteTextView autoApi;
     Spinner spinner;
@@ -70,7 +72,7 @@ public class ApiCallAct extends AppCompatActivity {
 
         //final TextView txt_api = (TextView) findViewById(R.id.txt_api);
         final Button btn_call = (Button) findViewById(R.id.btn_call);
-        ///*AutoCompleteTextView */autoApi = (AutoCompleteTextView) findViewById(R.id.autotxt_api);
+        //AutoCompleteTextView autoBooks = (AutoCompleteTextView) findViewById(R.id.autotxt_books);
         /*Spinner*/ spinner = (Spinner) findViewById(R.id.spinner);
         //txt_api.setText("API Calls");
         //ArrayAdapter<String> adapter = ArrayAdapter.createFromResource(this, null, )
@@ -129,6 +131,14 @@ public class ApiCallAct extends AppCompatActivity {
 
         autoComplete(apiList);
 
+        ArrayList<String> bookList = new ArrayList<>();
+
+        for (int i = 0; i < objBooks.length; i++) {
+            bookList.add(objBooks[i].getTitle());
+        }
+
+        autoCompleteBooks(bookList);
+
         //apiCall(finalStr, client);
 
 
@@ -138,6 +148,12 @@ public class ApiCallAct extends AppCompatActivity {
                 /*if (autoApi.getText().toString() == null) {
                     showAlert("Not a valid API Call");
                 }*/
+                //ProgressDialog progress = new ProgressDialog(ApiCallAct.this);
+                /*progress = new ProgressDialog(ApiCallAct.this);
+                progress.setTitle("Checking");
+                progress.setMessage("Good things come to those who wait");
+                progress.setCancelable(true);
+                progress.show();*/
                 String tmpCall = String.valueOf(spinner.getSelectedItem());
                 /*String callStr*/ finalStr = (String) calls.get(tmpCall);
                 //finalStr = "https://" + dns + callStr;
@@ -157,6 +173,15 @@ public class ApiCallAct extends AppCompatActivity {
         spinner = (Spinner) findViewById(R.id.spinner);
         //spinner.setThreshold(1);
         spinner.setAdapter(adapter);
+    }
+
+    private void autoCompleteBooks(ArrayList books) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(ApiCallAct.this, android.R.layout.select_dialog_item, books);
+        //ArrayAdapter<String> adapter = ArrayAdapter.createFromResource(ApiCallAct.this, R.array.calls, R.layout.api_call_spinner)
+        AutoCompleteTextView autoTxt = (AutoCompleteTextView) findViewById(R.id.autotxt_books);
+        //spinner = (Spinner) findViewById(R.id.spinner);
+        //spinner.setThreshold(1);
+        autoTxt.setAdapter(adapter);
     }
 
 
@@ -195,12 +220,14 @@ public class ApiCallAct extends AppCompatActivity {
                             showAlert(resp);
                         }
                         else {
+                        //    progress.dismiss();
                             showAlert(json.emit());
                         }
                     }
                 }
                 else {
                     jsonArray.put_EmitCompact(false);
+                    //progress.dismiss();
                     showAlert(jsonArray.emit());
                 }
             }

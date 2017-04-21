@@ -31,7 +31,7 @@ public class BooksAct extends AppCompatActivity {
 
     private ListView listView;
     private static String response;
-    //private static Example[] objMeta = null;
+    private static Example[] objBooks;
     private static Groups[] objGroup;
     private static Authorize objAuth;
     private String dns;
@@ -82,8 +82,9 @@ public class BooksAct extends AppCompatActivity {
 
         Log.wtf("BOOKS_ACT!@#$%^&*()", "4");
 
-        //loadContent(client, objLogin.user.username);
-
+        //userArea.loadContent(client, objLogin.getUser().getUsername());
+        Log.wtf("USERNAME #####", objLogin.getUser().getUsername());
+        //loadContent(client, objLogin.getUser().getUsername());
         updateList(books);
 
         Log.wtf("BOOKS_ACT!@#$%^&*()", "5");
@@ -93,13 +94,13 @@ public class BooksAct extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.d("#####CLICKEDY CLICK", "CLICKED");
-                Log.d("#####CLICKEDY CLICK", books[position].getMetadata().getBookID());
+                Log.d("#####CLICKEDY CLICK", objBooks[position].getMetadata().getBookID());
 
-                String url = "https://" + dns + "/alchemy/api/1.0/epubs/" + books[position].getMetadata().getBookID() + "/key?device=auth_test";
+                String url = "https://" + dns + "/alchemy/api/1.0/epubs/" + objBooks[position].getMetadata().getBookID() + "/key?device=auth_test";
 
                 Log.d("USER_AREA:AUTH-TEST", url);
 
-                validate(client, books[position].getMetadata().getBookID());
+                validate(client, objBooks[position].getMetadata().getBookID());
             }
         });
     }
@@ -135,6 +136,50 @@ public class BooksAct extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void loadContent(final OkHttpClient client, final String username, final String dns) {
+        new AsyncTask<Void, Void, Example[]>() {
+            @Override
+            protected Example[] doInBackground(Void... params) {
+                try {
+                    Log.wtf("BOOKS_ACT!@#$%^&*()", "6");
+                    response = ApiCall.GET(client, RequestBuilder.buildUrl(username, dns));
+                    Log.d("USER_AREA:LoadContent", response);
+
+                    Log.wtf("BOOKS_ACT!@#$%^&*()", "7");
+
+                    if (response.equals("Unauthorized")) {
+                        Log.wtf("WTF WTF WTF", "RESPONSE EQUALS UNAUTHORIZED");
+                        showAlert("You are not Authorized\nto view this content");
+                        finish();
+                    } else {
+                        Gson gson = new Gson();
+                        objBooks = gson.fromJson(response, Example[].class);
+
+                        /*GsonBuilder builder = new GsonBuilder();
+                        builder.registerTypeAdapterFactory(new )*/ //
+
+                        Log.wtf("BOOKS_ACT!@#$%^&*()", "8");
+                    }
+
+                    //updateList(objMeta);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return objBooks;
+            }
+
+            @Override
+            protected void onPostExecute(Example[] books) {
+                super.onPostExecute(books);
+                if (books != null) {
+                    Log.wtf("BOOKS_ACT!@#$%^&*()", "9");
+                    updateList(books);
+                    Log.wtf("BOOKS_ACT!@#$%^&*()", "10");
+                }
+            }
+        }.execute();
     }
 
     private void checkAuth(final OkHttpClient client, final String id) {
