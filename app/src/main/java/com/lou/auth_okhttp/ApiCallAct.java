@@ -13,6 +13,8 @@ import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -37,6 +39,8 @@ import org.json.JSONException;
 
 import okhttp3.OkHttpClient;
 
+import static java.sql.Types.NULL;
+
 public class ApiCallAct extends AppCompatActivity {
 
     private static String response;
@@ -47,7 +51,10 @@ public class ApiCallAct extends AppCompatActivity {
     private String finalStr = null;
     private ProgressDialog progress;
     private HashMap<String, String> calls = new HashMap<String, String>();
-    AutoCompleteTextView autoApi;
+    private HashMap<String, String> books = new HashMap<String, String>();
+    private String dns;
+    private String http = "https://";
+    AutoCompleteTextView autoTxt;
     Spinner spinner;
     final Context context = this;
     private static final String TAG = "Chilkat";
@@ -70,6 +77,9 @@ public class ApiCallAct extends AppCompatActivity {
 
         Log.d("WTF WTF WTF WTF", "WHY U NO WORK?");
 
+        autoTxt = (AutoCompleteTextView) findViewById(R.id.autotxt_books);
+        autoTxt.setSelectAllOnFocus(true);
+        autoTxt.setVisibility(View.GONE);
         //final TextView txt_api = (TextView) findViewById(R.id.txt_api);
         final Button btn_call = (Button) findViewById(R.id.btn_call);
         //AutoCompleteTextView autoBooks = (AutoCompleteTextView) findViewById(R.id.autotxt_books);
@@ -78,7 +88,7 @@ public class ApiCallAct extends AppCompatActivity {
         //ArrayAdapter<String> adapter = ArrayAdapter.createFromResource(this, null, )
 
         /*final String*/
-        String dns = mainAct.getDns();
+        /*String */dns = mainAct.getDns();
         final OkHttpClient client = mainAct.getClient();
         final LoginInfo objLogin = mainAct.getObj1();
         final Example[] objBooks = userArea.getObjBooks();
@@ -99,11 +109,19 @@ public class ApiCallAct extends AppCompatActivity {
             }
         }*/
 
-        String http = "https://";
+        ArrayList<String> bookList = new ArrayList<>();
+
+        bookList.add("All Books");
+        for (int i = 0; i < objBooks.length; i++) {
+            bookList.add(objBooks[i].getTitle());
+            books.put(objBooks[i].getTitle(), objBooks[i].getId());
+            Log.d("###### ID", books.get(objBooks[i].getTitle()));
+        }
+
+        autoCompleteBooks(bookList);
 
         ArrayList<String> apiList = new ArrayList<>(Arrays.asList(apiCalls));
 
-        //HashMap calls = new HashMap();
         String serverTime = http + dns + "/unity/time";
         calls.put("Server Time", serverTime);
         String iOS = http + dns + "/unity/api/1.0/ios/version";
@@ -116,7 +134,9 @@ public class ApiCallAct extends AppCompatActivity {
         calls.put("Upcoming Events", events);
         String studentStats = http + dns + "/answers/api/student/" + objLogin.getUser().getUsername();
         calls.put("Student Stats", studentStats);
+
         String bookResc = http + dns + "/unity/api/1.0/epubs/bulk/content/since/0?noDeletes=1";
+        //String allBooks;
         for (int i = 0; i < objBooks.length; i++) {
             bookResc = bookResc + "&id=" + objBooks[i].getId();
             //Log.wtf("BOOK RESOURCE", bookResc);
@@ -131,13 +151,40 @@ public class ApiCallAct extends AppCompatActivity {
 
         autoComplete(apiList);
 
-        ArrayList<String> bookList = new ArrayList<>();
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String item = spinner.getItemAtPosition(position).toString();
+                if (item.equals("User Content") || item.equals("Book Resources")) {
+                    autoTxt.setVisibility(View.VISIBLE);
+                    autoTxt.setText("All Books");
+                    autoTxt.setSelectAllOnFocus(true);
+                }
+                else {
+                    autoTxt.setVisibility(View.GONE);
+                }
+            }
 
-        for (int i = 0; i < objBooks.length; i++) {
-            bookList.add(objBooks[i].getTitle());
-        }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                autoTxt.setVisibility(View.GONE);
+            }
+        });
 
-        autoCompleteBooks(bookList);
+        autoTxt.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                in.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+            }
+        });
+
+        autoTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                autoTxt.setText("");
+            }
+        });
 
         //apiCall(finalStr, client);
 
@@ -154,12 +201,34 @@ public class ApiCallAct extends AppCompatActivity {
                 progress.setMessage("Good things come to those who wait");
                 progress.setCancelable(true);
                 progress.show();*/
-                String tmpCall = String.valueOf(spinner.getSelectedItem());
-                /*String callStr*/ finalStr = (String) calls.get(tmpCall);
-                //finalStr = "https://" + dns + callStr;
 
+                String tmpCall = String.valueOf(spinner.getSelectedItem());
+
+                if (tmpCall.equals("User Content") || tmpCall.equals("Book Resources")) {
+                    String autoStr = autoTxt.getText().toString();
+                    if (autoStr.equals("All Books")) {
+                        finalStr = (String) calls.get(tmpCall);
+                    }
+                    else {
+
+                        if (tmpCall.equals("Book Resources")); {
+                            String bookResc = http + dns + "/unity/api/1.0/epubs/bulk/content/since/0?noDeletes=1";
+                            finalStr = bookResc + "&id=" + books.get(autoStr);
+                        }
+                        if (tmpCall.equals("User Content")) {
+                            String userContent = http + dns + "/unity/api/1.0/epubs/bulk/userContent/since/0?noDeletes=1";
+                            finalStr = userContent + "&id=" + books.get(autoStr);
+                        }
+                        //Log.wtf("BOOK RESOURCE", bookResc);
+                        //calls.put("Book Resources", bookResc);
+                        //Log.wtf("USER CONTENT", userContent);
+                        //calls.put("User Content", userContent);
+                    }
+                }
+                else {
+                    finalStr = (String) calls.get(tmpCall);
+                }
                 apiCall(finalStr, client);
-                //showAlert(response);
             }
         });
 
@@ -176,9 +245,10 @@ public class ApiCallAct extends AppCompatActivity {
     }
 
     private void autoCompleteBooks(ArrayList books) {
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(ApiCallAct.this, android.R.layout.select_dialog_item, books);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(ApiCallAct.this, android.R.layout.simple_spinner_dropdown_item, books);
         //ArrayAdapter<String> adapter = ArrayAdapter.createFromResource(ApiCallAct.this, R.array.calls, R.layout.api_call_spinner)
-        AutoCompleteTextView autoTxt = (AutoCompleteTextView) findViewById(R.id.autotxt_books);
+        ///*AutoCompleteTextView */autoTxt = (AutoCompleteTextView) findViewById(R.id.autotxt_books);
+        //autoTxt.setSelectAllOnFocus(true);
         //spinner = (Spinner) findViewById(R.id.spinner);
         //spinner.setThreshold(1);
         autoTxt.setAdapter(adapter);
@@ -242,28 +312,6 @@ public class ApiCallAct extends AppCompatActivity {
     }
 
     public void showAlert(final String msg) {
-        //TextView showText = new TextView(this);
-
-        //ScrollView showText = new ScrollView(this);
-
-        /*showText.setTextColor(Color.BLACK);
-        showText.setTextSize(18);
-        showText.setTextIsSelectable(true);
-        showText.setPadding(5, 5, 5, 5);
-        //showText.setVerticalScrollBarEnabled(true);
-        showText.setMovementMethod(new ScrollingMovementMethod());
-        showText.setText(msg);
-        showText.setHighlightColor(Color.BLUE);
-        showText.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                ClipboardManager manager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                TextView showTextParam = (TextView) v;
-                manager.setText(showTextParam.getText());
-                Toast.makeText(v.getContext(), "Text in Clipboard", Toast.LENGTH_LONG).show();
-                return true;
-            }
-        });*/
 
         AlertDialog dialog;
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -280,6 +328,12 @@ public class ApiCallAct extends AppCompatActivity {
                 manager.setText(msg);
                 Toast.makeText(((AlertDialog) dialog).getContext(), "Text in Clipboard", Toast.LENGTH_LONG).show();
                 //return true;
+            }
+        });
+        dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Dismiss", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
             }
         });
         dialog.show();

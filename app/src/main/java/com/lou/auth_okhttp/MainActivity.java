@@ -10,6 +10,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -136,6 +138,14 @@ public class MainActivity extends AppCompatActivity {
         client2 = getUnsafeOkHttpClient();
 
         getSchools(schools, client2);
+
+        autoTxt.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                in.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+            }
+        });
 
         bLogin.setOnClickListener(new View.OnClickListener() {
             @Override

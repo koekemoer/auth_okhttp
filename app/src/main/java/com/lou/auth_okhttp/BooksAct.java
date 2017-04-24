@@ -143,11 +143,11 @@ public class BooksAct extends AppCompatActivity {
             @Override
             protected Example[] doInBackground(Void... params) {
                 try {
-                    Log.wtf("BOOKS_ACT!@#$%^&*()", "6");
+                    //Log.wtf("BOOKS_ACT!@#$%^&*()", "6");
                     response = ApiCall.GET(client, RequestBuilder.buildUrl(username, dns));
                     Log.d("USER_AREA:LoadContent", response);
 
-                    Log.wtf("BOOKS_ACT!@#$%^&*()", "7");
+                    //Log.wtf("BOOKS_ACT!@#$%^&*()", "7");
 
                     if (response.equals("Unauthorized")) {
                         Log.wtf("WTF WTF WTF", "RESPONSE EQUALS UNAUTHORIZED");
@@ -174,9 +174,9 @@ public class BooksAct extends AppCompatActivity {
             protected void onPostExecute(Example[] books) {
                 super.onPostExecute(books);
                 if (books != null) {
-                    Log.wtf("BOOKS_ACT!@#$%^&*()", "9");
+                    //Log.wtf("BOOKS_ACT!@#$%^&*()", "9");
                     updateList(books);
-                    Log.wtf("BOOKS_ACT!@#$%^&*()", "10");
+                    //Log.wtf("BOOKS_ACT!@#$%^&*()", "10");
                 }
             }
         }.execute();
@@ -192,7 +192,7 @@ public class BooksAct extends AppCompatActivity {
                 }
                 else {
                     Log.d("####OBJECT_KEY", objAuth.getKey());
-                    Log.wtf("SARIE_SLEEP_SEWE_SAKKE_SOUT", "5");
+                    //Log.wtf("SARIE_SLEEP_SEWE_SAKKE_SOUT", "5");
 
                     String url = "https://" + dns + "/alchemy/api/1.0/epubs/" + id + "/key/confirm?device=auth_test&platform=web&model=na";
                     acknowledgeKey(url, objAuth.getKey(), client);
