@@ -16,8 +16,7 @@
         android:layout_height="wrap_content"
         android:text="BOOKS"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp" />
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:id="@+id/btn_groups"

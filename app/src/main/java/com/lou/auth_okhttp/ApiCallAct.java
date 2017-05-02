@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
@@ -56,6 +57,7 @@ public class ApiCallAct extends AppCompatActivity {
     private String http = "https://";
     AutoCompleteTextView autoTxt;
     Spinner spinner;
+    TextView txtClear, txtBooks;
     final Context context = this;
     private static final String TAG = "Chilkat";
 
@@ -80,7 +82,13 @@ public class ApiCallAct extends AppCompatActivity {
         autoTxt = (AutoCompleteTextView) findViewById(R.id.autotxt_books);
         autoTxt.setSelectAllOnFocus(true);
         autoTxt.setVisibility(View.GONE);
-        //final TextView txt_api = (TextView) findViewById(R.id.txt_api);
+        txtClear = (TextView) findViewById(R.id.txt_clear);
+        txtClear.setVisibility(View.GONE);
+        txtBooks = (TextView) findViewById(R.id.textView4);
+        txtBooks.setVisibility(View.GONE);
+
+        final TextView txt_api = (TextView) findViewById(R.id.textView3);
+        txt_api.setTextColor(Color.BLACK);
         final Button btn_call = (Button) findViewById(R.id.btn_call);
         //AutoCompleteTextView autoBooks = (AutoCompleteTextView) findViewById(R.id.autotxt_books);
         /*Spinner*/ spinner = (Spinner) findViewById(R.id.spinner);
@@ -92,6 +100,7 @@ public class ApiCallAct extends AppCompatActivity {
         final OkHttpClient client = mainAct.getClient();
         final LoginInfo objLogin = mainAct.getObj1();
         final Example[] objBooks = userArea.getObjBooks();
+
 
         getSupportActionBar().setTitle("API Calls");
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -111,12 +120,16 @@ public class ApiCallAct extends AppCompatActivity {
 
         ArrayList<String> bookList = new ArrayList<>();
 
+        Log.d("WTF WTF WTF WTF", "WHY U NO WORK? 2");
+
         bookList.add("All Books");
         for (int i = 0; i < objBooks.length; i++) {
             bookList.add(objBooks[i].getTitle());
             books.put(objBooks[i].getTitle(), objBooks[i].getId());
             Log.d("###### ID", books.get(objBooks[i].getTitle()));
         }
+
+        Log.d("WTF WTF WTF WTF", "WHY U NO WORK? 3");
 
         autoCompleteBooks(bookList);
 
@@ -157,11 +170,15 @@ public class ApiCallAct extends AppCompatActivity {
                 String item = spinner.getItemAtPosition(position).toString();
                 if (item.equals("User Content") || item.equals("Book Resources")) {
                     autoTxt.setVisibility(View.VISIBLE);
-                    autoTxt.setText("All Books");
+                    txtClear.setVisibility(View.VISIBLE);
+                    //autoTxt.setText("All Books");
                     autoTxt.setSelectAllOnFocus(true);
+                    txtBooks.setVisibility(View.VISIBLE);
                 }
                 else {
                     autoTxt.setVisibility(View.GONE);
+                    txtClear.setVisibility(View.GONE);
+                    txtBooks.setVisibility(View.GONE);
                 }
             }
 
@@ -179,7 +196,8 @@ public class ApiCallAct extends AppCompatActivity {
             }
         });
 
-        autoTxt.setOnClickListener(new View.OnClickListener() {
+        txtClear.setTextColor(Color.BLUE);
+        txtClear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 autoTxt.setText("");
@@ -236,7 +254,7 @@ public class ApiCallAct extends AppCompatActivity {
 
     }
     private void autoComplete(ArrayList calls) {
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(ApiCallAct.this, android.R.layout.select_dialog_item, calls);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(ApiCallAct.this, android.R.layout.simple_spinner_dropdown_item, calls);
         //ArrayAdapter<String> adapter = ArrayAdapter.createFromResource(ApiCallAct.this, R.array.calls, R.layout.api_call_spinner)
         //AutoCompleteTextView autoTxt = (AutoCompleteTextView) findViewById(R.id.autotxt_api);
         spinner = (Spinner) findViewById(R.id.spinner);

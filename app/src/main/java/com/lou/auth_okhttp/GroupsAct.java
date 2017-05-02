@@ -91,7 +91,7 @@ public class GroupsAct extends AppCompatActivity {
             @Override
             public void run() {
 
-                Log.wtf("###_CHECK CHECK_###", "2");
+                /*Log.wtf("###_CHECK CHECK_###", "2");
 
                 for (int i = 0; i < objGrp.length; i++) {
 
@@ -110,7 +110,7 @@ public class GroupsAct extends AppCompatActivity {
                     }
                 }
 
-                Log.wtf("###_CHECK CHECK_###", "3");
+                Log.wtf("###_CHECK CHECK_###", "3");*/
 
                 ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
 

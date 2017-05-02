@@ -133,8 +133,10 @@ public class UserAreaAct extends AppCompatActivity {
         btn_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mainActivity.clearLogin();
+                Intent intent = new Intent(UserAreaAct.this, MainActivity.class);
+                //mainActivity.clearLogin();
                 finish();
+                UserAreaAct.this.startActivity(intent);
             }
         });
 
@@ -152,7 +154,8 @@ public class UserAreaAct extends AppCompatActivity {
 
                     Log.wtf("BOOKS_ACT!@#$%^&*()", "7");
 
-                    if (response.equals("Unauthorized")) {
+                    if (response.equals("Unauthorized") || response.equals(null) ||
+                            response == null || response.equals("")) {
                         showAlert("You are not Authorized\nto view this content");
                     } else {
                         Gson gson = new Gson();
@@ -168,7 +171,7 @@ public class UserAreaAct extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                return null;
+                return objBooks;
             }
 
             /*@Override

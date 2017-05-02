@@ -2,6 +2,9 @@ package com.lou.auth_okhttp;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -45,18 +48,7 @@ public class BooksAct extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_books);
 
-        Log.wtf("BOOKS_ACT!@#$%^&*()", "1");
-
-        /*getSupportActionBar().setDisplayUseLogoEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setIcon(R.drawable.miebooks);*/
-
-        //final TextView txt_books = (TextView) findViewById(R.id.tview_books);
-        //txt_books.setText("Books");
-
         listView = (ListView) findViewById(R.id.list_books);
-
-        Log.wtf("BOOKS_ACT!@#$%^&*()", "2");
 
         mainActivity = null;
         try {
@@ -69,38 +61,34 @@ public class BooksAct extends AppCompatActivity {
 
         /*UserAreaAct */userArea = new UserAreaAct();
 
-        Log.wtf("BOOKS_ACT!@#$%^&*()", "3");
-
         final OkHttpClient client = mainActivity.getClient();
         final LoginInfo objLogin = mainActivity.getObj1();
         final Example[] books = userArea.getObjBooks();
         dns = mainActivity.getDns();
 
+        Log.wtf("###### DNS", dns);
+
         getSupportActionBar().setTitle(objLogin.getUser().getFirstname() + "'s Books");
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Log.wtf("BOOKS_ACT!@#$%^&*()", "4");
-
-        //userArea.loadContent(client, objLogin.getUser().getUsername());
         Log.wtf("USERNAME #####", objLogin.getUser().getUsername());
-        //loadContent(client, objLogin.getUser().getUsername());
-        updateList(books);
-
-        Log.wtf("BOOKS_ACT!@#$%^&*()", "5");
+        loadContent(client, objLogin.getUser().getUsername(), dns);
 
         listView.setClickable(true);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.d("#####CLICKEDY CLICK", "CLICKED");
-                Log.d("#####CLICKEDY CLICK", objBooks[position].getMetadata().getBookID());
 
-                String url = "https://" + dns + "/alchemy/api/1.0/epubs/" + objBooks[position].getMetadata().getBookID() + "/key?device=auth_test";
+                Log.d("TEST BEFORE objBOOKS", "TOETS TOETS");
 
-                Log.d("USER_AREA:AUTH-TEST", url);
-
-                validate(client, objBooks[position].getMetadata().getBookID());
+                if (client != null || objBooks[position].getMetadata().getBookID() != null) {
+                    validate(client, objBooks[position].getMetadata().getBookID(), objBooks[position].getMetadata().getTitle());
+                }
+                else {
+                    showAlert("Wiele");
+                }
             }
         });
     }
@@ -109,18 +97,11 @@ public class BooksAct extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                /*for (int i = 0; i < objBooks.length; i++) {
-                    Log.d("####BOOK_ID", objBooks[i].getMetadata().getBookID());
-                    if (objBooks[i].getMetadata().getTitle() == null || objBooks[i].getMetadata().getTitle() == "") {
-                        Log.d("###BOOK_TITLE", "NULL OU BUL");
-                    }
-                    Log.d("###BOOK_TITLE", objBooks[i].getMetadata().getTitle());
-                }*/
 
                 ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
 
                 for (int j = 0; j < objBooks.length; j++) {
-                    if (objBooks[j].getMetadata().getTitle() == "" || objBooks[j].getMetadata().getTitle() == null) {
+                    if (objBooks[j].getMetadata().getTitle().equals("") || objBooks[j].getMetadata().getTitle() == null) {
                         list.add(putData(objBooks[j].getMetadata().getBookID(), "(Title not available)"));
                     }
                     else {
@@ -143,27 +124,18 @@ public class BooksAct extends AppCompatActivity {
             @Override
             protected Example[] doInBackground(Void... params) {
                 try {
-                    //Log.wtf("BOOKS_ACT!@#$%^&*()", "6");
                     response = ApiCall.GET(client, RequestBuilder.buildUrl(username, dns));
                     Log.d("USER_AREA:LoadContent", response);
 
-                    //Log.wtf("BOOKS_ACT!@#$%^&*()", "7");
-
-                    if (response.equals("Unauthorized")) {
-                        Log.wtf("WTF WTF WTF", "RESPONSE EQUALS UNAUTHORIZED");
+                    if (response.equals("Unauthorized") || response == null || response.equals("")) {
                         showAlert("You are not Authorized\nto view this content");
-                        finish();
+                        //finish();
+                        return null;
                     } else {
                         Gson gson = new Gson();
                         objBooks = gson.fromJson(response, Example[].class);
-
-                        /*GsonBuilder builder = new GsonBuilder();
-                        builder.registerTypeAdapterFactory(new )*/ //
-
-                        Log.wtf("BOOKS_ACT!@#$%^&*()", "8");
                     }
 
-                    //updateList(objMeta);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -174,75 +146,81 @@ public class BooksAct extends AppCompatActivity {
             protected void onPostExecute(Example[] books) {
                 super.onPostExecute(books);
                 if (books != null) {
-                    //Log.wtf("BOOKS_ACT!@#$%^&*()", "9");
                     updateList(books);
-                    //Log.wtf("BOOKS_ACT!@#$%^&*()", "10");
                 }
             }
         }.execute();
     }
 
-    private void checkAuth(final OkHttpClient client, final String id) {
+    private void checkAuth(final OkHttpClient client, final String id, final String title) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
 
                 if (objAuth.getKey() == null) {
+                    debug("1ST IF", "OFFLINE");
+                    showAlert(title + ":\n\nCould not be authenticated");
+                }
+                else if (client == null || id == null) {
                     showAlert(objAuth.getDetail());
+                    debug("OFFLINE", objAuth.getKey());
+                    debug("OFFLINE", id);
+                    debug("OFFLINE", "WHAT TO DO WHEN OFFLINE");
                 }
                 else {
-                    Log.d("####OBJECT_KEY", objAuth.getKey());
-                    //Log.wtf("SARIE_SLEEP_SEWE_SAKKE_SOUT", "5");
-
+                    debug("ONLINE", objAuth.getKey());
                     String url = "https://" + dns + "/alchemy/api/1.0/epubs/" + id + "/key/confirm?device=auth_test&platform=web&model=na";
-                    acknowledgeKey(url, objAuth.getKey(), client);
-
-                    //String ackstr = Boolean.toString(objAuth.ack);
-                    //Log.wtf("###ACK_checkAuth", ackstr);
+                    acknowledgeKey(url, objAuth.getKey(), client, title);
                 }
 
             }
         });
     }
 
-    public void validate(final OkHttpClient client, final String id) {
-        new AsyncTask<Void, Void, Void>() {
+    public void validate(final OkHttpClient client, final String id, final String title) {
+        new AsyncTask<Void, Void, Authorize>() {
             @Override
-            protected Void doInBackground(Void... params) {
+            protected Authorize doInBackground(Void... params) {
                 try {
-                    Log.wtf("CHECK CHECK","VALIDATE");
-                    Log.wtf("SARIE_SLEEP_SEWE_SAKKE_SOUT", "1");
+                    debug("ID", id);
                     String url = "https://" + dns + "/alchemy/api/1.0/epubs/" + id + "/key?device=auth_test";
                     response = ApiCall.GET(client, url);
-                    Log.d("###CHECK_AUTH", response);
-                    Log.wtf("SARIE_SLEEP_SEWE_SAKKE_SOUT", "2");
 
+                    debug("VALIDATE_RESPONSE", response);
+                    if (response == null || response.equals("")) {
+                        showAlert("Eish bru!");
+                    }
+                    else {
+                        Gson gson = new Gson();
+                        objAuth = gson.fromJson(response, Authorize.class);
+                    }
 
-                    Gson gson = new Gson();
-                    objAuth = gson.fromJson(response, Authorize.class);
-
-                    Log.wtf("SARIE_SLEEP_SEWE_SAKKE_SOUT", "3");
-
-                    //checkAuth(client, id);
+                    debug("VALIDATE_KEY", objAuth.getKey());
+                    debug("VALIDATE_DETAIL", objAuth.getDetail());
+                    String ackstr = Boolean.toString(objAuth.isAck());
+                    debug("VALIDATE_IS-ACK", ackstr);
 
                 }
                 catch (IOException e) {
                     e.printStackTrace();
                     Log.e("ERROR TERROR", e.getMessage());
                 }
-                return null;
+                return objAuth;
             }
 
             @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-                Log.wtf("SARIE_SLEEP_SEWE_SAKKE_SOUT", "4");
-                checkAuth(client, id);
+            protected void onPostExecute(Authorize auth) {
+                super.onPostExecute(auth);
+                checkAuth(client, id, title);
             }
         }.execute();
     }
 
-    private void acknowledgeKey(final String url, final String key, final OkHttpClient client) {
+    public void debug(final String msg, final String str) {
+        Log.wtf("##### " + msg + " #####", str != null ? str : "NULL");
+    }
+
+    private void acknowledgeKey(final String url, final String key, final OkHttpClient client, final String title) {
         new AsyncTask<String, Void, Void>() {
             protected Void doInBackground(String... params) {
                 assert (params[0] != null);
@@ -253,8 +231,9 @@ public class BooksAct extends AppCompatActivity {
                             params[0],
                             RequestBuilder.PostKey(key)
                     );
-                    Log.wtf("ACKNOWLEDGE_KEY", url);
-                    Log.wtf("ACKNOWLEDGE_KEY", response);
+                    debug("ACKNOWLEDGE_KEY", url);
+                    debug("ACKNOWLEDGE_KEY", response);
+                    debug("SHOW_KEY", key);
 
                     runOnUiThread(new Runnable() {
                         @Override
@@ -269,15 +248,21 @@ public class BooksAct extends AppCompatActivity {
                             progress.show();
                             //progress.dismiss();
 
-                            //String ackstr = Boolean.toString(objAuth.ack);
-                            //check = true;
-                            //String test = Boolean.toString(ack);
-                            //Log.wtf("###ACK_ackFunc", ackstr);
-                            //Log.wtf("###ACK_TEST", test);
-
                             //ack = objAuth.ack;
+                            debug("ACKNOWLEDGE_KEY", objAuth.getDetail());
+                            String ackstr = Boolean.toString(objAuth.isAck());
+                            debug("ACKNOWLEDGE_KEY", ackstr);
+
+                            //Log.d("#### AUTH DETAIL", "AFTER");
+
                             progress.dismiss();
-                            showAlert("Book Authenticated\n\nKey: " + key + "\n\n" + (objAuth.isAck() ? "Acknowledged" : "Not Acknowledged"));
+                            if (!objAuth.isAck() || key == null || key.equals("")) {
+                                showAlert("An error occurred.\n");
+                            }
+                            else {
+                                showAlert(title + ":\n\nIs Authenticated");
+                            }
+
                         }
                     });
 
@@ -308,11 +293,31 @@ public class BooksAct extends AppCompatActivity {
     }
 
     public void showAlert(String msg) {
-        AlertDialog.Builder alert = new AlertDialog.Builder(context);
-        alert.setTitle("Result").setCancelable(true);
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
+        AlertDialog alert;
+
+        alert = alertBuilder.create();
+        alert.setTitle("Result");
         //Log.wtf("CHECK CHECK", "CHECK_AUTH");
         alert.setMessage(msg);
-        alert.create();
+        alert.setButton(DialogInterface.BUTTON_NEGATIVE, "Dismiss", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface alert, int which) {
+                alert.cancel();
+            }
+        });
         alert.show();
+    }
+
+    public boolean isOnline(Context context) {
+        ConnectivityManager cm = (ConnectivityManager) context
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        if ((cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE) != null && cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).isConnected())
+                || (cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI) != null && cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected())) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }

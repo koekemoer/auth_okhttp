@@ -128,12 +128,10 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.drawable.miebooks);*/
 
-        Log.wtf("!@#$%^&*()1234567890", "1");
-
+        final AutoCompleteTextView autoTxt = (AutoCompleteTextView) findViewById(R.id.auto_txt);
         final EditText etUname = (EditText) findViewById(R.id.et_uname);
         final EditText etPassw = (EditText) findViewById(R.id.et_passw);
         final Button bLogin = (Button) findViewById(R.id.btn_login);
-        final AutoCompleteTextView autoTxt = (AutoCompleteTextView) findViewById(R.id.auto_txt);
 
         client2 = getUnsafeOkHttpClient();
 
@@ -171,6 +169,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
                 if (!found && autoTxt.getText() != null) {
+                    getSchools(schools, client2);
                     showAlert("Wrong school name entered");
                 }
 
@@ -226,7 +225,6 @@ public class MainActivity extends AppCompatActivity {
         new AsyncTask<Void, Void, Schools>() {
             @Override
             protected Schools doInBackground(Void... params) {
-                //Log.d("###WIELE###", "!@#$%^&*()(*&^%$#@#$%^&**&^%$#@#$%^*%*&%*%^&^%&^%&%&^%&%&^%");
                 try {
                     response = ApiCall.GET(client, schools);
 
@@ -272,7 +270,9 @@ public class MainActivity extends AppCompatActivity {
                 for (int i = 0; i < size; i++) {
                     arr[i] = objSchools.getSchools().get(i);
                     nameList.add(arr[i].getName());
+                    debug("NAME_LIST", nameList.get(i));
                     dnsList.add(arr[i].getDns());
+                    debug("DNS_LIST", dnsList.get(i));
                 }
                 nameList.add("App Dev");
                 dnsList.add("app.dev.it.si");
@@ -311,16 +311,12 @@ public class MainActivity extends AppCompatActivity {
                             progress.setCancelable(true);
                             progress.show();
 
-                            //Log.wtf("!@#$%^&*()1234567890", "11");
-
                             if (!obj2.getSuccess()) {
                                 Log.d("###LOGIN", "WRONG USER");
                                 progress.dismiss();
                                 showAlert(obj2.getInfo());
                             }
                             else {
-
-                                //Log.wtf("!@#$%^&*()1234567890", "12");
 
                                 obj1 = gson.fromJson(response, LoginInfo.class);
                                 progress.dismiss();
@@ -452,6 +448,10 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void debug(final String msg, final String str) {
+        Log.wtf("##### " + msg + " #####", str != null ? str : "NULL");
     }
 
 
