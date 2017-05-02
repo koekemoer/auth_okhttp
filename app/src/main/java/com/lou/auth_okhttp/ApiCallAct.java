@@ -85,6 +85,7 @@ public class ApiCallAct extends AppCompatActivity {
         txtClear = (TextView) findViewById(R.id.txt_clear);
         txtClear.setVisibility(View.GONE);
         txtBooks = (TextView) findViewById(R.id.textView4);
+        txtBooks.setTextColor(Color.BLACK);
         txtBooks.setVisibility(View.GONE);
 
         final TextView txt_api = (TextView) findViewById(R.id.textView3);

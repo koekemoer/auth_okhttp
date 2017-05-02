@@ -11,43 +11,42 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Gooi"
+        android:layout_marginBottom="18dp"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="37dp" />
-
-    <Spinner
-        android:id="@+id/spinner"
-        android:layout_width="300sp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="11dp"
-        android:layout_below="@+id/textView3"
         android:layout_centerHorizontal="true" />
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="API Call"
+        android:layout_marginTop="16dp"
+        android:text="API Call:"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="11dp" />
+        android:layout_centerHorizontal="true" />
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="300sp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView3"
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="49dp"
-        android:text="Books List"
+        android:text="Books List:"
         android:layout_below="@+id/spinner"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignLeft="@+id/txt_clear"
+        android:layout_alignStart="@+id/txt_clear" />
 
     <AutoCompleteTextView
         android:id="@+id/autotxt_books"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="13dp"
         android:text="All Books"
         android:selectAllOnFocus="true"
+        android:imeOptions="flagNoExtractUi"
         android:layout_below="@+id/textView4"
         android:layout_alignLeft="@+id/spinner"
         android:layout_alignStart="@+id/spinner"
@@ -58,9 +57,8 @@
         android:id="@+id/txt_clear"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/textView4"
-        android:layout_alignRight="@+id/textView4"
+        android:text="Clear Field"
+        android:layout_marginTop="17dp"
         android:layout_below="@+id/autotxt_books"
-        android:layout_marginTop="11dp"
-        android:text="Clear Field" />
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>

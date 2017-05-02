@@ -102,11 +102,8 @@ public class UserAreaAct extends AppCompatActivity {
         btn_show.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Log.wtf("USERAREA!@#$%^&*()", "2");
-
                 Intent intent = new Intent(UserAreaAct.this, BooksAct.class);
                 UserAreaAct.this.startActivity(intent);
-                //Log.wtf("USERAREA!@#$%^&*()", "3");
             }
         });
 
@@ -114,11 +111,8 @@ public class UserAreaAct extends AppCompatActivity {
             //boolean show = false;
             @Override
             public void onClick(View v) {
-                //Log.wtf("USERAREA!@#$%^&*()", "4");
-
                 Intent intent = new Intent(UserAreaAct.this, GroupsAct.class);
                 UserAreaAct.this.startActivity(intent);
-                //Log.wtf("USERAREA!@#$%^&*()", "5");
             }
         });
 
@@ -148,26 +142,17 @@ public class UserAreaAct extends AppCompatActivity {
             protected Example[] doInBackground(Void... params) {
                 try {
 
-                    Log.wtf("BOOKS_ACT!@#$%^&*()", "6");
                     response = ApiCall.GET(client, RequestBuilder.buildUrl(username, dns));
                     Log.d("USER_AREA:LoadContent", response);
-
-                    Log.wtf("BOOKS_ACT!@#$%^&*()", "7");
 
                     if (response.equals("Unauthorized") || response.equals(null) ||
                             response == null || response.equals("")) {
                         showAlert("You are not Authorized\nto view this content");
-                    } else {
+                    }
+                    else {
                         Gson gson = new Gson();
                         objBooks = gson.fromJson(response, Example[].class);
-
-                        /*GsonBuilder builder = new GsonBuilder();
-                        builder.registerTypeAdapterFactory(new )*/
-
-                        Log.wtf("BOOKS_ACT!@#$%^&*()", "8");
                     }
-
-                    //updateList(objMeta);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

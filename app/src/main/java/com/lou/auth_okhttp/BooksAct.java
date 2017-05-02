@@ -253,8 +253,6 @@ public class BooksAct extends AppCompatActivity {
                             String ackstr = Boolean.toString(objAuth.isAck());
                             debug("ACKNOWLEDGE_KEY", ackstr);
 
-                            //Log.d("#### AUTH DETAIL", "AFTER");
-
                             progress.dismiss();
                             if (!objAuth.isAck() || key == null || key.equals("")) {
                                 showAlert("An error occurred.\n");
