@@ -1,4 +1,4 @@
-package com.lou.auth_okhttp;
+package com.lou.itsi_authenticator;
 
 import okhttp3.FormBody;
 import okhttp3.HttpUrl;

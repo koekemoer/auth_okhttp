@@ -16,35 +16,40 @@
         android:layout_height="wrap_content"
         android:text="BOOKS"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_toLeftOf="@+id/btn_groups"
+        android:layout_toStartOf="@+id/btn_groups"
+        android:layout_marginRight="77dp"
+        android:layout_marginEnd="77dp"
+        android:layout_marginTop="72dp" />
 
     <Button
         android:id="@+id/btn_groups"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="GROUPS"
-        android:layout_below="@+id/btn_show"
-        android:layout_alignLeft="@+id/btn_show"
-        android:layout_alignStart="@+id/btn_show"
-        android:layout_marginTop="21dp" />
+        android:layout_alignBaseline="@+id/btn_show"
+        android:layout_alignBottom="@+id/btn_show"
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:id="@+id/btn_logout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/btn_groups"
+        android:text="Logout"
         android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/btn_groups"
-        android:text="Logout" />
+        android:layout_alignLeft="@+id/btn_groups"
+        android:layout_alignStart="@+id/btn_groups" />
 
     <Button
         android:id="@+id/btn_api"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/btn_groups"
-        android:layout_alignStart="@+id/btn_groups"
-        android:layout_below="@+id/btn_groups"
-        android:layout_marginTop="22dp"
-        android:text="Api Calls" />
+        android:text="Api Calls"
+        android:layout_alignBaseline="@+id/btn_groups"
+        android:layout_alignBottom="@+id/btn_groups"
+        android:layout_toRightOf="@+id/btn_groups"
+        android:layout_toEndOf="@+id/btn_groups"
+        android:layout_marginLeft="75dp"
+        android:layout_marginStart="75dp" />
 
 </RelativeLayout>

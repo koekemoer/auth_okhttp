@@ -1,6 +1,4 @@
-package com.lou.auth_okhttp;
-
-import android.os.AsyncTask;
+package com.lou.itsi_authenticator;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

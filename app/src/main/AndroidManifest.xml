@@ -13,17 +13,17 @@
         android:logo="@drawable/miebooks"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name="com.lou.itsi_authenticator.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".UserAreaAct" />
-        <activity android:name=".BooksAct" />
-        <activity android:name=".GroupsAct" />
-        <activity android:name=".ApiCallAct"></activity>
+        <activity android:name="com.lou.itsi_authenticator.UserAreaAct" />
+        <activity android:name="com.lou.itsi_authenticator.BooksAct" />
+        <activity android:name="com.lou.itsi_authenticator.GroupsAct" />
+        <activity android:name="com.lou.itsi_authenticator.ApiCallAct"></activity>
     </application>
 
 </manifest>

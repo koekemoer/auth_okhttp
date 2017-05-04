@@ -1,11 +1,10 @@
-package com.lou.auth_okhttp;
+package com.lou.itsi_authenticator;
 
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -16,26 +15,13 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.reflect.TypeToken;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.lou.auth_okhttp.R;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Type;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -46,11 +32,8 @@ import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.KeyManagerFactory;
@@ -132,6 +115,8 @@ public class MainActivity extends AppCompatActivity {
         final EditText etUname = (EditText) findViewById(R.id.et_uname);
         final EditText etPassw = (EditText) findViewById(R.id.et_passw);
         final Button bLogin = (Button) findViewById(R.id.btn_login);
+
+        autoTxt.setDropDownWidth(getResources().getDisplayMetrics().widthPixels);
 
         client2 = getUnsafeOkHttpClient();
 
@@ -270,9 +255,9 @@ public class MainActivity extends AppCompatActivity {
                 for (int i = 0; i < size; i++) {
                     arr[i] = objSchools.getSchools().get(i);
                     nameList.add(arr[i].getName());
-                    debug("NAME_LIST", nameList.get(i));
+                    //debug("NAME_LIST", nameList.get(i));
                     dnsList.add(arr[i].getDns());
-                    debug("DNS_LIST", dnsList.get(i));
+                    //debug("DNS_LIST", dnsList.get(i));
                 }
                 nameList.add("App Dev");
                 dnsList.add("app.dev.it.si");

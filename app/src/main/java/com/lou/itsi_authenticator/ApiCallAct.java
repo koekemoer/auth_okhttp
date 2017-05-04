@@ -1,16 +1,14 @@
-package com.lou.auth_okhttp;
+package com.lou.itsi_authenticator;
 
 import android.app.ProgressDialog;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,8 +17,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.ScrollView;
-import android.widget.Scroller;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -30,17 +26,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import android.app.Activity;
 import android.widget.Toast;
 
 import com.chilkatsoft.*;
+import com.lou.auth_okhttp.R;
 
-
-import org.json.JSONException;
 
 import okhttp3.OkHttpClient;
-
-import static java.sql.Types.NULL;
 
 public class ApiCallAct extends AppCompatActivity {
 
@@ -81,6 +73,7 @@ public class ApiCallAct extends AppCompatActivity {
 
         autoTxt = (AutoCompleteTextView) findViewById(R.id.autotxt_books);
         autoTxt.setSelectAllOnFocus(true);
+        autoTxt.setDropDownWidth(getResources().getDisplayMetrics().widthPixels);
         autoTxt.setVisibility(View.GONE);
         txtClear = (TextView) findViewById(R.id.txt_clear);
         txtClear.setVisibility(View.GONE);
@@ -174,6 +167,7 @@ public class ApiCallAct extends AppCompatActivity {
                     txtClear.setVisibility(View.VISIBLE);
                     //autoTxt.setText("All Books");
                     autoTxt.setSelectAllOnFocus(true);
+                    //autoTxt.showDropDown();
                     txtBooks.setVisibility(View.VISIBLE);
                 }
                 else {
@@ -256,21 +250,15 @@ public class ApiCallAct extends AppCompatActivity {
     }
     private void autoComplete(ArrayList calls) {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(ApiCallAct.this, android.R.layout.simple_spinner_dropdown_item, calls);
-        //ArrayAdapter<String> adapter = ArrayAdapter.createFromResource(ApiCallAct.this, R.array.calls, R.layout.api_call_spinner)
-        //AutoCompleteTextView autoTxt = (AutoCompleteTextView) findViewById(R.id.autotxt_api);
         spinner = (Spinner) findViewById(R.id.spinner);
-        //spinner.setThreshold(1);
         spinner.setAdapter(adapter);
     }
 
     private void autoCompleteBooks(ArrayList books) {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(ApiCallAct.this, android.R.layout.simple_spinner_dropdown_item, books);
-        //ArrayAdapter<String> adapter = ArrayAdapter.createFromResource(ApiCallAct.this, R.array.calls, R.layout.api_call_spinner)
-        ///*AutoCompleteTextView */autoTxt = (AutoCompleteTextView) findViewById(R.id.autotxt_books);
-        //autoTxt.setSelectAllOnFocus(true);
-        //spinner = (Spinner) findViewById(R.id.spinner);
-        //spinner.setThreshold(1);
+
         autoTxt.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 
 
@@ -278,7 +266,6 @@ public class ApiCallAct extends AppCompatActivity {
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
-                //Log.d("###WIELE###", "!@#$%^&*()(*&^%$#@#$%^&**&^%$#@#$%^*%*&%*%^&^%&^%&%&^%&%&^%");
                 try {
                     response = ApiCall.GET(client, str);
 

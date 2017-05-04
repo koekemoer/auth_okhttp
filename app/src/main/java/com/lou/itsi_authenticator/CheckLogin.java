@@ -1,4 +1,4 @@
-package com.lou.auth_okhttp;
+package com.lou.itsi_authenticator;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

@@ -1,4 +1,4 @@
-package com.lou.auth_okhttp;
+package com.lou.itsi_authenticator;
 
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -7,9 +7,9 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.lou.auth_okhttp.R;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
